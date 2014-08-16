@@ -4,8 +4,6 @@ public class GameStateGame implements GameState
 
 	public void loadState()
 	{
-		String fileName = new String(); // temp
-
 		level = new Level("test2.lvl");
 	}
 	public void unloadState()
