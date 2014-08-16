@@ -24,8 +24,8 @@ Installation
 ------------
 
 1. Requirements:
-* Java compiler
-* [SDLJava binding] (https://github.com/zear/sdljava)
+  * Java compiler
+  * [SDLJava binding] (https://github.com/zear/sdljava)
 
 2. Compilation:
 
