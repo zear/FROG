@@ -11,7 +11,6 @@ public class Level
 	private LinkedList<GameObjectTemplate> objTemp;	// templates for object types
 	private LinkedList<GameObject> objs;		// game objects on the map
 	private LinkedList<GameObject> newObjs;		// newly added game objects, to move to "objs" in the next iteration
-	private LinkedList<GameObject> delObjs;		// list of objects to remove from the list in the next iteration
 	private LinkedList<LevelLayer> layers;		// level background layers
 	private Collision collision;
 	private Camera camera;
@@ -23,7 +22,6 @@ public class Level
 		objTemp = new LinkedList<GameObjectTemplate>();
 		objs = new LinkedList<GameObject>();
 		newObjs = new LinkedList<GameObject>();
-		delObjs = new LinkedList<GameObject>();
 		layers = new LinkedList<LevelLayer>();
 		load(fileName);
 		gui = new Gui();
@@ -202,15 +200,13 @@ public class Level
 	{
 		// Update the objs list with:
 		// 1) objects to delete
-		ListIterator<GameObject> delObjsli = delObjs.listIterator();
-		if(delObjsli.hasNext())
+		ListIterator<GameObject> objsli = objs.listIterator();
+		while (objsli.hasNext())
 		{
-			do
+			if(objsli.next().getRemoval())
 			{
-				objs.remove(delObjsli.next());
+				objsli.remove();
 			}
-			while(delObjsli.hasNext());
-			delObjs = new LinkedList<GameObject>();
 		}
 		// 2) newly added objects
 		ListIterator<GameObject> newObjsli = newObjs.listIterator();
@@ -224,7 +220,7 @@ public class Level
 			newObjs = new LinkedList<GameObject>();
 		}
 
-		ListIterator<GameObject> objsli = objs.listIterator();
+		objsli = objs.listIterator();
 		do
 		{
 			if(!objsli.hasNext())
@@ -450,10 +446,6 @@ public class Level
 				}
 				while(objsli2.hasNext());
 			}
-
-			// remove objects that are flagged for removal
-			if(curObj.getRemoval())
-				delObjs.push(curObj);
 		}
 		while(objsli.hasNext());
 	}
