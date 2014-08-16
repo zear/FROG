@@ -51,27 +51,20 @@ public class Level
 
 			while(fp.hasNext())
 			{
-				switch(fp.getNext())
-				{
-					case "COLLISION":
-						collision = new Collision(fp.getNext(), Integer.parseInt(fp.getNext()));
-					break;
-					case "LAYER":
-						curElem = new LevelLayer();
-						layers.push(curElem);
-						System.out.printf("New layer\n");
-						curElem.load(Integer.parseInt(fp.getNext()));
-					break;
-					case "IMG":
-						curElem.load("./data/gfx/" + fp.getNext(), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()));
-						curElem.load(fp); // load the tileset
-					break;
-					case "OBJECTS":
-						loadObjects(fp);
-					break;
+				String next = fp.getNext();
 
-					default:
-					break;
+				if (next.equals("COLLISION")) {
+					collision = new Collision(fp.getNext(), Integer.parseInt(fp.getNext()));
+				} else if (next.equals("LAYER")) {
+					curElem = new LevelLayer();
+					layers.push(curElem);
+					System.out.printf("New layer\n");
+					curElem.load(Integer.parseInt(fp.getNext()));
+				} else if (next.equals("IMG")) {
+					curElem.load("./data/gfx/" + fp.getNext(), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()));
+					curElem.load(fp); // load the tileset
+				} else if (next.equals("OBJECTS")) {
+					loadObjects(fp);
 				}
 			}
 		}
@@ -94,29 +87,24 @@ public class Level
 			words = line.split("\\s");
 			GameObject curElem = null;
 
-			switch(words[0])
+			if (words[0].equals("END"))
+				return;
+
+			try
 			{
-				case "END":
-					return;
-
-				default:
-					try
-					{
-						loadSingleObject(new FileIO(new File("./data/obj/" + words[0] + ".obj")));
-					}
-					catch (Exception e)
-					{
-						System.out.printf("Failed to load object file: %s\n", words[0]);
-						return;
-						// todo
-					}
-
-					curElem = objs.getFirst();
-					curElem.putX(Integer.parseInt(words[1]));
-					curElem.putY(Integer.parseInt(words[2]));
-					curElem.putDirection(Integer.parseInt(words[3]));
-				break;
+				loadSingleObject(new FileIO(new File("./data/obj/" + words[0] + ".obj")));
 			}
+			catch (Exception e)
+			{
+				System.out.printf("Failed to load object file: %s\n", words[0]);
+				return;
+				// todo
+			}
+
+			curElem = objs.getFirst();
+			curElem.putX(Integer.parseInt(words[1]));
+			curElem.putY(Integer.parseInt(words[2]));
+			curElem.putDirection(Integer.parseInt(words[3]));
 		}
 	}
 
@@ -139,59 +127,38 @@ public class Level
 
 			words = line.split("\\s");
 
-			switch(words[0])
-			{
-				case "END":
-					return;
-				case "TYPE":
-					switch(words[1])
-					{
-						case "OBJECT":
-							list.push(new GameObject());
-							System.out.printf("new object\n");
-						break;
-						case "CREATURE":
-							System.out.printf("List: %d\n", layers.size());
-							list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
-							System.out.printf("new creature\n");
-						break;
-						case "PLAYER":
-							list.push(new Player(layers.get(1), collision));
-							System.out.printf("new player\n");
-						break;
+			if (words[0].equals("END"))
+				return;
 
-						default:
-							// unknown type!
-						return;
-					}
+			if (words[0].equals("NAME")) {
+				newObj.setName(words[1]);
+			} else if (words[0].equals("WIDTH")) {
+				newObj.putW(Integer.parseInt(words[1]));
+			} else if (words[0].equals("HEIGHT")) {
+				newObj.putH(Integer.parseInt(words[1]));
+			} else if (words[0].equals("IMG")) {
+				newObj.load("./data/gfx/obj/" + words[1], Integer.parseInt(words[2]), Integer.parseInt(words[3]), Integer.parseInt(words[4]), Integer.parseInt(words[5]), objTemp);
+			} else if (words[0].equals("HP")) {
+				if(newObj instanceof Creature)
+					((Creature)newObj).setHp(Integer.parseInt(words[1]));
+			} else if (words[0].equals("VULN")) {
+				newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
+			} else if (words[0].equals("ANIMATION")) {
+				newObj.addAnimation(fp);
+			} else if (words[0].equals("TYPE")) {
+				if (words[1].equals("OBJECT")) {
+					list.push(new GameObject());
+					System.out.printf("new object\n");
+				} else if (words[1].equals("CREATURE")) {
+					System.out.printf("List: %d\n", layers.size());
+					list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					System.out.printf("new creature\n");
+				} else if (words[1].equals("PLAYER")) {
+					list.push(new Player(layers.get(1), collision));
+					System.out.printf("new player\n");
+				}
 
-					newObj = list.getFirst();
-				break;
-				case "NAME":
-					newObj.setName(words[1]);
-				break;
-				case "WIDTH":
-					newObj.putW(Integer.parseInt(words[1]));
-				break;
-				case "HEIGHT":
-					newObj.putH(Integer.parseInt(words[1]));
-				break;
-				case "IMG":
-					newObj.load("./data/gfx/obj/" + words[1], Integer.parseInt(words[2]), Integer.parseInt(words[3]), Integer.parseInt(words[4]), Integer.parseInt(words[5]), objTemp);
-				break;
-				case "HP":
-					if(newObj instanceof Creature)
-						((Creature)newObj).setHp(Integer.parseInt(words[1]));
-				break;
-				case "VULN":
-					newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
-				break;
-				case "ANIMATION":
-					newObj.addAnimation(fp);
-				break;
-
-				default:
-				break;
+				newObj = list.getFirst();
 			}
 		}
 	}

@@ -41,15 +41,9 @@ public class Collision
 			{
 				String next = fp.getNext();
 
-				switch(next)
-				{
-					case "EOF":
+				if (next.equals("EOF"))
 					break;
-
-					default:
-						map[index] = Integer.parseInt(next);
-					break;
-				}
+				map[index] = Integer.parseInt(next);
 
 				index++;
 			}
