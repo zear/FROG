@@ -32,11 +32,6 @@ public class Level
 		gui.setFont(font0);
 	}
 
-	public int getCollision(int index)
-	{
-		return getCollision(index);
-	}
-
 	private void load(String fileName)
 	{
 		File file;
