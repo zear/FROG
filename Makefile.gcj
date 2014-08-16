@@ -1,0 +1,48 @@
+TARGET := frog$(shell date +-%Y.%m.%d)
+
+# Path to sdljava bindings
+SDLJAVA ?= sdljava
+
+JC := $(CROSS_COMPILE)gcj
+OBJCOPY := $(CROSS_COMPILE)objcopy
+
+CPPFLAGS := -I $(SDLJAVA)/src -I.
+JFLAGS := -O3
+LDFLAGS := -L $(SDLJAVA)/lib -ljsdl -lgcj
+
+OBJS := AI.o \
+	Animation.o \
+	Camera.o \
+	Collision.o \
+	Creature.o \
+	FileIO.o \
+	Font.o \
+	Game.o \
+	GameObject.o \
+	GameObjectTemplate.o \
+	GameStateEnum.o \
+	GameStateGame.o \
+	GameState.o \
+	GameStateMenu.o \
+	Gui.o \
+	Input.o \
+	Level.o \
+	LevelLayer.o \
+	Player.o \
+	Program.o \
+	Replay.o \
+	Sdl.o
+
+.PHONY: all
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(JC) $(JFLAGS) --main=Program -o $@ $^ $(LDFLAGS)
+
+%.o: %.java
+	$(JC) $(CPPFLAGS) $(JFLAGS) $^ -c -o $@
+	$(OBJCOPY) -L '_ZGr8_$$_dummy' $@
+
+.PHONY: clean
+clean:
+	rm -f $(TARGET) $(OBJS)
