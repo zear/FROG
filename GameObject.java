@@ -156,7 +156,7 @@ public class GameObject
 
 	public void addAnimation(FileIO fp)
 	{
-		Animation tmp = null;
+		Animation tmp;
 
 		tmp = this.objTemplate.addAnimation(fp);
 		if(tmp != null && this.curAnim == null)
