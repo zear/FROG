@@ -215,7 +215,6 @@ public class Level
 				objs.remove(delObjsli.next());
 			}
 			while(delObjsli.hasNext());
-			delObjsli = null;	// I hope this frees in time for the next iteration
 			delObjs = new LinkedList<GameObject>();
 		}
 		// 2) newly added objects
@@ -227,7 +226,6 @@ public class Level
 				objs.push(newObjsli.next());
 			}
 			while(newObjsli.hasNext());
-			newObjsli = null;	// I hope this frees in time for the next iteration
 			newObjs = new LinkedList<GameObject>();
 		}
 
