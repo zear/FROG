@@ -50,7 +50,7 @@ public class Game
 	// this is the main program loop
 	public boolean mainLoop()
 	{
-		while(Sdl.fps())
+		if(Sdl.fps())
 		{
 			checkState();
 			Input.getInput();
