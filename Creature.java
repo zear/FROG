@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 
 // Creature class extends GameObject class by moving creatures specific features
 public class Creature extends GameObject
@@ -226,6 +228,7 @@ public class Creature extends GameObject
 			if((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vy = 0;
+				this.y = (float)ceil(this.y) - 0.2f;
 				this.isOnGround = true;
 			}
 			else if((col & Collision.COLLISION_PLATFORM) > 0)
@@ -233,6 +236,7 @@ public class Creature extends GameObject
 				if(((int)this.y + super.h - 1)/16*16 < (y1)/16*16)
 				{
 					this.vy = 0;
+					this.y = (float)ceil(this.y) - 0.2f;
 					this.isOnGround = true;
 				}
 				else
