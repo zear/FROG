@@ -197,8 +197,16 @@ public class Level
 			//System.out.printf("###\n");
 			if(curObj instanceof Player)
 			{
-				camera = ((Player)curObj).viewport;
-				camera.setTarget(curObj);
+				if(camera == null)
+				{
+					camera = ((Player)curObj).viewport;
+					camera.setCamera(curObj);
+				}
+				else
+				{
+					camera = ((Player)curObj).viewport;
+					camera.setTarget(curObj);
+				}
 
 				Player player = (Player)curObj;
 				gui.setPlayer(player);

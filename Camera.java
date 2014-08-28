@@ -82,18 +82,24 @@ public class Camera
 			Creature t = (Creature)this.target;
 
 			if(this.targetX < this.x + 320/2 - 16)
-				this.trackX = true;
+			{
+				this.x -= this.x + 320/2 - 16 - this.targetX;
+			}
 			else if(this.targetX + t.w - 1 > this.x + 320/2 + 16)
-				this.trackX = true;
-			else
-				this.trackX = false;
+			{
+				this.x += (this.targetX + t.w - 1) - (this.x + 320/2 + 16);
+			}
+			this.trackX = false;
 
-			if(this.targetY < this.y + 240/2 - 16)
-				this.trackY = true;
-			else if(this.targetY > this.y + 240/2 + 8)
-				this.trackY = true;
-			else
-				this.trackY = false;
+			if(t.isOnGround)
+			{
+				if(this.targetY < this.y + 240/2)
+					this.trackY = true;
+				else if(this.targetY > this.y + 240/2)
+					this.trackY = true;
+				else
+					this.trackY = false;
+			}
 		}
 		else
 		{
