@@ -47,6 +47,24 @@ public class Creature extends GameObject
 		}
 	}
 
+	public void loadAI()
+	{
+		this.ai = new AI();
+
+		// Let's hardcode the AI behaviour for now.
+		if(super.getName().equals("jumper"))
+		{
+			ai.addAction(AI.JUMP);
+			ai.setVar(0, 1.5f);
+			ai.setVar(1, 4.0f);
+		}
+		else if(super.getName().equals("badass"))
+		{
+			ai.addAction(AI.WALK);
+			ai.setVar(0, 0.5f);
+		}
+	}
+
 	public float getVx()
 	{
 		return vx;

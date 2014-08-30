@@ -8,7 +8,8 @@ import java.io.FileNotFoundException;
 // Level class keeps all that is necessary to have a playable level, such as the list of objects on the map (including player(s))
 public class Level
 {
-	private LinkedList<GameObjectTemplate> objTemp;	// templates for object types
+	private LinkedList<GameObjectTemplate> objTemp;	// templates for object types // <- deprecated, to remove
+	private LinkedList<GameObject> objTemp2;	// game object templates
 	private LinkedList<GameObject> objs;		// game objects on the map
 	private LinkedList<GameObject> newObjs;		// newly added game objects, to move to "objs" in the next iteration
 	private LinkedList<LevelLayer> layers;		// level background layers
@@ -20,6 +21,7 @@ public class Level
 	public Level(String fileName) // constructor
 	{
 		objTemp = new LinkedList<GameObjectTemplate>();
+		objTemp2 = new LinkedList<GameObject>();
 		objs = new LinkedList<GameObject>();
 		newObjs = new LinkedList<GameObject>();
 		layers = new LinkedList<LevelLayer>();
@@ -92,7 +94,7 @@ public class Level
 
 			try
 			{
-				loadSingleObject(new FileIO(new File("./data/obj/" + words[0] + ".obj")));
+				loadSingleObject(words[0]);
 			}
 			catch (Exception e)
 			{
@@ -108,43 +110,66 @@ public class Level
 		}
 	}
 
-	private void loadSingleObject(FileIO fp)
+	private void loadSingleObject(String fileName)
 	{
-		loadSingleObject(fp, this.objs);
+		loadSingleObject(fileName, this.objs);
 	}
 
-	private void loadSingleObject(FileIO fp, LinkedList<GameObject> list)
+	private void loadSingleObject(String fileName, LinkedList<GameObject> list)
 	{
+		FileIO fp;
 		String line;
 		String [] words;
 		GameObject newObj = null;
+
+		for(GameObject curObjTemp : objTemp2)
+		{
+			if(fileName.equals(curObjTemp.getFileName()))
+			{
+				loadObjectFromTemplate(curObjTemp, list);
+				return;
+			}
+		}
+
+		fp = new FileIO(new File("./data/obj/" + fileName + ".obj"));
 
 		while(fp.hasNext())
 		{
 			line = fp.getLine();
 			if(line == null)
-			return;
+			{
+				return;
+			}
 
 			words = line.split("\\s");
 
 			if (words[0].equals("END"))
+			{
 				return;
+			}
 
 			if (words[0].equals("TYPE"))
 			{
+				ObjType type = null;
+
 				if (words[1].equals("OBJECT")) {
-					list.push(new GameObject());
+					objTemp2.push(new GameObject());
+					type = ObjType.OBJECT;
 					System.out.printf("new object\n");
 				} else if (words[1].equals("CREATURE")) {
 					System.out.printf("List: %d\n", layers.size());
-					list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					objTemp2.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					type = ObjType.CREATURE;
 					System.out.printf("new creature\n");
 				} else if (words[1].equals("PLAYER")) {
-					list.push(new Player(layers.get(1), collision));
+					objTemp2.push(new Player(layers.get(1), collision));
+					type = ObjType.PLAYER;
 					System.out.printf("new player\n");
 				}
 
-				newObj = list.getFirst();
+				newObj = objTemp2.getFirst();
+				newObj.setType(type);
+				newObj.setFileName(fileName);
 			}
 			else if(newObj != null)
 			{
@@ -176,7 +201,52 @@ public class Level
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
+					loadObjectFromTemplate(newObj, list);
 				}
+			}
+		}
+	}
+
+	public void loadObjectFromTemplate(GameObject template, LinkedList<GameObject> list)
+	{
+		GameObject newObj = null;
+
+		if(template != null)
+		{
+			switch(template.getType())
+			{
+				case OBJECT:
+					list.push(new GameObject());
+					newObj = list.getFirst();
+				break;
+				case CREATURE:
+					list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					newObj = list.getFirst();
+				break;
+				case PLAYER:
+					list.push(new Player(layers.get(1), collision));
+					newObj = list.getFirst();
+				break;
+
+				default:
+				return;
+			}
+		}
+
+		if(newObj != null)
+		{
+			newObj.setFileName(template.getFileName());
+			newObj.setName(template.getName());
+			newObj.setType(template.getType());
+			newObj.putW(template.getW());
+			newObj.putH(template.getH());
+			newObj.setTemplate(template.getTemplate());
+			newObj.setVulnerability(template.isVulnerable());
+			newObj.setAnimation(template.getAnimation());
+			if(newObj instanceof Creature)
+			{
+				((Creature)newObj).setHp(((Creature)template).getHp());
+				((Creature)newObj).loadAI();
 			}
 		}
 	}
@@ -289,7 +359,7 @@ public class Level
 
 						try
 						{
-							loadSingleObject(new FileIO(new File("./data/obj/swoosh.obj")), newObjs);
+							loadSingleObject("swoosh", newObjs);
 						}
 						catch (Exception e)
 						{

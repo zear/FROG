@@ -3,10 +3,19 @@ import sdljava.video.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+enum ObjType
+{
+	OBJECT,
+	CREATURE,
+	PLAYER
+}
+
 // GameObject class keeps all information necessary for objects on the map
 public class GameObject
 {
+	private String fileName;
 	private String objName;
+	private ObjType type;
 	private boolean removal = false;	// if true, object is flagged for removal
 	protected float x;
 	protected float y;
@@ -58,7 +67,6 @@ public class GameObject
 				if(this.objName.equals(templateName))
 				{
 					objTemplate = curElement;
-					System.out.printf("Found existing template for \"%s\".\n", templateName);
 					return; // Template for this object already exists. Abort.
 				}
 			}
@@ -70,7 +78,16 @@ public class GameObject
 		tempList.push(objTemplate);
 		objTemplate.setName(this.objName);
 		objTemplate.load(fileName, w, h, rowW, size);
-		System.out.printf("!! Adding new template\n");
+	}
+
+	public String getFileName()
+	{
+		return this.fileName;
+	}
+
+	public void setFileName(String fileName)
+	{
+		this.fileName = fileName;
 	}
 
 	public String getName()
@@ -81,6 +98,16 @@ public class GameObject
 	public void setName(String name)
 	{
 		this.objName = name;
+	}
+
+	public ObjType getType()
+	{
+		return this.type;
+	}
+
+	public void setType(ObjType type)
+	{
+		this.type = type;
 	}
 
 	public boolean getRemoval()
@@ -123,6 +150,14 @@ public class GameObject
 	public float getY()
 	{
 		return y;
+	}
+	public int getW()
+	{
+		return w;
+	}
+	public int getH()
+	{
+		return h;
 	}
 	public boolean getDirection()
 	{
@@ -186,6 +221,16 @@ public class GameObject
 		}
 	}
 
+	public GameObjectTemplate getTemplate()
+	{
+		return this.objTemplate;
+	}
+
+	public void setTemplate(GameObjectTemplate template)
+	{
+		this.objTemplate = template;
+	}
+
 	public void changeAnimation(String name)
 	{
 		ListIterator<Animation> animli = this.objTemplate.getAnimation().listIterator();
@@ -218,6 +263,11 @@ public class GameObject
 	public Animation getAnimation()
 	{
 		return this.curAnim;
+	}
+
+	public void setAnimation(Animation anim)
+	{
+		this.curAnim = anim;
 	}
 
 	public void logic()
