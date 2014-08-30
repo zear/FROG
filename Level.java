@@ -130,22 +130,8 @@ public class Level
 			if (words[0].equals("END"))
 				return;
 
-			if (words[0].equals("NAME")) {
-				newObj.setName(words[1]);
-			} else if (words[0].equals("WIDTH")) {
-				newObj.putW(Integer.parseInt(words[1]));
-			} else if (words[0].equals("HEIGHT")) {
-				newObj.putH(Integer.parseInt(words[1]));
-			} else if (words[0].equals("IMG")) {
-				newObj.load("./data/gfx/obj/" + words[1], Integer.parseInt(words[2]), Integer.parseInt(words[3]), Integer.parseInt(words[4]), Integer.parseInt(words[5]), objTemp);
-			} else if (words[0].equals("HP")) {
-				if(newObj instanceof Creature)
-					((Creature)newObj).setHp(Integer.parseInt(words[1]));
-			} else if (words[0].equals("VULN")) {
-				newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
-			} else if (words[0].equals("ANIMATION")) {
-				newObj.addAnimation(fp);
-			} else if (words[0].equals("TYPE")) {
+			if (words[0].equals("TYPE"))
+			{
 				if (words[1].equals("OBJECT")) {
 					list.push(new GameObject());
 					System.out.printf("new object\n");
@@ -159,6 +145,38 @@ public class Level
 				}
 
 				newObj = list.getFirst();
+			}
+			else if(newObj != null)
+			{
+				if (words[0].equals("NAME"))
+				{
+					newObj.setName(words[1]);
+				}
+				else if (words[0].equals("WIDTH"))
+				{
+					newObj.putW(Integer.parseInt(words[1]));
+				}
+				else if (words[0].equals("HEIGHT"))
+				{
+					newObj.putH(Integer.parseInt(words[1]));
+				}
+				else if (words[0].equals("IMG"))
+				{
+					newObj.load("./data/gfx/obj/" + words[1], Integer.parseInt(words[2]), Integer.parseInt(words[3]), Integer.parseInt(words[4]), Integer.parseInt(words[5]), objTemp);
+				}
+				else if (words[0].equals("HP"))
+				{
+					if(newObj instanceof Creature)
+						((Creature)newObj).setHp(Integer.parseInt(words[1]));
+				}
+				else if (words[0].equals("VULN"))
+				{
+					newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
+				}
+				else if (words[0].equals("ANIMATION"))
+				{
+					newObj.addAnimation(fp);
+				}
 			}
 		}
 	}
