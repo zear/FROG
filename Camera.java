@@ -18,6 +18,11 @@ public class Camera
 		return this.y;
 	}
 
+	public GameObject getTarget()
+	{
+		return this.target;
+	}
+
 	public void setTarget(GameObject obj)
 	{
 		this.target = obj;

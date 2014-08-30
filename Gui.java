@@ -85,6 +85,11 @@ public class Gui
 				//font.draw("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 20, 90);
 				font.draw("(c) 2014, Licensed under GPLv2+", 20, 220 + dist);
 			}
+
+			if(this.player.isDead())
+			{
+				font.draw("Game Over", 320/2 - 36, 240/2);
+			}
 		}
 		catch (SDLException e)
 		{

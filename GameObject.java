@@ -282,6 +282,12 @@ public class GameObject
 		if(curAnim == null)
 			return;
 
+		if(this instanceof Player)
+		{
+			if(((Player)this).isDead())
+				return;
+		}
+
 		this.blinkingCountdown();
 
 		if(!doDraw)

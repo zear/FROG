@@ -285,21 +285,32 @@ public class Level
 			//System.out.printf("###\n");
 			if(curObj instanceof Player)
 			{
+				Player player = (Player)curObj;
+
 				if(camera == null)
 				{
-					camera = ((Player)curObj).viewport;
-					camera.setCamera(curObj);
+					camera = player.viewport;
+					camera.setCamera(player);
+				}
+				else if(player.hp > 0)
+				{
+					camera = player.viewport;
+					camera.setTarget(player);
 				}
 				else
 				{
-					camera = ((Player)curObj).viewport;
-					camera.setTarget(curObj);
+					camera.setTarget(camera.getTarget());
 				}
 
-				Player player = (Player)curObj;
 				gui.setPlayer(player);
 				// check input
 				player.updateKeys();
+
+				if(player.isDead())
+				{
+					continue;
+				}
+
 				if(player.acceptInput())
 				{
 					if(player.getAction(0))		// left
@@ -445,7 +456,7 @@ public class Level
 							}
 						}
 
-						if(player.isVulnerable())
+						if(player.isVulnerable() && !player.isDead())
 						{
 							if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1))
 							{
@@ -464,6 +475,11 @@ public class Level
 									player.hp--;
 									player.setInvincibility(90);
 									player.setBlinking(90);
+
+									if(player.hp <= 0)
+									{
+										camera.setTarget(tmpCreature);
+									}
 									//player.setAcceptInput(false);
 
 									// Pushes the creature away from the player.

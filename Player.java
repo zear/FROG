@@ -7,6 +7,7 @@ public class Player extends Creature
 	private boolean[] keys;
 	private boolean acceptInput = true;
 	private Replay replay;
+	private boolean dead = false;	// temporary
 
 	public Player(LevelLayer lay, Collision col)
 	{
@@ -76,5 +77,15 @@ public class Player extends Creature
 			this.replay.play = !this.replay.play;
 			System.out.printf("Playback: %d\n", !!this.replay.play != false ? 1 : 0);
 		}
+	}
+
+	public boolean isDead()
+	{
+		return this.dead;
+	}
+
+	public void setDead(boolean value)
+	{
+		this.dead = value;
 	}
 }

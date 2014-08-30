@@ -532,7 +532,16 @@ public class Creature extends GameObject
 		super.logic();
 
 		if(this.hp <= 0)
-			this.setRemoval(true);
+		{
+			if(this instanceof Player)
+			{
+				((Player)this).setDead(true);
+			}
+			else
+			{
+				this.setRemoval(true);
+			}
+		}
 	}
 
 	public void move()
