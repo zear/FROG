@@ -580,6 +580,7 @@ public class Creature extends GameObject
 		{
 			if(this instanceof Player && ((Player)this).getAction(5))
 			{
+				((Player)this).setAction(5, false);
 				newAnim = "ATTACK";
 			}
 			else
@@ -595,6 +596,7 @@ public class Creature extends GameObject
 		{
 			if(this instanceof Player && ((Player)this).getAction(5))
 			{
+					((Player)this).setAction(5, false);
 					newAnim = "ATTACK";
 			}
 			else
@@ -611,7 +613,7 @@ public class Creature extends GameObject
 		{
 			if(this.isOnGround)
 			{
-				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()))
+				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
 					newAnim = "JUMP_UP";
 			}
 		}
@@ -619,7 +621,7 @@ public class Creature extends GameObject
 		{
 			if(!this.isOnGround)
 			{
-				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()))
+				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
 					newAnim = "JUMP_DOWN";
 			}
 		}
