@@ -3,6 +3,8 @@ import sdljava.event.*;
 // Player class extends Creature class by player specific features
 public class Player extends Creature
 {
+	private float walkV;
+	private float jumpV;
 	public Camera viewport;
 	private boolean[] keys;
 	private boolean acceptInput = true;
@@ -15,6 +17,26 @@ public class Player extends Creature
 		viewport = new Camera();
 		keys = new boolean[6]; // left, right, up, down, jump, attack
 		replay = new Replay();
+	}
+
+	public float getWalkV()
+	{
+		return this.walkV;
+	}
+
+	public void setWalkV(float velocity)
+	{
+		this.walkV = velocity;
+	}
+
+	public float getJumpV()
+	{
+		return this.jumpV;
+	}
+
+	public void setJumpV(float velocity)
+	{
+		this.jumpV = velocity;
 	}
 
 	public boolean acceptInput()

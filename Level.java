@@ -198,6 +198,20 @@ public class Level
 				{
 					newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
 				}
+				else if (words[0].equals("WALK_V"))
+				{
+					if(newObj instanceof Player)
+					{
+						((Player)newObj).setWalkV(Float.parseFloat(words[1]));
+					}
+				}
+				else if (words[0].equals("JUMP_V"))
+				{
+					if(newObj instanceof Player)
+					{
+						((Player)newObj).setJumpV(Float.parseFloat(words[1]));
+					}
+				}
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
@@ -247,6 +261,11 @@ public class Level
 			{
 				((Creature)newObj).setHp(((Creature)template).getHp());
 				((Creature)newObj).loadAI();
+			}
+			if(newObj instanceof Player)
+			{
+				((Player)newObj).setWalkV(((Player)template).getWalkV());
+				((Player)newObj).setJumpV(((Player)template).getJumpV());
 			}
 		}
 	}
@@ -314,9 +333,9 @@ public class Level
 				if(player.acceptInput())
 				{
 					if(player.getAction(0))		// left
-						player.walk(-0.9f);
+						player.walk(-player.getWalkV());
 					if(player.getAction(1))		// right
-						player.walk(0.9f);
+						player.walk(player.getWalkV());
 					if(player.getAction(2))		// up
 					{
 						if(player.isClimbing)
@@ -347,7 +366,7 @@ public class Level
 					{
 						player.setAction(2, false);
 						player.setAction(4, false);
-						player.jump(-4f);
+						player.jump(-player.getJumpV());
 					}
 					if(player.getAction(5))		// attack
 					{
