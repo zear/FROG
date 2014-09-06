@@ -152,16 +152,27 @@ public class Level
 			{
 				ObjType type = null;
 
-				if (words[1].equals("OBJECT")) {
+				if (words[1].equals("OBJECT"))
+				{
 					objTemp2.push(new GameObject());
 					type = ObjType.OBJECT;
 					System.out.printf("new object\n");
-				} else if (words[1].equals("CREATURE")) {
+				}
+				else if (words[1].equals("CREATURE"))
+				{
 					System.out.printf("List: %d\n", layers.size());
 					objTemp2.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
 					type = ObjType.CREATURE;
 					System.out.printf("new creature\n");
-				} else if (words[1].equals("PLAYER")) {
+				}
+				else if (words[1].equals("PROJECTILE"))
+				{
+					objTemp2.push(new Projectile(layers.get(1), collision));
+					type = ObjType.PROJECTILE;
+					System.out.printf("new projectile\n");
+				}
+				else if (words[1].equals("PLAYER"))
+				{
 					objTemp2.push(new Player(layers.get(1), collision));
 					type = ObjType.PLAYER;
 					System.out.printf("new player\n");
@@ -212,6 +223,13 @@ public class Level
 						((Player)newObj).setJumpV(Float.parseFloat(words[1]));
 					}
 				}
+				else if (words[0].equals("TTL"))
+				{
+					if(newObj instanceof Projectile)
+					{
+						((Projectile)newObj).setTtl(Integer.parseInt(words[1]));
+					}
+				}
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
@@ -235,6 +253,10 @@ public class Level
 				break;
 				case CREATURE:
 					list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					newObj = list.getFirst();
+				break;
+				case PROJECTILE:
+					list.push(new Projectile(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
 					newObj = list.getFirst();
 				break;
 				case PLAYER:
@@ -266,6 +288,10 @@ public class Level
 			{
 				((Player)newObj).setWalkV(((Player)template).getWalkV());
 				((Player)newObj).setJumpV(((Player)template).getJumpV());
+			}
+			if(newObj instanceof Projectile)
+			{
+				((Projectile)newObj).setTtl(((Projectile)template).getTtl());
 			}
 		}
 	}
@@ -398,7 +424,7 @@ public class Level
 							// todo
 						}
 
-						Creature swoosh = (Creature)newObjs.getFirst();
+						Projectile swoosh = (Projectile)newObjs.getFirst();
 
 						swoosh.putX(x);
 						swoosh.putY((int)player.y + 14);

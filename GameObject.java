@@ -7,6 +7,7 @@ enum ObjType
 {
 	OBJECT,
 	CREATURE,
+	PROJECTILE,
 	PLAYER
 }
 
