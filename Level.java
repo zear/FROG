@@ -397,7 +397,6 @@ public class Level
 					if(player.getAction(5))		// attack
 					{
 						int x;
-						int vx;
 
 						//player.setAction(5, false);
 						player.setAcceptInput(false);
@@ -405,12 +404,10 @@ public class Level
 						if(!player.direction)	// left
 						{
 							x = (int)player.x - 5 - 15;
-							vx = -10;
 						}
 						else			// right
 						{
 							x = (int)player.x + player.w + 5;
-							vx = 10;
 						}
 
 						try
@@ -429,7 +426,6 @@ public class Level
 						swoosh.putX(x);
 						swoosh.putY((int)player.y + 14);
 						swoosh.putDirection(player.direction ? 1 : 0);
-						swoosh.vx = vx;
 						swoosh.affectedByGravity = false;
 					}
 				}

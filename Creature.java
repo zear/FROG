@@ -45,6 +45,11 @@ public class Creature extends GameObject
 			ai.addAction(AI.WALK);
 			ai.setVar(0, 0.5f);
 		}
+		else if(super.getName().equals("swoosh"))
+		{
+			ai.addAction(AI.WALK);
+			ai.setVar(0, 5f);
+		}
 	}
 
 	public void loadAI()
@@ -62,6 +67,11 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(0, 0.5f);
+		}
+		else if(super.getName().equals("swoosh"))
+		{
+			ai.addAction(AI.WALK);
+			ai.setVar(0, 5f);
 		}
 	}
 
@@ -541,6 +551,14 @@ public class Creature extends GameObject
 			{
 				this.setRemoval(true);
 			}
+		}
+		if(this instanceof Projectile)
+		{
+			if(((Projectile)this).getTtl() <= 0)
+			{
+				this.setRemoval(true);
+			}
+			((Projectile)this).ttlCountdown();
 		}
 	}
 

@@ -1,6 +1,14 @@
+enum OnCollision
+{
+	IGNORE,
+	PERISH,
+	BOUNCE
+}
+
 public class Projectile extends Creature
 {
-	private int ttl; // time to live counter
+	private int ttl;			// Time to live counter.
+	private OnCollision onCollision;	// Behaviour on collision with level tiles (and not other objects!).
 
 	public Projectile(LevelLayer lay, Collision col)
 	{
@@ -15,5 +23,11 @@ public class Projectile extends Creature
 	public void setTtl(int ttl)
 	{
 		this.ttl = ttl;
+	}
+
+	public void ttlCountdown()
+	{
+		if(this.ttl > 0)
+			this.ttl--;
 	}
 }
