@@ -149,11 +149,15 @@ public class Creature extends GameObject
 					this.ai.setNextAction();
 			break;
 			case AI.WALK:
+				this.ai.doTimer();
+
 				if(!this.direction)	// left
 					this.walk(-this.ai.getVar(0));
 				else			// right
 					this.walk(this.ai.getVar(0));
-				this.ai.setNextAction();
+
+				if(this.ai.getTimer() <= 0)
+					this.ai.setNextAction();
 			break;
 			case AI.JUMP:
 				if(this.isOnGround)

@@ -53,6 +53,11 @@ public class AI
 			return this.timer;
 		}
 
+		public void resetTimer()
+		{
+			this.timer = origTime;
+		}
+
 		public float getVar(int var)
 		{
 			switch(var)
@@ -112,24 +117,26 @@ public class AI
 		this.resetActions();
 	}
 
+	public void addAction(int type, int time)
+	{
+		actionList.push(new AIAction(type, time));
+		this.resetActions();
+	}
+
 	public void resetActions()
 	{
 		actionListIterator = actionList.listIterator();
 		curAction = actionList.getFirst();
 	}
 
-	public void addAction(int type, int time)
-	{
-		actionList.push(new AIAction(type, time));
-	}
-
 	public void setNextAction()
 	{
+		curAction.resetTimer();
 		if(actionListIterator.hasNext())
 			curAction = actionListIterator.next();
 		else
 		{
-			resetActions();
+			this.resetActions();
 		}
 	}
 
