@@ -32,6 +32,11 @@ public class Level
 		gui.setFont(font0);
 	}
 
+	public LinkedList<GameObject> getNewObjs()
+	{
+		return this.newObjs;
+	}
+
 	private void load(String fileName)
 	{
 		File file;
@@ -110,12 +115,12 @@ public class Level
 		}
 	}
 
-	private void loadSingleObject(String fileName)
+	public void loadSingleObject(String fileName)
 	{
 		loadSingleObject(fileName, this.objs);
 	}
 
-	private void loadSingleObject(String fileName, LinkedList<GameObject> list)
+	public void loadSingleObject(String fileName, LinkedList<GameObject> list)
 	{
 		FileIO fp;
 		String line;
@@ -161,19 +166,19 @@ public class Level
 				else if (words[1].equals("CREATURE"))
 				{
 					System.out.printf("List: %d\n", layers.size());
-					objTemp2.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					objTemp2.push(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
 					type = ObjType.CREATURE;
 					System.out.printf("new creature\n");
 				}
 				else if (words[1].equals("PROJECTILE"))
 				{
-					objTemp2.push(new Projectile(layers.get(1), collision));
+					objTemp2.push(new Projectile(layers.get(1), collision, this));
 					type = ObjType.PROJECTILE;
 					System.out.printf("new projectile\n");
 				}
 				else if (words[1].equals("PLAYER"))
 				{
-					objTemp2.push(new Player(layers.get(1), collision));
+					objTemp2.push(new Player(layers.get(1), collision, this));
 					type = ObjType.PLAYER;
 					System.out.printf("new player\n");
 				}
@@ -252,15 +257,15 @@ public class Level
 					newObj = list.getFirst();
 				break;
 				case CREATURE:
-					list.push(new Creature(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					list.push(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
 					newObj = list.getFirst();
 				break;
 				case PROJECTILE:
-					list.push(new Projectile(layers.get(1), collision)); // this is assuming layer #1 is the middle layer
+					list.push(new Projectile(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
 					newObj = list.getFirst();
 				break;
 				case PLAYER:
-					list.push(new Player(layers.get(1), collision));
+					list.push(new Player(layers.get(1), collision, this));
 					newObj = list.getFirst();
 				break;
 

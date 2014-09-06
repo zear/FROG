@@ -11,9 +11,9 @@ public class Player extends Creature
 	private Replay replay;
 	private boolean dead = false;	// temporary
 
-	public Player(LevelLayer lay, Collision col)
+	public Player(LevelLayer lay, Collision col, Level lev)
 	{
-		super(lay, col);
+		super(lay, col, lev);
 		viewport = new Camera();
 		keys = new boolean[6]; // left, right, up, down, jump, attack
 		replay = new Replay();

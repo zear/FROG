@@ -4,10 +4,11 @@ import java.util.ListIterator;
 public class AI
 {
 	// AI types
-	public static final int NONE = 0;
-	public static final int WAIT = 1;
-	public static final int WALK = 2;
-	public static final int JUMP = 3;
+	public static final int NONE		= 0;
+	public static final int WAIT		= 1;
+	public static final int WALK		= 2;
+	public static final int JUMP		= 3;
+	public static final int SPAWN_OBJ	= 4;
 
 	private class AIAction
 	{
@@ -19,6 +20,7 @@ public class AI
 		private float var1;
 		private float var2;
 		private float var3;
+		private String objName;
 
 		public AIAction(int type)
 		{
@@ -93,6 +95,15 @@ public class AI
 			}
 		}
 
+		public void setVar(String objName)
+		{
+			this.objName = objName;
+		}
+
+		public String getObjName()
+		{
+			return this.objName;
+		}
 	}
 
 	private LinkedList<AIAction> actionList;
@@ -160,8 +171,18 @@ public class AI
 		return this.curAction.getVar(var);
 	}
 
+	public String getObjName()
+	{
+		return this.curAction.getObjName();
+	}
+
 	public void setVar(int var, float value)
 	{
 		this.curAction.setVar(var, value);
+	}
+
+	public void setVar(String objName)
+	{
+		this.curAction.setVar(objName);
 	}
 }

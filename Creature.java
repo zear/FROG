@@ -21,11 +21,13 @@ public class Creature extends GameObject
 
 	protected LevelLayer levelLayer;	// the middle-layer of the level
 	protected Collision collision;		// reference to collision map passed by the Level object
+	private Level level;			// Current level. We use that to be able to spawn new objects within the current object. Ugly!
 
-	public Creature(LevelLayer lay, Collision col)
+	public Creature(LevelLayer lay, Collision col, Level lev)
 	{
 		this.collision = col;
 		this.levelLayer = lay;
+		this.level = lev;
 	}
 
 	public void load(String fileName, int w, int h, int rowW, int size, LinkedList <GameObjectTemplate> tempList)
@@ -173,6 +175,31 @@ public class Creature extends GameObject
 					}
 					this.ai.setNextAction();
 				}
+			break;
+			case AI.SPAWN_OBJ:
+				LinkedList<GameObject> newObjs = this.level.getNewObjs();
+
+				try
+				{
+					this.level.loadSingleObject(this.ai.getObjName(), newObjs);
+				}
+				catch (Exception e)
+				{
+					System.out.printf("Failed to load object file: %s.obj\n", this.ai.getObjName());
+					return;
+					// todo
+				}
+
+				Creature obj = (Creature)newObjs.getFirst();
+
+				obj.putX((int)(this.x + (this.w - 1)/2 - (obj.getW() - 1)/2));
+				obj.putY((int)this.y);
+				obj.setVx(this.ai.getVar(1));
+				obj.setVy(this.ai.getVar(2));
+				obj.putDirection(this.direction ? 1 : 0);
+				obj.affectedByGravity = true;
+
+				this.ai.setNextAction();
 			break;
 
 			default:

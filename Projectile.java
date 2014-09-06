@@ -10,9 +10,9 @@ public class Projectile extends Creature
 	private int ttl;			// Time to live counter.
 	private OnCollision onCollision;	// Behaviour on collision with level tiles (and not other objects!).
 
-	public Projectile(LevelLayer lay, Collision col)
+	public Projectile(LevelLayer lay, Collision col, Level lev)
 	{
-		super(lay, col);
+		super(lay, col, lev);
 	}
 
 	public int getTtl()
