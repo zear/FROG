@@ -1,5 +1,7 @@
 public class Camera
 {
+	public static final int MUST_FOLLOW_DIST = 48;
+
 	private int x = 0;
 	private int y = 0;
 	private LevelLayer layer;
@@ -71,13 +73,13 @@ public class Camera
 					this.x = targetX + t.w - 1 - 320;
 				}
 
-				if(this.targetY < this.y)
+				if(this.targetY < this.y + MUST_FOLLOW_DIST)
 				{
-					this.y = targetY;
+					this.y = targetY - MUST_FOLLOW_DIST;
 				}
-				else if(this.targetY + t.h - 1 > this.y + 240)
+				else if(this.targetY + t.h - 1 > this.y + 240 - MUST_FOLLOW_DIST)
 				{
-					this.y = targetY + t.h - 1 - 240;
+					this.y = targetY + t.h - 1 - 240 + MUST_FOLLOW_DIST;
 				}
 			}
 		}
@@ -98,12 +100,14 @@ public class Camera
 
 			if(t.isOnGround)
 			{
-				if(this.targetY < this.y + 240/2)
-					this.trackY = true;
-				else if(this.targetY > this.y + 240/2)
+				if(this.targetY != this.y + 240/2)
 					this.trackY = true;
 				else
 					this.trackY = false;
+			}
+			else if(this.targetY > this.y + 240/2)
+			{
+				this.trackY = true;
 			}
 		}
 		else
