@@ -15,6 +15,8 @@ public class Creature extends GameObject
 	protected boolean isCrouching;
 	protected boolean isClimbing;
 	protected boolean canClimb;
+	private int climbX;
+	private int climbY;
 	protected boolean affectedByGravity = true;
 
 	protected int hp;
@@ -112,7 +114,9 @@ public class Creature extends GameObject
 
 	public void tryClimb()
 	{
-		this.isClimbing = true;
+		climbCheck();
+		if(canClimb)
+			this.isClimbing = true;
 	}
 
 	public void climb(float vy)
@@ -204,6 +208,39 @@ public class Creature extends GameObject
 
 			default:
 			break;
+		}
+	}
+
+	private void climbCheck()
+	{
+		// #####
+		// |   |
+		// .---.
+
+		int col = Collision.COLLISION_NONE;
+		int tile;
+		int x1 = (int)(super.x);
+		int x2 = (int)(super.x) + super.w - 1;
+		int y1 = (int)(super.y);
+
+		if(x1 < 0)
+			x1 = -16;
+		if(y1 < 0)
+			y1 = -16;
+
+		for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+		{
+			tile = levelLayer.getTile(i, y1/16);
+			col = col | collision.getCollision(tile);
+
+			if((col & Collision.COLLISION_CLIMB) > 0)
+			{
+				{
+					this.canClimb = true;
+					this.climbX = i * 16;
+					break;
+				}
+			}
 		}
 	}
 
@@ -301,20 +338,25 @@ public class Creature extends GameObject
 				else
 					super.y += curVy;
 			}
-			else if((col & Collision.COLLISION_CLIMB) > 0)
-			{
-				this.canClimb = true;
-				super.y += curVy;
-			}
 			else
 			{
 				super.y += curVy;
 			}
 
-			// Is not
-			if(!((col & Collision.COLLISION_CLIMB) > 0))
+			col = Collision.COLLISION_NONE;
+			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
 			{
-				this.canClimb = false;
+				tile = levelLayer.getTile(i, y1/16);
+				col = col | collision.getCollision(tile);
+
+				if((col & Collision.COLLISION_CLIMB) > 0)
+				{
+					{
+						this.canClimb = true;
+						this.climbX = i * 16;
+						break;
+					}
+				}
 			}
 		}
 		else if(curVy < 0)
@@ -343,27 +385,27 @@ public class Creature extends GameObject
 			{
 				this.vy = 0;
 			}
-			else if((col & Collision.COLLISION_CLIMB) > 0)
-			{
-				this.canClimb = true;
-				super.y += curVy;
-			}
 			else
 			{
 				super.y += curVy;
 			}
 
-			// Is not
-			if(!((col & Collision.COLLISION_CLIMB) > 0))
+			col = Collision.COLLISION_NONE;
+			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
 			{
-				if(canClimb)
+				tile = levelLayer.getTile(i, y1/16);
+				col = col | collision.getCollision(tile);
+
+				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
-					super.y -= curVy;
-					//this.vy = 0;
+					{
+						this.canClimb = true;
+						this.climbX = i * 16;
+						break;
+					}
 				}
-					//super.y -= curVy;
-				//this.canClimb = false;
 			}
+
 		}
 
 		// check x
@@ -704,31 +746,37 @@ public class Creature extends GameObject
 			vy = -4;
 
 		if(isClimbing)
+		{
 			vx = 0;
+		}
 
 		// reset the fields
 		this.isOnGround	= false;
+		if(vy != 0)
+		{
+			this.canClimb = false;
+		}
 		// and call collision check
 		collisionCheck(this.vx, this.vy);
 
 		if(isClimbing)
 		{
 			if(!canClimb)
-				isClimbing = false;
+			{
+				y -= vy;
+			}
 		}
 
 		if(this.isOnGround)
 		{
-//			vx = 0;
 			if(vx > 0)
 				vx-= 0.1;
 			else if(vx < 0)
 				vx+= 0.1;
+
+			if(this.isClimbing)
+				this.isClimbing = false;
 		}
-//		else if(this.isClimbing)
-//		{
-//			vx = 0;
-//		}
 		else
 		{
 			if(vx > 0)
@@ -750,6 +798,7 @@ public class Creature extends GameObject
 		if(this.isClimbing)
 		{
 			vy = 0;
+			x = climbX;
 		}
 		else
 		{

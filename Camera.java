@@ -1,3 +1,5 @@
+import java.lang.Math;
+
 public class Camera
 {
 	public static final int MUST_FOLLOW_DIST = 48;
@@ -28,8 +30,8 @@ public class Camera
 	public void setTarget(GameObject obj)
 	{
 		this.target = obj;
-		this.targetX = (int)target.getX();
-		this.targetY = (int)target.getY();
+		this.targetX = (int)Math.floor(target.getX());
+		this.targetY = (int)Math.floor(target.getY());
 	}
 
 	public void setTarget(int x, int y)

@@ -57,16 +57,18 @@ public class Collision
 
 		switch(map[index])
 		{
-			case 1:
+			case 1:	// solid
 				return COLLISION_SOLID;
-			case 2:
+			case 2:	// platform
 				return COLLISION_PLATFORM;
-			case 3:
+			case 3:	// damage
 				return COLLISION_DAMAGE;
-			case 4:
+			case 4:	// destructible
 				return COLLISION_DESTRUCTIBLE;
-			case 5:
+			case 5:	// ladder
 				return COLLISION_CLIMB;
+			case 6:	// top of the ladder
+				return COLLISION_CLIMB | COLLISION_PLATFORM;
 
 			default:
 				return COLLISION_NONE;

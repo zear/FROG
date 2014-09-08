@@ -371,22 +371,18 @@ public class Level
 					{
 						if(player.isClimbing)
 						{
-							player.climb(-0.4f);
+							player.climb(-1f);
 						}
-						else if(player.canClimb)
+						else
 						{
 							player.tryClimb();
-						}
-						else	// look up
-						{
-							// todo
 						}
 					}
 					if(player.getAction(3))		// down
 					{
 						if(player.isClimbing)
 						{
-							player.climb(0.4f);
+							player.climb(1f);
 						}
 						else	// crouch
 						{
