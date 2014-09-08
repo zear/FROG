@@ -109,12 +109,16 @@ public class Creature extends GameObject
 
 	public void tryCrouch()
 	{
-		this.isCrouching = true;
+		climbCheck(true);
+		if(canClimb)
+			this.isClimbing = true;
+		else
+			this.isCrouching = true;
 	}
 
 	public void tryClimb()
 	{
-		climbCheck();
+		climbCheck(false);
 		if(canClimb)
 			this.isClimbing = true;
 	}
@@ -211,34 +215,66 @@ public class Creature extends GameObject
 		}
 	}
 
-	private void climbCheck()
+	private void climbCheck(boolean direction)
 	{
-		// #####
-		// |   |
-		// .---.
-
 		int col = Collision.COLLISION_NONE;
 		int tile;
+
 		int x1 = (int)(super.x);
 		int x2 = (int)(super.x) + super.w - 1;
-		int y1 = (int)(super.y);
+		int y1;
 
-		if(x1 < 0)
-			x1 = -16;
-		if(y1 < 0)
-			y1 = -16;
-
-		for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+		if(direction) // down
 		{
-			tile = levelLayer.getTile(i, y1/16);
-			col = col | collision.getCollision(tile);
+			// .---.
+			// |   |
+			// #####
 
-			if((col & Collision.COLLISION_CLIMB) > 0)
+			y1 = (int)(super.y) + 1 + super.h - 1;
+
+			if(x1 < 0)
+				x1 = -16;
+
+			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
 			{
+				tile = levelLayer.getTile(i, y1/16);
+				col = col | collision.getCollision(tile);
+
+				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
-					this.canClimb = true;
-					this.climbX = i * 16;
-					break;
+					{
+						this.canClimb = true;
+						this.climbX = i * 16;
+						break;
+					}
+				}
+			}
+		}
+		else // up
+		{
+			// #####
+			// |   |
+			// .---.
+
+			y1 = (int)(super.y) - 1;
+
+			if(x1 < 0)
+				x1 = -16;
+			if(y1 < 0)
+				y1 = -16;
+
+			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+			{
+				tile = levelLayer.getTile(i, y1/16);
+				col = col | collision.getCollision(tile);
+
+				if((col & Collision.COLLISION_CLIMB) > 0)
+				{
+					{
+						this.canClimb = true;
+						this.climbX = i * 16;
+						break;
+					}
 				}
 			}
 		}
@@ -329,7 +365,7 @@ public class Creature extends GameObject
 			}
 			else if((col & Collision.COLLISION_PLATFORM) > 0)
 			{
-				if(((int)this.y + super.h - 1)/16*16 < (y1)/16*16)
+				if(((int)this.y + super.h - 1)/16*16 < (y1)/16*16 && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
 				{
 					this.vy = 0;
 					this.y = (float)ceil(this.y) - 0.2f;
