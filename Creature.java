@@ -752,6 +752,12 @@ public class Creature extends GameObject
 				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
 					newAnim = "JUMP_UP";
 			}
+
+			if(this.isClimbing)
+			{
+				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
+			}
 		}
 		else if(vy > 0)
 		{
@@ -759,6 +765,20 @@ public class Creature extends GameObject
 			{
 				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
 					newAnim = "JUMP_DOWN";
+			}
+
+			if(this.isClimbing)
+			{
+				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
+			}
+		}
+		else
+		{
+			if(this.isClimbing)
+			{
+				if(!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
 			}
 		}
 
