@@ -39,6 +39,10 @@ public class LevelLayer
 		{
 			return t.get(row).get(element);
 		}
+		protected void setElement(int row, int element, int value)
+		{
+			t.get(row).set(element, value);
+		}
 		protected int getNumOfRows()
 		{
 			return t.size();
@@ -57,9 +61,7 @@ public class LevelLayer
 	public int getTile(int x, int y)
 	{
 		if(x < 0)
-		{
 			return -1;
-		}
 		if(y < 0)
 			return -1;
 		if(x > getWidth() - 1)
@@ -68,6 +70,20 @@ public class LevelLayer
 			return -1;
 
 		return tiles.getElement(y, x);
+	}
+
+	public void setTile(int x, int y, int value)
+	{
+		if(x < 0)
+			return;
+		if(y < 0)
+			return;
+		if(x > getWidth() - 1)
+			return;
+		if(y > getHeight() - 1)
+			return;
+
+		tiles.setElement(y, x, value);
 	}
 
 	public int getWidth()

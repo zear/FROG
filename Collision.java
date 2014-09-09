@@ -63,9 +63,9 @@ public class Collision
 				return COLLISION_PLATFORM;
 			case 3:	// damage
 				return COLLISION_DAMAGE;
-			case 4:	// destructible
-				return COLLISION_DESTRUCTIBLE;
-			case 5:	// ladder
+			case 4:	// destructible block
+				return COLLISION_DESTRUCTIBLE | COLLISION_SOLID;
+			case 5:	// middle of the ladder
 				return COLLISION_CLIMB;
 			case 6:	// top of the ladder
 				return COLLISION_CLIMB | COLLISION_PLATFORM;

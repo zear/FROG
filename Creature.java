@@ -283,6 +283,8 @@ public class Creature extends GameObject
 	private void collisionCheck(float totalVx, float totalVy)
 	{
 		int col;
+		int tmpCol;
+		boolean remTile;
 		float curVx;
 		float curVy;
 		float remVx = 0; // remaining vx
@@ -351,10 +353,19 @@ public class Creature extends GameObject
 				x1 = -16;
 
 			col = Collision.COLLISION_NONE;
+			remTile = true;
 			for(int i = x1/16; i <= x2/16; i++)
 			{
 				tile = levelLayer.getTile(i, y1/16);
-				col = col | collision.getCollision(tile);
+				tmpCol = collision.getCollision(tile);
+
+				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				{
+					levelLayer.setTile(i, y1/16, 0);
+					remTile = false;
+				}
+
+				col = col | tmpCol;
 			}
 
 			if((col & Collision.COLLISION_SOLID) > 0)
@@ -411,10 +422,19 @@ public class Creature extends GameObject
 				y1 = -16;
 
 			col = Collision.COLLISION_NONE;
+			remTile = true;
 			for(int i = x1/16; i <= x2/16; i++)
 			{
 				tile = levelLayer.getTile(i, y1/16);
-				col = col | collision.getCollision(tile);
+				tmpCol = collision.getCollision(tile);
+
+				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				{
+					levelLayer.setTile(i, y1/16, 0);
+					remTile = false;
+				}
+
+				col = col | tmpCol;
 			}
 
 			if((col & Collision.COLLISION_SOLID) > 0)
@@ -461,10 +481,19 @@ public class Creature extends GameObject
 				y2 = -16;
 
 			col = Collision.COLLISION_NONE;
+			remTile = true;
 			for(int i = y1/16; i <= y2/16; i++)
 			{
 				tile = levelLayer.getTile(x1/16, i);
-				col = col | collision.getCollision(tile);
+				tmpCol = collision.getCollision(tile);
+
+				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				{
+					levelLayer.setTile(x1/16, i, 0);
+					remTile = false;
+				}
+
+				col = col | tmpCol;
 			}
 
 			if((col & Collision.COLLISION_SOLID) > 0)
@@ -496,10 +525,19 @@ public class Creature extends GameObject
 				y2 = -16;
 
 			col = Collision.COLLISION_NONE;
+			remTile = true;
 			for(int i = y1/16; i <= y2/16; i++)
 			{
 				tile = levelLayer.getTile(x1/16, i);
-				col = col | collision.getCollision(tile);
+				tmpCol = collision.getCollision(tile);
+
+				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				{
+					levelLayer.setTile(x1/16, i, 0);
+					remTile = false;
+				}
+
+				col = col | tmpCol;
 			}
 
 			if((col & Collision.COLLISION_SOLID) > 0)
