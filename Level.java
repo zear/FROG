@@ -404,11 +404,11 @@ public class Level
 
 						if(!player.direction)	// left
 						{
-							x = (int)player.x - 5 - 15;
+							x = (int)player.x - 15;
 						}
 						else			// right
 						{
-							x = (int)player.x + player.w + 5;
+							x = (int)player.x + player.w;
 						}
 
 						try
@@ -498,7 +498,7 @@ public class Level
 							}
 						}
 
-						if(player.isVulnerable() && !player.isDead())
+						if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
 						{
 							if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1))
 							{
