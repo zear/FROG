@@ -425,7 +425,10 @@ public class Level
 						Projectile swoosh = (Projectile)newObjs.getFirst();
 
 						swoosh.putX(x);
-						swoosh.putY((int)player.y + 14);
+						if(player.isCrouching)
+							swoosh.putY((int)player.y + 14);
+						else
+							swoosh.putY((int)player.y + 7);
 						swoosh.putDirection(player.direction ? 1 : 0);
 						swoosh.affectedByGravity = false;
 					}

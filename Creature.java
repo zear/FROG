@@ -113,7 +113,10 @@ public class Creature extends GameObject
 		if(canClimb)
 			this.isClimbing = true;
 		else
-			this.isCrouching = true;
+		{
+			if(this.isOnGround)
+				this.isCrouching = true;
+		}
 	}
 
 	public void tryClimb()
@@ -850,6 +853,7 @@ public class Creature extends GameObject
 		{
 			this.canClimb = false;
 		}
+		this.isCrouching = false;
 		// and call collision check
 		collisionCheck(this.vx, this.vy);
 
