@@ -6,6 +6,7 @@ import java.util.ListIterator;
 enum ObjType
 {
 	OBJECT,
+	ITEM,
 	CREATURE,
 	PROJECTILE,
 	PLAYER

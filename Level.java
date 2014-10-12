@@ -163,6 +163,12 @@ public class Level
 					type = ObjType.OBJECT;
 					System.out.printf("new object\n");
 				}
+				else if (words[1].equals("ITEM"))
+				{
+					objTemp2.push(new Item());
+					type = ObjType.ITEM;
+					System.out.printf("new item\n");
+				}
 				else if (words[1].equals("CREATURE"))
 				{
 					System.out.printf("List: %d\n", layers.size());
@@ -235,6 +241,13 @@ public class Level
 						((Projectile)newObj).setTtl(Integer.parseInt(words[1]));
 					}
 				}
+				else if (words[0].equals("POINTS"))
+				{
+					if(newObj instanceof Item)
+					{
+						((Item)newObj).setPoints(Integer.parseInt(words[1]));
+					}
+				}
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
@@ -254,6 +267,10 @@ public class Level
 			{
 				case OBJECT:
 					list.push(new GameObject());
+					newObj = list.getFirst();
+				break;
+				case ITEM:
+					list.push(new Item());
 					newObj = list.getFirst();
 				break;
 				case CREATURE:
@@ -297,6 +314,10 @@ public class Level
 			if(newObj instanceof Projectile)
 			{
 				((Projectile)newObj).setTtl(((Projectile)template).getTtl());
+			}
+			if(newObj instanceof Item)
+			{
+				((Item)newObj).setPoints(((Item)template).getPoints());
 			}
 		}
 	}
@@ -477,6 +498,7 @@ public class Level
 				do
 				{
 					GameObject tmpObj = objsli2.next();
+
 					if(tmpObj instanceof Creature && tmpObj != curObj)
 					{
 						Creature tmpCreature = (Creature)tmpObj;
@@ -503,9 +525,9 @@ public class Level
 
 						if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
 						{
-							if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1))
+							if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 							{
-								if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1))
+								if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
 								{
 									// Pushes the player away from the creature.
 									if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
@@ -540,6 +562,25 @@ public class Level
 							}
 						}
 					}
+					else if(tmpObj instanceof Item && tmpObj != curObj)
+					{
+						Item tmpItem = (Item)tmpObj;
+
+						int px = (int)player.x;
+						int py = (int)player.y;
+						int ix = (int)tmpItem.x;
+						int iy = (int)tmpItem.y;
+
+						if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
+						{
+							if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
+							{
+								player.addScore(((Item)tmpObj).getPoints());
+								System.out.printf("Score: %d\n", player.getScore());
+								tmpItem.setRemoval(true);
+							}
+						}
+					}
 				}
 				while(objsli2.hasNext());
 			}
@@ -549,7 +590,7 @@ public class Level
 				do
 				{
 					GameObject tmpObj = objsli2.next();
-					if(tmpObj instanceof Creature && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
+					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
 					{
 						Creature tmpCreature = (Creature)tmpObj;
 
@@ -558,9 +599,9 @@ public class Level
 						int cx = (int)tmpCreature.x;
 						int cy = (int)tmpCreature.y;
 
-						if((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1))
+						if((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1) || (ox < cx && ox + curObj.w - 1 > cx + tmpCreature.w - 1))
 						{
-							if((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1))
+							if((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
 							{
 								curObj.setRemoval(true);
 								tmpCreature.setRemoval(true);

@@ -10,6 +10,7 @@ public class Player extends Creature
 	private boolean acceptInput = true;
 	private Replay replay;
 	private boolean dead = false;	// temporary
+	private int score;
 
 	public Player(LevelLayer lay, Collision col, Level lev)
 	{
@@ -46,6 +47,21 @@ public class Player extends Creature
 	public void setAcceptInput(boolean value)
 	{
 		this.acceptInput = value;
+	}
+
+	public int getScore()
+	{
+		return this.score;
+	}
+
+	public void setScore(int score)
+	{
+		this.score = score;
+	}
+
+	public void addScore(int score)
+	{
+		this.score += score;
 	}
 
 	public boolean getAction(int key)
