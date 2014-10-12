@@ -576,7 +576,6 @@ public class Level
 							if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
 							{
 								player.addScore(((Item)tmpObj).getPoints());
-								System.out.printf("Score: %d\n", player.getScore());
 								tmpItem.setRemoval(true);
 							}
 						}
