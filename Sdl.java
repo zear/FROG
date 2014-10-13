@@ -219,134 +219,137 @@ public class Sdl
 	{
 		try
 		{
-			event = SDLEvent.pollEvent();
+			while((event = SDLEvent.pollEvent()) != null)
+			{
+				switch(event.getType())
+				{
+					case SDLEvent.SDL_QUIT:
+						// exit program
+						Game.setQuit(true);
+						return;
+
+					case SDLEvent.SDL_KEYDOWN:
+					{
+						SDLKeyboardEvent key = (SDLKeyboardEvent)event;
+						putInput(key.getSym(), true);
+					}
+					break;
+
+					case SDLEvent.SDL_KEYUP:
+					{
+						SDLKeyboardEvent key = (SDLKeyboardEvent)event;
+						putInput(key.getSym(), false);
+					}
+					break;
+
+					case SDLEvent.SDL_JOYBUTTONDOWN:
+					{
+						if(Sdl.enableJoystick)
+						{
+							SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
+							switch(but.getButton())
+							{
+								case 0:
+									//putInput(SDLKey.SDLK_z, true);
+									putInput(SDLKey.SDLK_LCTRL, true);
+								break;
+								case 1:
+									//putInput(SDLKey.SDLK_x, true);
+									putInput(SDLKey.SDLK_LALT, true);
+								break;
+
+								default:
+								break;
+							}
+						}
+					}
+					break;
+
+					case SDLEvent.SDL_JOYBUTTONUP:
+					{
+						if(Sdl.enableJoystick)
+						{
+							SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
+							switch(but.getButton())
+							{
+								case 0:
+									//putInput(SDLKey.SDLK_z, false);
+									putInput(SDLKey.SDLK_LCTRL, false);
+								break;
+								case 1:
+									//putInput(SDLKey.SDLK_x, false);
+									putInput(SDLKey.SDLK_LALT, false);
+								break;
+
+								default:
+								break;
+							}
+						}
+					}
+					break;
+					case SDLEvent.SDL_JOYAXISMOTION:
+					{
+						if(Sdl.enableJoystick)
+						{
+							SDLJoyAxisEvent axis = (SDLJoyAxisEvent)event;
+
+							final int deadzone = 1000;
+							int value = axis.getValue();
+
+							switch(axis.getAxis())
+							{
+								case 0: // left-right
+									if(value < -deadzone)
+									{
+										putInput(SDLKey.SDLK_LEFT, true);
+										putInput(SDLKey.SDLK_RIGHT, false);
+									}
+									else if(value > deadzone)
+									{
+										putInput(SDLKey.SDLK_LEFT, false);
+										putInput(SDLKey.SDLK_RIGHT, true);
+									}
+									else
+									{
+										putInput(SDLKey.SDLK_LEFT, false);
+										putInput(SDLKey.SDLK_RIGHT, false);
+									}
+								break;
+								case 1: // up-down
+									if(value < -deadzone)
+									{
+										putInput(SDLKey.SDLK_UP, true);
+										putInput(SDLKey.SDLK_DOWN, false);
+									}
+									else if(value > deadzone)
+									{
+										putInput(SDLKey.SDLK_UP, false);
+										putInput(SDLKey.SDLK_DOWN, true);
+									}
+									else
+									{
+										putInput(SDLKey.SDLK_UP, false);
+										putInput(SDLKey.SDLK_DOWN, false);
+									}
+								break;
+
+								default:
+								break;
+							}
+						}
+					}
+					break;
+
+					default:
+					break;
+				}
+			}
 		}
+
 		catch (SDLException e)
 		{
 			System.out.printf("Failed to get event\n");
 			// todo
-		}
-
-		if(event != null)
-		{
-			switch(event.getType())
-			{
-				case SDLEvent.SDL_QUIT:
-					// exit program
-					Game.setQuit(true);
-					return;
-
-				case SDLEvent.SDL_KEYDOWN:
-				{
-					SDLKeyboardEvent key = (SDLKeyboardEvent)event;
-					putInput(key.getSym(), true);
-				}
-				break;
-
-				case SDLEvent.SDL_KEYUP:
-				{
-					SDLKeyboardEvent key = (SDLKeyboardEvent)event;
-					putInput(key.getSym(), false);
-				}
-				break;
-
-				case SDLEvent.SDL_JOYBUTTONDOWN:
-				{
-					if(Sdl.enableJoystick)
-					{
-						SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
-						switch(but.getButton())
-						{
-							case 0:
-								putInput(SDLKey.SDLK_z, true);
-							break;
-							case 1:
-								putInput(SDLKey.SDLK_x, true);
-							break;
-
-							default:
-							break;
-						}
-					}
-				}
-				break;
-
-				case SDLEvent.SDL_JOYBUTTONUP:
-				{
-					if(Sdl.enableJoystick)
-					{
-						SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
-						switch(but.getButton())
-						{
-							case 0:
-								putInput(SDLKey.SDLK_z, false);
-							break;
-							case 1:
-								putInput(SDLKey.SDLK_x, false);
-							break;
-
-							default:
-							break;
-						}
-					}
-				}
-				break;
-				case SDLEvent.SDL_JOYAXISMOTION:
-				{
-					if(Sdl.enableJoystick)
-					{
-						SDLJoyAxisEvent axis = (SDLJoyAxisEvent)event;
-
-						final int deadzone = 100;
-						int value = axis.getValue();
-
-						switch(axis.getAxis())
-						{
-							case 0: // left-right
-								if(value < -deadzone)
-								{
-									putInput(SDLKey.SDLK_LEFT, true);
-									putInput(SDLKey.SDLK_RIGHT, false);
-								}
-								else if(value > deadzone)
-								{
-									putInput(SDLKey.SDLK_LEFT, false);
-									putInput(SDLKey.SDLK_RIGHT, true);
-								}
-								else
-								{
-									putInput(SDLKey.SDLK_LEFT, false);
-									putInput(SDLKey.SDLK_RIGHT, false);
-								}
-							break;
-							case 1: // up-down
-								if(value < -deadzone)
-								{
-									putInput(SDLKey.SDLK_UP, true);
-									putInput(SDLKey.SDLK_DOWN, false);
-								}
-								else if(value > deadzone)
-								{
-									putInput(SDLKey.SDLK_UP, false);
-									putInput(SDLKey.SDLK_DOWN, true);
-								}
-								else
-								{
-									putInput(SDLKey.SDLK_UP, false);
-									putInput(SDLKey.SDLK_DOWN, false);
-								}
-							break;
-
-							default:
-							break;
-						}
-					}
-				}
-				break;
-
-				default:
-				break;
-			}
 		}
 	}
 }
