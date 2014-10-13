@@ -48,6 +48,7 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(0, 0.5f);
+			ai.setVar(1, 1f); // don't drop
 		}
 		else if(super.getName().equals("swoosh"))
 		{
@@ -71,6 +72,7 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(0, 0.5f);
+			ai.setVar(1, 1f); // don't drop
 		}
 		else if(super.getName().equals("swoosh"))
 		{
@@ -215,6 +217,43 @@ public class Creature extends GameObject
 
 			default:
 			break;
+		}
+	}
+
+	private void dropCheck(boolean direction)
+	{
+		int col = Collision.COLLISION_NONE;
+		int tile;
+
+		int x;
+		int y = (int)(super.y) + super.h;
+
+		if(direction)	// right
+		{
+			// .---.
+			// |   |
+			// .---.
+			//      #
+
+			x = (int)(super.x) + super.w;
+		}
+		else		// left
+		{
+			//  .---.
+			//  |   |
+			//  .---.
+			// #
+
+			x = (int)(super.x) - 1;
+		}
+
+		tile = levelLayer.getTile(x/16, y/16);
+		col = col | collision.getCollision(tile);
+
+		if(col == Collision.COLLISION_NONE)
+		{
+			this.vx = 0;
+			this.direction = !this.direction;
 		}
 	}
 
@@ -509,6 +548,11 @@ public class Creature extends GameObject
 			{
 				super.x += curVx;
 			}
+
+			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(1) != 0f)
+			{
+				dropCheck(true);
+			}
 		}
 		else if(curVx < 0)
 		{
@@ -552,6 +596,11 @@ public class Creature extends GameObject
 			else
 			{
 				super.x += curVx;
+			}
+
+			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(1) != 0)
+			{
+				dropCheck(false);
 			}
 		}
 
