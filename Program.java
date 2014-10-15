@@ -15,6 +15,7 @@ public class Program
 				if(i + 1 < args.length)
 				{
 					Program.levelName = args[i+1];
+					Program.game.changeState(GameStateEnum.STATE_GAME);
 				}
 				else
 				{

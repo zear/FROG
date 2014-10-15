@@ -100,7 +100,7 @@ public class Player extends Creature
 
 		// TODO: move this elsewhere
 		if(Sdl.getInput(SDLKey.SDLK_ESCAPE))
-			Game.setQuit(true);
+			Program.game.changeState(GameStateEnum.STATE_MENU);
 		if(Sdl.getInput(SDLKey.SDLK_f))
 			Sdl.toggleFullscreen();
 		if(Sdl.getInput(SDLKey.SDLK_c))

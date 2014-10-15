@@ -53,9 +53,12 @@ public class Game
 		if(Sdl.fps())
 		{
 			checkState();
-			Input.getInput();
-			activeState.logic();
-			activeState.draw();
+			if(activeState != null)
+			{
+				Input.getInput();
+				activeState.logic();
+				activeState.draw();
+			}
 		}
 		
 		return quit;

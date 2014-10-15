@@ -1,3 +1,5 @@
+import sdljava.event.*;
+
 public class GameStateMenu implements GameState
 {
 	private final int MENU_EPISODES = 0;
@@ -6,21 +8,23 @@ public class GameStateMenu implements GameState
 	private final int MENU_SEPARATOR = 3;
 	private final int MENU_BACK = 4;
 
-	private int [] curMenu;
+	private int[] curMenu;
 	private int curSelection = 0;
+	private boolean selected = false;
+	private boolean[] keys;
 
-	private int [] menuMain =
+	private int[] menuMain =
 	{
 		MENU_EPISODES,
 		MENU_OPTIONS,
 		MENU_EXIT
 	};
-	private int [] menuEpisodes =
+	private int[] menuEpisodes =
 	{
 		MENU_SEPARATOR,
 		MENU_BACK
 	};
-	private int [] menuOptions =
+	private int[] menuOptions =
 	{
 		MENU_BACK
 	};
@@ -30,32 +34,93 @@ public class GameStateMenu implements GameState
 	public void loadState()
 	{
 		font = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
+		keys = new boolean[6]; // left, right, up, down, accept, back
 		curMenu = menuMain;
 	}
 	public void unloadState()
 	{
 	}
 
+	public void input()
+	{
+		keys[0] = Sdl.getInput(SDLKey.SDLK_LEFT);
+		keys[1] = Sdl.getInput(SDLKey.SDLK_RIGHT);
+		keys[2] = Sdl.getInput(SDLKey.SDLK_UP);
+		keys[3] = Sdl.getInput(SDLKey.SDLK_DOWN);
+//		keys[4] = Sdl.getInput(SDLKey.SDLK_x);
+//		keys[5] = Sdl.getInput(SDLKey.SDLK_z);
+		keys[4] = Sdl.getInput(SDLKey.SDLK_LCTRL);
+		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
+	}
+
 	public void logic()
 	{
-		switch(curMenu[curSelection])
-		{
-			case MENU_EPISODES:
-				Program.game.changeState(GameStateEnum.STATE_GAME);
-			break;
-			case MENU_OPTIONS:
-				// TODO
-			break;
-			case MENU_EXIT:
-				Program.game.changeState(GameStateEnum.STATE_EXIT);
-			break;
+		input();
 
-			default:
-			break;
+		if(keys[2]) // up
+		{
+			keys[2] = false;
+			curSelection--;
+		}
+		else if(keys[3]) // down
+		{
+			keys[3] = false;
+			curSelection++;
+		}
+		else if(keys[4]) // accept
+		{
+			keys[4] = false;
+			selected = true;
+		}
+
+		// temp
+		Sdl.putInput(SDLKey.SDLK_LEFT, keys[0]);
+		Sdl.putInput(SDLKey.SDLK_RIGHT, keys[1]);
+		Sdl.putInput(SDLKey.SDLK_UP, keys[2]);
+		Sdl.putInput(SDLKey.SDLK_DOWN, keys[3]);
+//		Sdl.putInput(SDLKey.SDLK_x, keys[4]);
+//		Sdl.putInput(SDLKey.SDLK_z, keys[5]);
+		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[4]);
+		Sdl.putInput(SDLKey.SDLK_LALT, keys[5]);
+
+		if(curSelection < 0)
+			curSelection = curMenu.length - 1;
+		else if(curSelection >= curMenu.length)
+			curSelection = 0;
+
+		if(selected)
+		{
+			switch(curMenu[curSelection])
+			{
+				case MENU_EPISODES:
+					Program.game.changeState(GameStateEnum.STATE_GAME);
+				break;
+				case MENU_OPTIONS:
+					// TODO
+				break;
+				case MENU_EXIT:
+					Program.game.changeState(GameStateEnum.STATE_EXIT);
+				break;
+
+				default:
+				break;
+			}
+
+			selected = false;
 		}
 	}
 	public void draw()
 	{
+		// Draw uniform background
+		try
+		{
+			Sdl.screen.fillRect(100);
+		}
+		catch (Exception e)
+		{
+			//todo
+		}
+
 		if(curMenu != null)
 		{
 			font.draw("->", 110, 130 + curSelection * 12);
