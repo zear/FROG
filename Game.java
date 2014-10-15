@@ -3,8 +3,8 @@ public class Game
 {
 	private GameStateMenu stateMenu = new GameStateMenu();
 	private GameStateGame stateGame = new GameStateGame();
-	private GameState activeState = stateMenu;
-	private GameState newState = activeState;
+	private GameState activeState = null;
+	private GameState newState = stateMenu;
 
 	private static boolean quit = false;
 
