@@ -8,13 +8,28 @@ public class AI
 	public static final int WAIT		= 1;
 	public static final int WALK		= 2;
 	public static final int JUMP		= 3;
-	public static final int SPAWN_OBJ	= 4;
+	public static final int FLY		= 4;
+	public static final int SPAWN_OBJ	= 5;
+
+	// AI action var names
+	public static final int WALK_VX		= 0;
+	public static final int WALK_DROP	= 1;
+	public static final int JUMP_VX		= 0;
+	public static final int JUMP_VY		= 1;
+	public static final int FLY_VX		= 0;
+	public static final int FLY_AMPLITUDE	= 1;
+	public static final int SPAWN_OBJ_OBJVX	= 1;
+	public static final int SPAWN_OBJ_OBJVY	= 2;
 
 	private class AIAction
 	{
 		private int type;
 		private int timer;
 		private int origTime;
+
+		// Variables used for sine wave
+		private float sineDisplacement;	// current height of the wave
+		private boolean sineDirection;	// direction of the wave (raising/falling)
 
 		// Variables used for action
 		private float var1;
@@ -58,6 +73,26 @@ public class AI
 		public void resetTimer()
 		{
 			this.timer = origTime;
+		}
+
+		public float getSineDisplacement()
+		{
+			return this.sineDisplacement;
+		}
+
+		public void setSineDisplacement(float displacement)
+		{
+			this.sineDisplacement = displacement;
+		}
+
+		public boolean getSineDirection()
+		{
+			return this.sineDirection;
+		}
+
+		public void setSineDirection(boolean direction)
+		{
+			this.sineDirection = direction;
 		}
 
 		public float getVar(int var)
@@ -164,6 +199,26 @@ public class AI
 	public int getTimer()
 	{
 		return this.curAction.getTimer();
+	}
+
+	public float getSineDisplacement()
+	{
+		return this.curAction.getSineDisplacement();
+	}
+
+	public void setSineDisplacement(float displacement)
+	{
+		this.curAction.setSineDisplacement(displacement);
+	}
+
+	public boolean getSineDirection()
+	{
+		return this.curAction.getSineDirection();
+	}
+
+	public void setSineDirection(boolean direction)
+	{
+		this.curAction.setSineDirection(direction);
 	}
 
 	public float getVar(int var)

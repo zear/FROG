@@ -41,19 +41,25 @@ public class Creature extends GameObject
 		if(super.getName().equals("jumper"))
 		{
 			ai.addAction(AI.JUMP);
-			ai.setVar(0, 1.5f);
-			ai.setVar(1, 4.0f);
+			ai.setVar(AI.JUMP_VX, 1.5f);
+			ai.setVar(AI.JUMP_VY, 4.0f);
 		}
 		else if(super.getName().equals("badass"))
 		{
 			ai.addAction(AI.WALK);
-			ai.setVar(0, 0.5f);
-			ai.setVar(1, 1f); // don't drop
+			ai.setVar(AI.WALK_VX, 0.5f);
+			ai.setVar(AI.WALK_DROP, 1f); // don't drop
 		}
 		else if(super.getName().equals("swoosh"))
 		{
 			ai.addAction(AI.WALK);
-			ai.setVar(0, 5f);
+			ai.setVar(AI.WALK_VX, 5f);
+		}
+		else if(super.getName().equals("dragonfly"))
+		{
+			ai.addAction(AI.FLY);
+			ai.setVar(AI.FLY_VX, 1.5f);
+			ai.setVar(AI.FLY_AMPLITUDE, 3f);
 		}
 	}
 
@@ -65,19 +71,25 @@ public class Creature extends GameObject
 		if(super.getName().equals("jumper"))
 		{
 			ai.addAction(AI.JUMP);
-			ai.setVar(0, 1.5f);
-			ai.setVar(1, 4.0f);
+			ai.setVar(AI.JUMP_VX, 1.5f);
+			ai.setVar(AI.JUMP_VY, 4.0f);
 		}
 		else if(super.getName().equals("badass"))
 		{
 			ai.addAction(AI.WALK);
-			ai.setVar(0, 0.5f);
-			ai.setVar(1, 1f); // don't drop
+			ai.setVar(AI.WALK_VX, 0.5f);
+			ai.setVar(AI.WALK_DROP, 1f); // don't drop
 		}
 		else if(super.getName().equals("swoosh"))
 		{
 			ai.addAction(AI.WALK);
-			ai.setVar(0, 5f);
+			ai.setVar(AI.WALK_VX, 5f);
+		}
+		else if(super.getName().equals("dragonfly"))
+		{
+			ai.addAction(AI.FLY);
+			ai.setVar(AI.FLY_VX, 1.5f);
+			ai.setVar(AI.FLY_AMPLITUDE, 3f);
 		}
 	}
 
@@ -150,6 +162,12 @@ public class Creature extends GameObject
 		this.vx = vx;
 	}
 
+	public void fly(float vx, float vy)
+	{
+		this.vx = vx;
+		this.vy = vy;
+	}
+
 	public void doAi()
 	{
 		if(!this.ai.hasActions())	// Don't bother if there are no AI actions for this object
@@ -167,9 +185,9 @@ public class Creature extends GameObject
 				this.ai.doTimer();
 
 				if(!this.direction)	// left
-					this.walk(-this.ai.getVar(0));
+					this.walk(-this.ai.getVar(AI.WALK_VX));
 				else			// right
-					this.walk(this.ai.getVar(0));
+					this.walk(this.ai.getVar(AI.WALK_VX));
 
 				if(this.ai.getTimer() <= 0)
 					this.ai.setNextAction();
@@ -177,17 +195,65 @@ public class Creature extends GameObject
 			case AI.JUMP:
 				if(this.isOnGround)
 				{
-					this.jump(-this.ai.getVar(1));
+					this.jump(-this.ai.getVar(AI.JUMP_VY));
 					if(!this.direction)	// left
 					{
-						this.walk(-this.ai.getVar(0));
+						this.walk(-this.ai.getVar(AI.JUMP_VX));
 					}
 					else			// right
 					{
-						this.walk(this.ai.getVar(0));
+						this.walk(this.ai.getVar(AI.JUMP_VX));
 					}
 					this.ai.setNextAction();
 				}
+			break;
+			case AI.FLY:
+				this.ai.doTimer();
+
+				float sine;
+
+				if(this.ai.getVar(AI.FLY_AMPLITUDE) == 0)
+				{
+					sine = 0f;
+				}
+				else
+				{
+					sine = (float)Math.sin(this.ai.getSineDisplacement());
+
+					if(this.ai.getSineDirection())
+					{
+						this.ai.setSineDisplacement(this.ai.getSineDisplacement() - 0.05f);
+					}
+					else
+					{
+						this.ai.setSineDisplacement(this.ai.getSineDisplacement() + 0.05f);
+					}
+
+					if(this.ai.getSineDisplacement() <= -1)
+					{
+						this.ai.setSineDisplacement(-1);
+						this.ai.setSineDirection(!this.ai.getSineDirection());
+					}
+					else if(this.ai.getSineDisplacement() >= 1)
+					{
+						this.ai.setSineDisplacement(1);
+						this.ai.setSineDirection(!this.ai.getSineDirection());
+					}
+				}
+
+				if(!this.direction)	// left
+				{
+					this.fly(-this.ai.getVar(AI.FLY_VX), sine * this.ai.getVar(AI.FLY_AMPLITUDE));
+				}
+				else			// right
+				{
+					this.fly(this.ai.getVar(AI.FLY_VX), sine * this.ai.getVar(AI.FLY_AMPLITUDE));
+				}
+
+				this.affectedByGravity = false;
+
+				if(this.ai.getTimer() <= 0)
+					this.ai.setNextAction();
 			break;
 			case AI.SPAWN_OBJ:
 				LinkedList<GameObject> newObjs = this.level.getNewObjs();
@@ -207,8 +273,8 @@ public class Creature extends GameObject
 
 				obj.putX((int)(this.x + (this.w - 1)/2 - (obj.getW() - 1)/2));
 				obj.putY((int)this.y);
-				obj.setVx(this.ai.getVar(1));
-				obj.setVy(this.ai.getVar(2));
+				obj.setVx(this.ai.getVar(AI.SPAWN_OBJ_OBJVX));
+				obj.setVy(this.ai.getVar(AI.SPAWN_OBJ_OBJVY));
 				obj.putDirection(this.direction ? 1 : 0);
 				obj.affectedByGravity = true;
 
