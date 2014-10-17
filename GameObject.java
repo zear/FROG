@@ -341,29 +341,28 @@ public class GameObject
 			// todo
 		}
 
-		// Uncomment to debug camera
-//		if(this instanceof Player)
-//		{
-//			r.x = 320/2 - 16;
-//			r.y = 240/2 - 16;
-//			r.width = 32;
-//			r.height = 1;
-//			try
-//			{
-//				Sdl.screen.fillRect(r, 10);
-//				r.y = 240/2 + 8 + this.h - 1;
-//				Sdl.screen.fillRect(r, 10);
-//				r.y = 240/2 - 16;
-//				r.width = 1;
-//				r.height = 24 + this.h - 1;
-//				Sdl.screen.fillRect(r, 10);
-//				r.x = 320/2 + 16;
-//				Sdl.screen.fillRect(r, 10);
-//			}
-//			catch (SDLException e)
-//			{
-//				// todo
-//			}
-//		}
+		if(Game.debugMode)
+		{
+			r.x = (int)this.x - camera.getX();
+			r.y = (int)this.y - camera.getY();
+			r.width = this.w;
+			r.height = 1;
+			try
+			{
+				Sdl.screen.fillRect(r, 10);	// top
+				r.y = r.y + this.h - 1;
+				Sdl.screen.fillRect(r, 10);	// bottom
+				r.y = (int)this.y - camera.getY();
+				r.width = 1;
+				r.height = this.h;
+				Sdl.screen.fillRect(r, 10);	// left
+				r.x = (int)this.x - camera.getX() + this.w - 1;
+				Sdl.screen.fillRect(r, 10);	// right
+			}
+			catch (SDLException e)
+			{
+				// todo
+			}
+		}
 	}
 }

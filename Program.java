@@ -32,6 +32,10 @@ public class Program
 			{
 				Sdl.enableJoystick = false;
 			}
+			if(args[i].equals("-debug"))
+			{
+				Game.debugMode = true;
+			}
 		}
 
 		Sdl.initSDL();
