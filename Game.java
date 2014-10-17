@@ -6,6 +6,7 @@ public class Game
 	private GameState activeState = null;
 	private GameState newState = stateMenu;
 
+	public static boolean drawFps = false;
 	public static boolean debugMode = false;
 	private static boolean quit = false;
 

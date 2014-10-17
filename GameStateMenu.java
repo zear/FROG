@@ -5,10 +5,13 @@ public class GameStateMenu implements GameState
 	private final int MENU_EPISODES = 0;
 	private final int MENU_OPTIONS = 1;
 	private final int MENU_EXIT = 2;
-	private final int MENU_SEPARATOR = 3;
-	private final int MENU_BACK = 4;
+	private final int MENU_FPS = 3;
+	private final int MENU_DEBUG = 4;
+	private final int MENU_SEPARATOR = 5;
+	private final int MENU_BACK = 6;
 
 	private int[] curMenu;
+	private int[] parentMenu = null;
 	private int curSelection = 0;
 	private boolean selected = false;
 	private boolean[] keys;
@@ -26,6 +29,9 @@ public class GameStateMenu implements GameState
 	};
 	private int[] menuOptions =
 	{
+		MENU_FPS,
+		MENU_DEBUG,
+		MENU_SEPARATOR,
 		MENU_BACK
 	};
 
@@ -61,11 +67,17 @@ public class GameStateMenu implements GameState
 		{
 			keys[2] = false;
 			curSelection--;
+
+			if(curSelection >= 0 && curMenu[curSelection] == MENU_SEPARATOR)
+				curSelection--;
 		}
 		else if(keys[3]) // down
 		{
 			keys[3] = false;
 			curSelection++;
+
+			if(curSelection < curMenu.length && curMenu[curSelection] == MENU_SEPARATOR)
+				curSelection++;
 		}
 		else if(keys[4]) // accept
 		{
@@ -96,10 +108,26 @@ public class GameStateMenu implements GameState
 					Program.game.changeState(GameStateEnum.STATE_GAME);
 				break;
 				case MENU_OPTIONS:
-					// TODO
+					parentMenu = curMenu;
+					curMenu = menuOptions;
+					curSelection = 0;
 				break;
 				case MENU_EXIT:
 					Program.game.changeState(GameStateEnum.STATE_EXIT);
+				break;
+				case MENU_FPS:
+					Game.drawFps = !Game.drawFps;
+				break;
+				case MENU_DEBUG:
+					Game.debugMode = !Game.debugMode;
+				break;
+				case MENU_BACK:
+					if(parentMenu != null)
+					{
+						curMenu = parentMenu;
+						parentMenu = null;
+						curSelection = 0;
+					}
 				break;
 
 				default:
@@ -139,6 +167,18 @@ public class GameStateMenu implements GameState
 					break;
 					case MENU_EXIT:
 						word = "Quit";
+					break;
+					case MENU_FPS:
+						word = "show fps" + (Game.drawFps ? ": ON" : ": OFF");
+					break;
+					case MENU_DEBUG:
+						word = "debug mode" + (Game.debugMode ? ": ON" : ": OFF");
+					break;
+					case MENU_SEPARATOR:
+						word = "";
+					break;
+					case MENU_BACK:
+						word = "back";
 					break;
 
 					default:

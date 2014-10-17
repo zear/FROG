@@ -64,8 +64,13 @@ public class Gui
 			else
 				this.hpBar.blitSurface(this.hpBarClip[0], Sdl.screen, r);
 
-			font.draw("".format("%6dp", this.player.getScore()), 255, 1);
-			font.draw("" + (Sdl.fpsIsCapped ? "" : "!") + Sdl.fpsCalculated, 290, 14);
+				font.draw("".format("%6dp", this.player.getScore()), 255, 1);
+
+			if(Game.drawFps)
+			{
+				font.draw("" + (Sdl.fpsIsCapped ? "" : "!") + Sdl.fpsCalculated, 290, 14);
+			}
+
 			Sdl.fpsIsCapped = false;
 
 			if(timer2 > 0)
