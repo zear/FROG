@@ -1,4 +1,5 @@
 import sdljava.event.*;
+import java.util.LinkedList;
 
 // Player class extends Creature class by player specific features
 public class Player extends Creature
@@ -11,6 +12,7 @@ public class Player extends Creature
 	private Replay replay;
 	private boolean dead = false;	// temporary
 	private int score;
+	private LinkedList<GameObject> attackObjs = null;
 
 	public Player(LevelLayer lay, Collision col, Level lev)
 	{
@@ -18,6 +20,7 @@ public class Player extends Creature
 		viewport = new Camera();
 		keys = new boolean[6]; // left, right, up, down, jump, attack
 		replay = new Replay();
+		attackObjs = new LinkedList<GameObject>();
 	}
 
 	public float getWalkV()
@@ -125,5 +128,10 @@ public class Player extends Creature
 	public void setDead(boolean value)
 	{
 		this.dead = value;
+	}
+
+	public LinkedList<GameObject> getAttackObjs()
+	{
+		return this.attackObjs;
 	}
 }

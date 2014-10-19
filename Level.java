@@ -331,8 +331,12 @@ public class Level
 		ListIterator<GameObject> objsli = objs.listIterator();
 		while (objsli.hasNext())
 		{
-			if(objsli.next().getRemoval())
+			GameObject curObj = objsli.next();
+
+			if(curObj.getRemoval())
 			{
+				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
+					playerObj.getAttackObjs().remove();
 				objsli.remove();
 			}
 		}
@@ -342,7 +346,11 @@ public class Level
 		{
 			do
 			{
-				objs.push(newObjsli.next());
+				GameObject curObj = newObjsli.next();
+
+				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
+					playerObj.getAttackObjs().push(curObj);
+				objs.push(curObj);
 			}
 			while(newObjsli.hasNext());
 			newObjs = new LinkedList<GameObject>();
@@ -505,9 +513,12 @@ public class Level
 
 			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
 			{
-				ListIterator<GameObject> objsli2 = objs.listIterator();
+				ListIterator<GameObject> objsli2 = playerObj.getAttackObjs().listIterator();
 				do
 				{
+					if(!objsli2.hasNext())
+						break;
+
 					GameObject tmpObj = objsli2.next();
 					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
 					{
