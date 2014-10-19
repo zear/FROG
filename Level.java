@@ -324,6 +324,8 @@ public class Level
 
 	public void logic() // logic related to the map and all it's objects
 	{
+		Player playerObj = null;
+
 		// Update the objs list with:
 		// 1) objects to delete
 		ListIterator<GameObject> objsli = objs.listIterator();
@@ -356,80 +358,81 @@ public class Level
 			//System.out.printf("###\n");
 			if(curObj instanceof Player)
 			{
-				Player player = (Player)curObj;
+				playerObj = (Player)curObj;
+				//Player player = (Player)curObj;
 
 				if(camera == null)
 				{
-					camera = player.viewport;
-					camera.setCamera(player);
+					camera = playerObj.viewport;
+					camera.setCamera(playerObj);
 				}
-				else if(player.hp > 0)
+				else if(playerObj.hp > 0)
 				{
-					camera = player.viewport;
-					camera.setTarget(player);
+					camera = playerObj.viewport;
+					camera.setTarget(playerObj);
 				}
 				else
 				{
 					camera.setTarget(camera.getTarget());
 				}
 
-				gui.setPlayer(player);
+				gui.setPlayer(playerObj);
 				// check input
-				player.updateKeys();
+				playerObj.updateKeys();
 
-				if(player.isDead())
+				if(playerObj.isDead())
 				{
 					continue;
 				}
 
-				if(player.acceptInput())
+				if(playerObj.acceptInput())
 				{
-					if(player.getAction(0))		// left
-						player.walk(-player.getWalkV());
-					if(player.getAction(1))		// right
-						player.walk(player.getWalkV());
-					if(player.getAction(2))		// up
+					if(playerObj.getAction(0))		// left
+						playerObj.walk(-playerObj.getWalkV());
+					if(playerObj.getAction(1))		// right
+						playerObj.walk(playerObj.getWalkV());
+					if(playerObj.getAction(2))		// up
 					{
-						if(player.isClimbing)
+						if(playerObj.isClimbing)
 						{
-							player.climb(-1f);
+							playerObj.climb(-1f);
 						}
 						else
 						{
-							player.tryClimb();
+							playerObj.tryClimb();
 						}
 					}
-					if(player.getAction(3))		// down
+					if(playerObj.getAction(3))		// down
 					{
-						if(player.isClimbing)
+						if(playerObj.isClimbing)
 						{
-							player.climb(1f);
+							playerObj.climb(1f);
 						}
 						else	// crouch
 						{
-							player.tryCrouch();
+							playerObj.tryCrouch();
 						}
 					}
-					if(player.getAction(4))		// jump
+					if(playerObj.getAction(4))		// jump
 					{
-						player.setAction(2, false);
-						player.setAction(4, false);
-						player.jump(-player.getJumpV());
+						playerObj.setAction(2, false);
+						playerObj.setAction(4, false);
+						playerObj.jump(-playerObj.getJumpV());
 					}
-					if(player.getAction(5))		// attack
+					if(playerObj.getAction(5))		// attack
 					{
 						int x;
 
-						//player.setAction(5, false);
-						player.setAcceptInput(false);
+						//playerObj.setAction(5, false);
+						playerObj.setAcceptInput(false);
 
-						if(!player.direction)	// left
+						if(!playerObj.direction)	// left
 						{
-							x = (int)player.x - 15;
+							x = (int)playerObj.x - 15;
 						}
 						else			// right
 						{
-							x = (int)player.x + player.w;
+							x = (int)playerObj.x + playerObj.w;
 						}
 
 						try
@@ -446,22 +449,49 @@ public class Level
 						Projectile swoosh = (Projectile)newObjs.getFirst();
 
 						swoosh.putX(x);
-						if(player.isCrouching)
-							swoosh.putY((int)player.y + 14);
+						if(playerObj.isCrouching)
+							swoosh.putY((int)playerObj.y + 14);
 						else
-							swoosh.putY((int)player.y + 7);
-						swoosh.putDirection(player.direction ? 1 : 0);
+							swoosh.putY((int)playerObj.y + 7);
+						swoosh.putDirection(playerObj.direction ? 1 : 0);
 						swoosh.affectedByGravity = false;
 					}
 				}
 				else	// TODO: This should be solved in a cleaner way.
 				{
-					player.setAction(5, false);
+					playerObj.setAction(5, false);
 				}
+
+				break; // this assumes there is only one player on the level
 			}
 		}
 		while(objsli.hasNext());
 
+//		objsli = objs.listIterator();
+//		do
+//		{
+//			if(!objsli.hasNext())
+//				break;
+
+//			GameObject curObj = objsli.next();
+
+//			curObj.logic();
+
+////			if(curObj instanceof Creature)
+//			if(curObj instanceof Player)
+//			{
+//				Creature creature = (Creature)curObj;
+//				creature.doAi();
+//				creature.move();
+//			}
+//		}
+
+//		while(objsli.hasNext());
+
+		playerObj.doAi();
+		playerObj.move();
+
+		// check collision with other objects
 		objsli = objs.listIterator();
 		do
 		{
@@ -472,117 +502,7 @@ public class Level
 
 			curObj.logic();
 
-//			if(curObj instanceof Creature)
-			if(curObj instanceof Player)
-			{
-				Creature creature = (Creature)curObj;
-				creature.doAi();
-				creature.move();
-			}
-		}
-		while(objsli.hasNext());
-
-		// check collision with other objects
-		objsli = objs.listIterator();
-		do
-		{
-			if(!objsli.hasNext())
-				break;
-
-			GameObject curObj = objsli.next();
-			if(curObj instanceof Player)
-			{
-				Player player = (Player)curObj;
-
-				ListIterator<GameObject> objsli2 = objs.listIterator();
-				do
-				{
-					GameObject tmpObj = objsli2.next();
-
-					// Activity zone around the player - only objects within this zone have the logic computed
-					int zoneX = this.camera.getX() - 20;
-					int zoneY = this.camera.getY() - 20;
-					int zoneW = 320 + 40;
-					int zoneH = 240 + 40;
-					int ox = (int)tmpObj.x;
-					int oy = (int)tmpObj.y;
-
-					if((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
-					{
-						if(tmpObj instanceof Creature && tmpObj != curObj)
-						{
-							Creature tmpCreature = (Creature)tmpObj;
-
-							int px = (int)player.x;
-							int py = (int)player.y;
-							int cx = (int)tmpCreature.x;
-							int cy = (int)tmpCreature.y;
-
-							tmpCreature.doAi();
-							tmpCreature.move();
-
-							if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
-							{
-								if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
-								{
-									if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
-									{
-										// Pushes the player away from the creature.
-										if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
-										{
-											player.vx += 1;
-										}
-										else
-										{
-											player.vx -= 1;
-										}
-
-										player.hp--;
-										player.setInvincibility(90);
-										player.setBlinking(90);
-
-										if(player.hp <= 0)
-										{
-											camera.setTarget(tmpCreature);
-										}
-										//player.setAcceptInput(false);
-
-										// Pushes the creature away from the player.
-		//								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
-		//								{
-		//									tmpCreature.vx -= 2;
-		//								}
-		//								else
-		//								{
-		//									tmpCreature.vx += 2;
-		//								}
-									}
-								}
-							}
-						}
-						else if(tmpObj instanceof Item && tmpObj != curObj)
-						{
-							Item tmpItem = (Item)tmpObj;
-
-							int px = (int)player.x;
-							int py = (int)player.y;
-							int ix = (int)tmpItem.x;
-							int iy = (int)tmpItem.y;
-
-							if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
-							{
-								if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
-								{
-									player.addScore(((Item)tmpObj).getPoints());
-									tmpItem.setRemoval(true);
-								}
-							}
-						}
-					}
-				}
-				while(objsli2.hasNext());
-			}
-			else if(curObj.isVulnerable()) // check if can get damage
+			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
 			{
 				ListIterator<GameObject> objsli2 = objs.listIterator();
 				do
@@ -611,6 +531,96 @@ public class Level
 			}
 		}
 		while(objsli.hasNext());
+
+		Player player = playerObj;
+
+		ListIterator<GameObject> objsli2 = objs.listIterator();
+		do
+		{
+			GameObject tmpObj = objsli2.next();
+
+			// Activity zone around the player - only objects within this zone have the logic computed
+			int zoneX = this.camera.getX() - 20;
+			int zoneY = this.camera.getY() - 20;
+			int zoneW = 320 + 40;
+			int zoneH = 240 + 40;
+			int ox = (int)tmpObj.x;
+			int oy = (int)tmpObj.y;
+
+			if((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
+			{
+				if(tmpObj instanceof Creature && tmpObj != player)
+				{
+					Creature tmpCreature = (Creature)tmpObj;
+
+					int px = (int)player.x;
+					int py = (int)player.y;
+					int cx = (int)tmpCreature.x;
+					int cy = (int)tmpCreature.y;
+
+					tmpCreature.doAi();
+					tmpCreature.move();
+
+					if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
+					{
+						if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
+						{
+							if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
+							{
+								// Pushes the player away from the creature.
+								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+								{
+									player.vx += 1;
+								}
+								else
+								{
+									player.vx -= 1;
+								}
+
+								player.hp--;
+								player.setInvincibility(90);
+								player.setBlinking(90);
+
+								if(player.hp <= 0)
+								{
+									camera.setTarget(tmpCreature);
+								}
+								//player.setAcceptInput(false);
+
+								// Pushes the creature away from the player.
+//								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+//								{
+//									tmpCreature.vx -= 2;
+//								}
+//								else
+//								{
+//									tmpCreature.vx += 2;
+//								}
+							}
+						}
+					}
+				}
+				else if(tmpObj instanceof Item && tmpObj != player)
+				{
+					Item tmpItem = (Item)tmpObj;
+
+					int px = (int)player.x;
+					int py = (int)player.y;
+					int ix = (int)tmpItem.x;
+					int iy = (int)tmpItem.y;
+
+					if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
+					{
+						if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
+						{
+							player.addScore(((Item)tmpObj).getPoints());
+							tmpItem.setRemoval(true);
+						}
+					}
+				}
+			}
+		}
+		while(objsli2.hasNext());
 	}
 
 	public void draw() // draws map layers, objects and all the other map related stuff
