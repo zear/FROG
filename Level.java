@@ -499,84 +499,83 @@ public class Level
 				{
 					GameObject tmpObj = objsli2.next();
 
-					if(tmpObj instanceof Creature && tmpObj != curObj)
+					// Activity zone around the player - only objects within this zone have the logic computed
+					int zoneX = this.camera.getX() - 20;
+					int zoneY = this.camera.getY() - 20;
+					int zoneW = 320 + 40;
+					int zoneH = 240 + 40;
+					int ox = (int)tmpObj.x;
+					int oy = (int)tmpObj.y;
+
+					if((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
 					{
-						Creature tmpCreature = (Creature)tmpObj;
-
-						int px = (int)player.x;
-						int py = (int)player.y;
-						int cx = (int)tmpCreature.x;
-						int cy = (int)tmpCreature.y;
-
-						// Activity zone around the player - only objects within this zone have the logic computed
-						int zoneX = this.camera.getX() - 20;
-						int zoneY = this.camera.getY() - 20;
-						int zoneW = 320 + 40;
-						int zoneH = 240 + 40;
-
-						if(cx + tmpCreature.w - 1 > zoneX && cx < zoneX + zoneW)
+						if(tmpObj instanceof Creature && tmpObj != curObj)
 						{
-							if(cy + tmpCreature.h - 1 > zoneY && cy < zoneY + zoneH)
-							{
-								tmpCreature.doAi();
-								tmpCreature.move();
-							}
-						}
+							Creature tmpCreature = (Creature)tmpObj;
 
-						if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
-						{
-							if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
+							int px = (int)player.x;
+							int py = (int)player.y;
+							int cx = (int)tmpCreature.x;
+							int cy = (int)tmpCreature.y;
+
+							tmpCreature.doAi();
+							tmpCreature.move();
+
+							if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
 							{
-								if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
+								if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 								{
-									// Pushes the player away from the creature.
-									if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+									if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
 									{
-										player.vx += 1;
-									}
-									else
-									{
-										player.vx -= 1;
-									}
+										// Pushes the player away from the creature.
+										if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+										{
+											player.vx += 1;
+										}
+										else
+										{
+											player.vx -= 1;
+										}
 
-									player.hp--;
-									player.setInvincibility(90);
-									player.setBlinking(90);
+										player.hp--;
+										player.setInvincibility(90);
+										player.setBlinking(90);
 
-									if(player.hp <= 0)
-									{
-										camera.setTarget(tmpCreature);
+										if(player.hp <= 0)
+										{
+											camera.setTarget(tmpCreature);
+										}
+										//player.setAcceptInput(false);
+
+										// Pushes the creature away from the player.
+		//								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+		//								{
+		//									tmpCreature.vx -= 2;
+		//								}
+		//								else
+		//								{
+		//									tmpCreature.vx += 2;
+		//								}
 									}
-									//player.setAcceptInput(false);
-
-									// Pushes the creature away from the player.
-	//								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
-	//								{
-	//									tmpCreature.vx -= 2;
-	//								}
-	//								else
-	//								{
-	//									tmpCreature.vx += 2;
-	//								}
 								}
 							}
 						}
-					}
-					else if(tmpObj instanceof Item && tmpObj != curObj)
-					{
-						Item tmpItem = (Item)tmpObj;
-
-						int px = (int)player.x;
-						int py = (int)player.y;
-						int ix = (int)tmpItem.x;
-						int iy = (int)tmpItem.y;
-
-						if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
+						else if(tmpObj instanceof Item && tmpObj != curObj)
 						{
-							if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
+							Item tmpItem = (Item)tmpObj;
+
+							int px = (int)player.x;
+							int py = (int)player.y;
+							int ix = (int)tmpItem.x;
+							int iy = (int)tmpItem.y;
+
+							if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
 							{
-								player.addScore(((Item)tmpObj).getPoints());
-								tmpItem.setRemoval(true);
+								if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
+								{
+									player.addScore(((Item)tmpObj).getPoints());
+									tmpItem.setRemoval(true);
+								}
 							}
 						}
 					}
