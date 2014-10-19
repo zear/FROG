@@ -18,6 +18,8 @@ public class Level
 	private Gui gui;
 	private Font font0;
 
+	private Player playerObj = null;
+
 	public Level(String fileName) // constructor
 	{
 		objTemp = new LinkedList<GameObjectTemplate>();
@@ -324,8 +326,6 @@ public class Level
 
 	public void logic() // logic related to the map and all it's objects
 	{
-		Player playerObj = null;
-
 		// Update the objs list with:
 		// 1) objects to delete
 		ListIterator<GameObject> objsli = objs.listIterator();
@@ -348,43 +348,47 @@ public class Level
 			newObjs = new LinkedList<GameObject>();
 		}
 
-		objsli = objs.listIterator();
-		do
+		if(playerObj == null)
 		{
-			if(!objsli.hasNext())
-				break;
-
-			GameObject curObj = objsli.next();
-			//System.out.printf("###\n");
-			if(curObj instanceof Player)
+			objsli = objs.listIterator();
+			do
 			{
-				playerObj = (Player)curObj;
-				//Player player = (Player)curObj;
+				if(!objsli.hasNext())
+					break;
 
-				if(camera == null)
+				GameObject curObj = objsli.next();
+				if(curObj instanceof Player)
 				{
-					camera = playerObj.viewport;
-					camera.setCamera(playerObj);
+					playerObj = (Player)curObj;
+					break; // this assumes there is only one player on the level
 				}
-				else if(playerObj.hp > 0)
-				{
-					camera = playerObj.viewport;
-					camera.setTarget(playerObj);
-				}
-				else
-				{
-					camera.setTarget(camera.getTarget());
-				}
+			}
+			while(objsli.hasNext());
+		}
 
-				gui.setPlayer(playerObj);
-				// check input
-				playerObj.updateKeys();
+		if(playerObj != null)
+		{
+			if(camera == null)
+			{
+				camera = playerObj.viewport;
+				camera.setCamera(playerObj);
+			}
+			else if(playerObj.hp > 0)
+			{
+				camera = playerObj.viewport;
+				camera.setTarget(playerObj);
+			}
+			else
+			{
+				camera.setTarget(camera.getTarget());
+			}
 
-				if(playerObj.isDead())
-				{
-					continue;
-				}
+			gui.setPlayer(playerObj);
+			// check input
+			playerObj.updateKeys();
 
+			if(!playerObj.isDead())
+			{
 				if(playerObj.acceptInput())
 				{
 					if(playerObj.getAction(0))		// left
@@ -461,11 +465,8 @@ public class Level
 				{
 					playerObj.setAction(5, false);
 				}
-
-				break; // this assumes there is only one player on the level
 			}
 		}
-		while(objsli.hasNext());
 
 //		objsli = objs.listIterator();
 //		do
