@@ -10,6 +10,7 @@ public class AI
 	public static final int JUMP		= 3;
 	public static final int FLY		= 4;
 	public static final int SPAWN_OBJ	= 5;
+	public static final int TURN		= 6;
 
 	// AI action var names
 	public static final int WALK_VX		= 0;
@@ -159,13 +160,13 @@ public class AI
 
 	public void addAction(int type)
 	{
-		actionList.push(new AIAction(type));
+		actionList.add(new AIAction(type));
 		this.resetActions();
 	}
 
 	public void addAction(int type, int time)
 	{
-		actionList.push(new AIAction(type, time));
+		actionList.add(new AIAction(type, time));
 		this.resetActions();
 	}
 

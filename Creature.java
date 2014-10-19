@@ -87,9 +87,10 @@ public class Creature extends GameObject
 		}
 		else if(super.getName().equals("dragonfly"))
 		{
-			ai.addAction(AI.FLY);
-			ai.setVar(AI.FLY_VX, 1.5f);
-			ai.setVar(AI.FLY_AMPLITUDE, 3f);
+			ai.addAction(AI.FLY, 60);
+			ai.setVar(AI.FLY_VX, 0.75f);
+			ai.setVar(AI.FLY_AMPLITUDE, 1.5f);
+			ai.addAction(AI.TURN);
 		}
 	}
 
@@ -277,6 +278,16 @@ public class Creature extends GameObject
 				obj.setVy(this.ai.getVar(AI.SPAWN_OBJ_OBJVY));
 				obj.putDirection(this.direction ? 1 : 0);
 				obj.affectedByGravity = true;
+
+				this.ai.setNextAction();
+			break;
+			case AI.TURN:
+				this.direction = !this.direction;
+				this.vx = 0;
+//				if(this.direction)
+//					this.vx = -20;
+//				else
+//					this.vx = 20;
 
 				this.ai.setNextAction();
 			break;
