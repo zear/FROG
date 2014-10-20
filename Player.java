@@ -118,6 +118,22 @@ public class Player extends Creature
 			this.replay.play = !this.replay.play;
 			System.out.printf("Playback: %d\n", !!this.replay.play != false ? 1 : 0);
 		}
+		// debug
+		if(Sdl.getInput(SDLKey.SDLK_0))
+		{
+			Sdl.putInput(SDLKey.SDLK_0, false);
+
+			if(Sdl.frameTime == 1000.0/Sdl.framesPerSecond)
+				Sdl.frameTime *= 10;
+			else
+				Sdl.frameTime = 1000.0/Sdl.framesPerSecond;
+		}
+		if(Sdl.getInput(SDLKey.SDLK_d))
+		{
+			Sdl.putInput(SDLKey.SDLK_d, false);
+
+			Game.debugMode = !Game.debugMode;
+		}
 	}
 
 	public boolean isDead()
