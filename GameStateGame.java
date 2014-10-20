@@ -8,7 +8,7 @@ public class GameStateGame implements GameState
 	}
 	public void unloadState()
 	{
-		Sdl.frameTime = 1000.0/Sdl.framesPerSecond; // reset the frameTime
+		Sdl.frameTime = 1000/Sdl.framesPerSecond; // reset the frameTime
 		level = null;
 	}
 

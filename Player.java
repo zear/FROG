@@ -123,10 +123,10 @@ public class Player extends Creature
 		{
 			Sdl.putInput(SDLKey.SDLK_0, false);
 
-			if(Sdl.frameTime == 1000.0/Sdl.framesPerSecond)
+			if(Sdl.frameTime == 1000/Sdl.framesPerSecond)
 				Sdl.frameTime *= 10;
 			else
-				Sdl.frameTime = 1000.0/Sdl.framesPerSecond;
+				Sdl.frameTime = 1000/Sdl.framesPerSecond;
 		}
 		if(Sdl.getInput(SDLKey.SDLK_d))
 		{

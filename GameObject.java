@@ -279,8 +279,6 @@ public class GameObject
 
 	public void draw(Camera camera) // draws game object
 	{
-		SDLRect r = new SDLRect();
-
 		if(curAnim == null)
 			return;
 
@@ -294,6 +292,8 @@ public class GameObject
 
 		if(!doDraw)
 			return;
+
+		SDLRect r = new SDLRect();
 
 		r.x = (int)this.x - camera.getX();
 		r.y = (int)this.y - camera.getY();

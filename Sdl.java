@@ -9,9 +9,9 @@ public class Sdl
 	public static long startFrameTime; // = SDLTimer.getTicks();
 	public static long newFrameTime;
 	public static long counterLastFull;			// for FPS counter
-	public final static double framesPerSecond = 60.0;
-	public static double accumulator = 0;
-	public static double frameTime = 1000.0/framesPerSecond;
+	public final static int framesPerSecond = 60;
+	public static int accumulator = 0;
+	public static int frameTime = 1000/framesPerSecond;
 	public static long deltaTime;
 	public static int fpsCalculated;			// Calculated FPS value to display on screen
 	public static boolean fpsIsCapped = false;
