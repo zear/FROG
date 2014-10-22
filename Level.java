@@ -642,15 +642,16 @@ public class Level
 		//System.out.printf("List: %d\n", layers.size());
 		camera.track(layers.get(1), false); // update the camera
 
-		// draw uniform background
-		//try
-		//{
-		//	Sdl.screen.fillRect(1000);
-		//}
-		//catch (Exception e)
-		//{
-		//	//todo
-		//}
+		//Draw uniform background
+		try
+		{
+			//Sdl.screen.fillRect(SDLVideo.mapRGB(Sdl.screen.getFormat(), 0, 191, 243));
+			Sdl.screen.fillRect(1534);
+		}
+		catch (Exception e)
+		{
+			//todo
+		}
 
 		// draw background layer
 		do
