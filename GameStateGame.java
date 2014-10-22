@@ -4,7 +4,7 @@ public class GameStateGame implements GameState
 
 	public void loadState()
 	{
-		level = new Level("test2.lvl");
+		level = new Level("e1l1.lvl");
 	}
 	public void unloadState()
 	{
