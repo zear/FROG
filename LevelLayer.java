@@ -166,7 +166,6 @@ public class LevelLayer
 		int x;
 		int y;
 		int tileNum;
-		SDLRect r = new SDLRect();
 
 		for(i = camera.getY()/16; i < camera.getY()/16 + 15 + 1; i++)
 		{
@@ -182,6 +181,7 @@ public class LevelLayer
 
 				if(tileNum != 0) // don't bother drawing tile #0 (transparent)
 				{
+					SDLRect r = new SDLRect();
 					r.x = j * tileW - camera.getX();
 					r.y = i * tileH - camera.getY();
 

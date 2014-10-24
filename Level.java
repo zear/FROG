@@ -384,11 +384,6 @@ public class Level
 			else if(playerObj.hp > 0)
 			{
 				camera = playerObj.viewport;
-				camera.setTarget(playerObj);
-			}
-			else
-			{
-				camera.setTarget(camera.getTarget());
 			}
 
 			gui.setPlayer(playerObj);
@@ -640,6 +635,15 @@ public class Level
 		ListIterator<LevelLayer> layli = layers.listIterator();
 
 		//System.out.printf("List: %d\n", layers.size());
+		if(playerObj.hp > 0)
+		{
+			camera.setTarget(playerObj);
+		}
+		else
+		{
+			camera.setTarget(camera.getTarget());
+		}
+
 		camera.track(layers.get(1), false); // update the camera
 
 		//Draw uniform background

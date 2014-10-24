@@ -58,9 +58,9 @@ public class Camera
 		if(target != null)
 		{
 			if(this.trackX)
-				this.targetX = (int)target.getX();
+				this.targetX = (int)Math.floor((int)target.getX());
 			if(this.trackY)
-				this.targetY = (int)target.getY();
+				this.targetY = (int)Math.floor((int)target.getY());
 
 			if(!canLeaveScreen && this.target instanceof Creature)
 			{
@@ -98,6 +98,7 @@ public class Camera
 			{
 				this.x += (this.targetX + t.w - 1) - (this.x + 320/2 + 16);
 			}
+
 			this.trackX = false;
 
 			if(t.isOnGround)
