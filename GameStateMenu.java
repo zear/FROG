@@ -1,4 +1,6 @@
+import sdljava.*;
 import sdljava.event.*;
+import sdljava.video.*;
 
 public class GameStateMenu implements GameState
 {
@@ -37,9 +39,13 @@ public class GameStateMenu implements GameState
 
 	private Font font;
 
+	private SDLSurface disk;
+	private boolean drawLoading = false;
+
 	public void loadState()
 	{
 		font = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
+		disk = Sdl.loadImage("./data/gfx/disk.bmp");
 		keys = new boolean[6]; // left, right, up, down, accept, back
 		curMenu = menuMain;
 	}
@@ -106,6 +112,7 @@ public class GameStateMenu implements GameState
 			{
 				case MENU_EPISODES:
 					Program.game.changeState(GameStateEnum.STATE_GAME);
+					drawLoading = true;
 				break;
 				case MENU_OPTIONS:
 					parentMenu = curMenu;
@@ -149,7 +156,21 @@ public class GameStateMenu implements GameState
 			//todo
 		}
 
-		if(curMenu != null)
+		if(drawLoading)
+		{
+			drawLoading = false;
+			try
+			{
+				disk.blitSurface(null, Sdl.screen, new SDLRect(140, 80));
+			}
+			catch (SDLException e)
+			{
+				// todo
+			}
+
+			font.drawCentered("Just a moment...", 130);
+		}
+		else if(curMenu != null)
 		{
 			font.draw("->", 110, 130 + curSelection * 12);
 

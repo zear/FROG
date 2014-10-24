@@ -91,9 +91,20 @@ public class Font
 
 			letterNum++;
 		}
+	}
 
+	public void drawCentered(String text, int y)
+	{
+		int width = 0;
 
-		//this.objTemplate.getImg().blitSurface(imgClip[this.curAnim.getFrame(this.direction, frameNum)], Sdl.screen, r);
+		for(int i = 0; i < text.length(); i++)
+		{
+			width += this.w;
+			if(i < text.length() - 1)
+				width += this.kerning;
+		}
+
+		draw(text, 320/2 - width/2, y);
 	}
 
 }
