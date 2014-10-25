@@ -1,10 +1,10 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.ListIterator;
 import sdljava.*;
 
 public class Replay
 {
-	private LinkedList<Action> actions = null;
+	private ArrayList<Action> actions = null;
 	float startTime = 0;
 
 	boolean record = false;
@@ -20,7 +20,7 @@ public class Replay
 	public Replay()
 	{
 		startTime = SDLTimer.getTicks();
-		actions = new LinkedList<Action>();
+		actions = new ArrayList<Action>();
 	}
 
 	public void record(int key, boolean value)
@@ -32,7 +32,7 @@ public class Replay
 			elem.key = key;
 			elem.value = value;
 
-			this.actions.push(elem);
+			this.actions.add(elem);
 		}
 	}
 

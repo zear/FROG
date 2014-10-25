@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.ListIterator;
 
 public class AI
@@ -142,13 +142,13 @@ public class AI
 		}
 	}
 
-	private LinkedList<AIAction> actionList;
+	private ArrayList<AIAction> actionList;
 	protected ListIterator<AIAction> actionListIterator;
 	private AIAction curAction;
 
 	public AI()
 	{
-		actionList = new LinkedList<AIAction>();
+		actionList = new ArrayList<AIAction>();
 	}
 
 	public boolean hasActions()
@@ -173,7 +173,7 @@ public class AI
 	public void resetActions()
 	{
 		actionListIterator = actionList.listIterator();
-		curAction = actionList.getFirst();
+		curAction = actionList.get(0);
 	}
 
 	public void setNextAction()

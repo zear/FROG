@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.ListIterator;
 import java.io.File;
 import java.io.BufferedReader;
@@ -8,11 +8,11 @@ import java.io.FileNotFoundException;
 // Level class keeps all that is necessary to have a playable level, such as the list of objects on the map (including player(s))
 public class Level
 {
-	private LinkedList<GameObjectTemplate> objTemp;	// templates for object types // <- deprecated, to remove
-	private LinkedList<GameObject> objTemp2;	// game object templates
-	private LinkedList<GameObject> objs;		// game objects on the map
-	private LinkedList<GameObject> newObjs;		// newly added game objects, to move to "objs" in the next iteration
-	private LinkedList<LevelLayer> layers;		// level background layers
+	private ArrayList<GameObjectTemplate> objTemp;	// templates for object types // <- deprecated, to remove
+	private ArrayList<GameObject> objTemp2;	// game object templates
+	private ArrayList<GameObject> objs;		// game objects on the map
+	private ArrayList<GameObject> newObjs;		// newly added game objects, to move to "objs" in the next iteration
+	private ArrayList<LevelLayer> layers;		// level background layers
 	private Collision collision;
 	private Camera camera;
 	private Gui gui;
@@ -22,11 +22,11 @@ public class Level
 
 	public Level(String fileName) // constructor
 	{
-		objTemp = new LinkedList<GameObjectTemplate>();
-		objTemp2 = new LinkedList<GameObject>();
-		objs = new LinkedList<GameObject>();
-		newObjs = new LinkedList<GameObject>();
-		layers = new LinkedList<LevelLayer>();
+		objTemp = new ArrayList<GameObjectTemplate>();
+		objTemp2 = new ArrayList<GameObject>();
+		objs = new ArrayList<GameObject>();
+		newObjs = new ArrayList<GameObject>();
+		layers = new ArrayList<LevelLayer>();
 		load(fileName);
 		gui = new Gui();
 		// load fonts
@@ -34,7 +34,7 @@ public class Level
 		gui.setFont(font0);
 	}
 
-	public LinkedList<GameObject> getNewObjs()
+	public ArrayList<GameObject> getNewObjs()
 	{
 		return this.newObjs;
 	}
@@ -66,7 +66,7 @@ public class Level
 					collision = new Collision(fp.getNext(), Integer.parseInt(fp.getNext()));
 				} else if (next.equals("LAYER")) {
 					curElem = new LevelLayer();
-					layers.push(curElem);
+					layers.add(curElem);
 					System.out.printf("New layer\n");
 					curElem.load(Integer.parseInt(fp.getNext()));
 				} else if (next.equals("IMG")) {
@@ -110,7 +110,7 @@ public class Level
 				// todo
 			}
 
-			curElem = objs.getFirst();
+			curElem = objs.get(objs.size() - 1);
 			curElem.putX(Integer.parseInt(words[1]));
 			curElem.putY(Integer.parseInt(words[2]));
 			curElem.putDirection(Integer.parseInt(words[3]));
@@ -122,7 +122,7 @@ public class Level
 		loadSingleObject(fileName, this.objs);
 	}
 
-	public void loadSingleObject(String fileName, LinkedList<GameObject> list)
+	public void loadSingleObject(String fileName, ArrayList<GameObject> list)
 	{
 		FileIO fp;
 		String line;
@@ -161,37 +161,37 @@ public class Level
 
 				if (words[1].equals("OBJECT"))
 				{
-					objTemp2.push(new GameObject());
+					objTemp2.add(new GameObject());
 					type = ObjType.OBJECT;
 					System.out.printf("new object\n");
 				}
 				else if (words[1].equals("ITEM"))
 				{
-					objTemp2.push(new Item());
+					objTemp2.add(new Item());
 					type = ObjType.ITEM;
 					System.out.printf("new item\n");
 				}
 				else if (words[1].equals("CREATURE"))
 				{
 					System.out.printf("List: %d\n", layers.size());
-					objTemp2.push(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
+					objTemp2.add(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
 					type = ObjType.CREATURE;
 					System.out.printf("new creature\n");
 				}
 				else if (words[1].equals("PROJECTILE"))
 				{
-					objTemp2.push(new Projectile(layers.get(1), collision, this));
+					objTemp2.add(new Projectile(layers.get(1), collision, this));
 					type = ObjType.PROJECTILE;
 					System.out.printf("new projectile\n");
 				}
 				else if (words[1].equals("PLAYER"))
 				{
-					objTemp2.push(new Player(layers.get(1), collision, this));
+					objTemp2.add(new Player(layers.get(1), collision, this));
 					type = ObjType.PLAYER;
 					System.out.printf("new player\n");
 				}
 
-				newObj = objTemp2.getFirst();
+				newObj = objTemp2.get(objTemp2.size() - 1);
 				newObj.setType(type);
 				newObj.setFileName(fileName);
 			}
@@ -259,7 +259,7 @@ public class Level
 		}
 	}
 
-	public void loadObjectFromTemplate(GameObject template, LinkedList<GameObject> list)
+	public void loadObjectFromTemplate(GameObject template, ArrayList<GameObject> list)
 	{
 		GameObject newObj = null;
 
@@ -268,24 +268,24 @@ public class Level
 			switch(template.getType())
 			{
 				case OBJECT:
-					list.push(new GameObject());
-					newObj = list.getFirst();
+					list.add(new GameObject());
+					newObj = list.get(list.size() - 1);
 				break;
 				case ITEM:
-					list.push(new Item());
-					newObj = list.getFirst();
+					list.add(new Item());
+					newObj = list.get(list.size() - 1);
 				break;
 				case CREATURE:
-					list.push(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
-					newObj = list.getFirst();
+					list.add(new Creature(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
+					newObj = list.get(list.size() - 1);
 				break;
 				case PROJECTILE:
-					list.push(new Projectile(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
-					newObj = list.getFirst();
+					list.add(new Projectile(layers.get(1), collision, this)); // this is assuming layer #1 is the middle layer
+					newObj = list.get(list.size() - 1);
 				break;
 				case PLAYER:
-					list.push(new Player(layers.get(1), collision, this));
-					newObj = list.getFirst();
+					list.add(new Player(layers.get(1), collision, this));
+					newObj = list.get(list.size() - 1);
 				break;
 
 				default:
@@ -336,7 +336,7 @@ public class Level
 			if(curObj.getRemoval())
 			{
 				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
-					playerObj.getAttackObjs().remove();
+					playerObj.getAttackObjs().remove(curObj);
 				objsli.remove();
 			}
 		}
@@ -349,11 +349,11 @@ public class Level
 				GameObject curObj = newObjsli.next();
 
 				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
-					playerObj.getAttackObjs().push(curObj);
-				objs.push(curObj);
+					playerObj.getAttackObjs().add(curObj);
+				objs.add(curObj);
 			}
 			while(newObjsli.hasNext());
-			newObjs = new LinkedList<GameObject>();
+			newObjs = new ArrayList<GameObject>();
 		}
 
 		if(playerObj == null)
@@ -453,7 +453,7 @@ public class Level
 							// todo
 						}
 
-						Projectile swoosh = (Projectile)newObjs.getFirst();
+						Projectile swoosh = (Projectile)newObjs.get(newObjs.size() - 1);
 
 						swoosh.putX(x);
 						if(playerObj.isCrouching)

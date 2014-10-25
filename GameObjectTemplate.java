@@ -1,11 +1,11 @@
 import sdljava.*;
 import sdljava.video.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class GameObjectTemplate
 {
 	private String templateName;
-	private LinkedList <Animation> animation;
+	private ArrayList <Animation> animation;
 	private SDLSurface img;
 	private int imgSize;
 	private int imgRowW;
@@ -15,7 +15,7 @@ public class GameObjectTemplate
 
 	public GameObjectTemplate()
 	{
-		this.animation = new LinkedList<Animation>();
+		this.animation = new ArrayList<Animation>();
 	}
 
 	public void load(String fileName, int w, int h, int rowW, int size)
@@ -79,14 +79,14 @@ public class GameObjectTemplate
 			}
 			else
 			{
-				animation.push(tmp = new Animation(fp, word));
+				animation.add(tmp = new Animation(fp, word));
 			}
 		}
 
 		return tmp;
 	}
 
-	public LinkedList <Animation> getAnimation()
+	public ArrayList <Animation> getAnimation()
 	{
 		return this.animation;
 	}

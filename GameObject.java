@@ -1,6 +1,6 @@
 import sdljava.*;
 import sdljava.video.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.ListIterator;
 
 enum ObjType
@@ -53,7 +53,7 @@ public class GameObject
 		this.frameDelay = 0;
 	}
 
-	public void load(String fileName, int w, int h, int rowW, int size, LinkedList <GameObjectTemplate> tempList)
+	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
 	{
 		String templateName = null;
 		ListIterator<GameObjectTemplate> templi = tempList.listIterator();
@@ -77,7 +77,7 @@ public class GameObject
 
 		// Add new template to the list
 		objTemplate = new GameObjectTemplate();
-		tempList.push(objTemplate);
+		tempList.add(objTemplate);
 		objTemplate.setName(this.objName);
 		objTemplate.load(fileName, w, h, rowW, size);
 	}
@@ -254,7 +254,7 @@ public class GameObject
 			{
 				this.curAnim.setIsOver(false);
 				this.curAnim = curElement;
-				this.frameNum = this.curAnim.getLength(this.direction) - 1;
+				this.frameNum = 0;
 				this.frameDelay = curAnim.getFrameRate();				
 				return;
 			}
@@ -318,15 +318,28 @@ public class GameObject
 			}
 			SDLRect[] imgClip = this.objTemplate.getImgClip();
 			this.objTemplate.getImg().blitSurface(imgClip[this.curAnim.getFrame(this.direction, frameNum)], Sdl.screen, r);
+//			if(frameDelay == 0)
+//			{
+//				frameDelay = this.curAnim.getFrameRate();
+//				if(frameNum > 0)
+//					frameNum--;
+//				else
+//				{
+//					if(this.curAnim.isLooping())
+//						frameNum = this.curAnim.getLength(this.direction) - 1;
+//					else
+//						this.curAnim.setIsOver(true);
+//				}
+//			}
 			if(frameDelay == 0)
 			{
 				frameDelay = this.curAnim.getFrameRate();
-				if(frameNum > 0)
-					frameNum--;
+				if(frameNum < this.curAnim.getLength(this.direction) - 1)
+					frameNum++;
 				else
 				{
 					if(this.curAnim.isLooping())
-						frameNum = this.curAnim.getLength(this.direction) - 1;
+						frameNum = 0;
 					else
 						this.curAnim.setIsOver(true);
 				}

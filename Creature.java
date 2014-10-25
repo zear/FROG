@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
@@ -32,7 +32,7 @@ public class Creature extends GameObject
 		this.level = lev;
 	}
 
-	public void load(String fileName, int w, int h, int rowW, int size, LinkedList <GameObjectTemplate> tempList)
+	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
 	{
 		super.load(fileName, w, h, rowW, size, tempList);
 		this.ai = new AI();
@@ -257,7 +257,7 @@ public class Creature extends GameObject
 					this.ai.setNextAction();
 			break;
 			case AI.SPAWN_OBJ:
-				LinkedList<GameObject> newObjs = this.level.getNewObjs();
+				ArrayList<GameObject> newObjs = this.level.getNewObjs();
 
 				try
 				{
@@ -270,7 +270,7 @@ public class Creature extends GameObject
 					// todo
 				}
 
-				Creature obj = (Creature)newObjs.getFirst();
+				Creature obj = (Creature)newObjs.get(newObjs.size() - 1);
 
 				obj.putX((int)(this.x + (this.w - 1)/2 - (obj.getW() - 1)/2));
 				obj.putY((int)this.y);

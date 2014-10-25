@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Animation
 {
@@ -11,13 +11,13 @@ public class Animation
 
 	protected class Frames
 	{
-		private LinkedList<Integer> frames;
+		private ArrayList<Integer> frames;
 		private int offsetX;
 		private int offsetY;
 
 		Frames()
 		{
-			frames = new LinkedList<Integer>();
+			frames = new ArrayList<Integer>();
 		}
 
 		protected int getLength()
@@ -32,7 +32,7 @@ public class Animation
 
 		protected void addFrame(int i)
 		{
-			frames.push(i);
+			frames.add(i);
 		}
 
 		protected int getOffsetX()
