@@ -15,6 +15,7 @@ public class Creature extends GameObject
 	protected boolean isCrouching;
 	protected boolean isClimbing;
 	protected boolean canClimb;
+	private boolean canWalk;
 	private int climbX;
 	private int climbY;
 	protected boolean affectedByGravity = true;
@@ -30,6 +31,8 @@ public class Creature extends GameObject
 		this.collision = col;
 		this.levelLayer = lay;
 		this.level = lev;
+
+		this.canWalk = true;
 	}
 
 	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
@@ -185,10 +188,17 @@ public class Creature extends GameObject
 			case AI.WALK:
 				this.ai.doTimer();
 
-				if(!this.direction)	// left
-					this.walk(-this.ai.getVar(AI.WALK_VX));
-				else			// right
-					this.walk(this.ai.getVar(AI.WALK_VX));
+				if(this.canWalk)
+				{
+					if(!this.direction)	// left
+						this.walk(-this.ai.getVar(AI.WALK_VX));
+					else			// right
+						this.walk(this.ai.getVar(AI.WALK_VX));
+				}
+				else
+				{
+					dropCheck(this.direction);
+				}
 
 				if(this.ai.getTimer() <= 0)
 					this.ai.setNextAction();
@@ -305,6 +315,9 @@ public class Creature extends GameObject
 		int x;
 		int y = (int)(super.y) + super.h;
 
+		if(!this.isOnGround)
+			return;
+
 		if(direction)	// right
 		{
 			// .---.
@@ -330,7 +343,43 @@ public class Creature extends GameObject
 		if(col == Collision.COLLISION_NONE)
 		{
 			this.vx = 0;
-			this.direction = !this.direction;
+
+			// Check the opposite direction to see if there is space for turning and walking
+			if(direction)
+			{
+				//  .---.
+				//  |   |
+				//  .---.
+				// #
+
+				x = (int)(super.x) - 1;
+			}
+			else
+			{
+				// .---.
+				// |   |
+				// .---.
+				//      #
+
+				x = (int)(super.x) + super.w;
+			}
+
+			tile = levelLayer.getTile(x/16, y/16);
+			col = col | collision.getCollision(tile);
+
+			if(col != Collision.COLLISION_NONE)
+			{
+				this.direction = !this.direction;
+				this.canWalk = true;
+			}
+			else
+			{
+				this.canWalk = false;
+			}
+		}
+		else
+		{
+			this.canWalk = true;
 		}
 	}
 
@@ -626,7 +675,7 @@ public class Creature extends GameObject
 				super.x += curVx;
 			}
 
-			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(1) != 0f)
+			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(true);
 			}
@@ -675,7 +724,7 @@ public class Creature extends GameObject
 				super.x += curVx;
 			}
 
-			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(1) != 0)
+			if(!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(false);
 			}
@@ -852,20 +901,20 @@ public class Creature extends GameObject
 			if(this instanceof Player)
 			{
 				if(((Player)this).getAction(1))	// right
-					super.direction = true;
+					this.direction = true;
 			}
 			else
-				super.direction = true;
+				this.direction = true;
 		}
 		else if(vx < 0)
 		{
 			if(this instanceof Player)
 			{
 				if(((Player)this).getAction(0))	// left
-					super.direction = false;
+					this.direction = false;
 			}
 			else
-				super.direction = false;
+				this.direction = false;
 		}
 
 
