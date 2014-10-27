@@ -469,82 +469,17 @@ public class Level
 					playerObj.setAction(5, false);
 				}
 			}
+
+			playerObj.doAi();
+			playerObj.move();
 		}
-
-//		objsli = objs.listIterator();
-//		do
-//		{
-//			if(!objsli.hasNext())
-//				break;
-
-//			GameObject curObj = objsli.next();
-
-//			curObj.logic();
-
-////			if(curObj instanceof Creature)
-//			if(curObj instanceof Player)
-//			{
-//				Creature creature = (Creature)curObj;
-//				creature.doAi();
-//				creature.move();
-//			}
-//		}
-
-//		while(objsli.hasNext());
-
-		playerObj.doAi();
-		playerObj.move();
-
-		// check collision with other objects
-		objsli = objs.listIterator();
-		do
-		{
-			if(!objsli.hasNext())
-				break;
-
-			GameObject curObj = objsli.next();
-
-			curObj.logic();
-
-			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
-			{
-				ListIterator<GameObject> objsli2 = playerObj.getAttackObjs().listIterator();
-				do
-				{
-					if(!objsli2.hasNext())
-						break;
-
-					GameObject tmpObj = objsli2.next();
-					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
-					{
-						Creature tmpCreature = (Creature)tmpObj;
-
-						int ox = (int)curObj.x;
-						int oy = (int)curObj.y;
-						int cx = (int)tmpCreature.x;
-						int cy = (int)tmpCreature.y;
-
-						if((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1) || (ox < cx && ox + curObj.w - 1 > cx + tmpCreature.w - 1))
-						{
-							if((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
-							{
-								curObj.setRemoval(true);
-								tmpCreature.setRemoval(true);
-							}
-						}
-					}
-				}
-				while(objsli2.hasNext());
-			}
-		}
-		while(objsli.hasNext());
 
 		Player player = playerObj;
 
-		ListIterator<GameObject> objsli2 = objs.listIterator();
+		objsli = objs.listIterator();
 		do
 		{
-			GameObject tmpObj = objsli2.next();
+			GameObject tmpObj = objsli.next();
 
 			// Activity zone around the player - only objects within this zone have the logic computed
 			int zoneX = this.camera.getX() - 20;
@@ -627,7 +562,51 @@ public class Level
 				}
 			}
 		}
-		while(objsli2.hasNext());
+		while(objsli.hasNext());
+
+		// check collision with other objects
+		objsli = objs.listIterator();
+		do
+		{
+			if(!objsli.hasNext())
+				break;
+
+			GameObject curObj = objsli.next();
+
+			curObj.logic();
+
+			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
+			{
+				ListIterator<GameObject> objsli2 = playerObj.getAttackObjs().listIterator();
+				do
+				{
+					if(!objsli2.hasNext())
+						break;
+
+					GameObject tmpObj = objsli2.next();
+					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
+					{
+						Creature tmpCreature = (Creature)tmpObj;
+
+						int ox = (int)curObj.x;
+						int oy = (int)curObj.y;
+						int cx = (int)tmpCreature.x;
+						int cy = (int)tmpCreature.y;
+
+						if((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1) || (ox < cx && ox + curObj.w - 1 > cx + tmpCreature.w - 1))
+						{
+							if((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
+							{
+								curObj.setRemoval(true);
+								tmpCreature.setRemoval(true);
+							}
+						}
+					}
+				}
+				while(objsli2.hasNext());
+			}
+		}
+		while(objsli.hasNext());
 	}
 
 	public void draw() // draws map layers, objects and all the other map related stuff
