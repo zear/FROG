@@ -42,12 +42,20 @@ public class GameStateMenu implements GameState
 	private SDLSurface disk;
 	private boolean drawLoading = false;
 
+	private int fadeStep;
+	private int fadeTotalSteps;
+	private int fadeTo;
+
 	public void loadState()
 	{
 		font = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
 		disk = Sdl.loadImage("./data/gfx/disk.bmp");
 		keys = new boolean[6]; // left, right, up, down, accept, back
 		curMenu = menuMain;
+
+		fadeStep = 0;
+		fadeTotalSteps = 25;
+		fadeTo = 0;
 	}
 	public void unloadState()
 	{
@@ -217,6 +225,11 @@ public class GameStateMenu implements GameState
 			}
 		}
 
+		if(fadeStep < fadeTotalSteps)
+		{
+			Sdl.fade(Sdl.screen, fadeTo, fadeStep, fadeTotalSteps);
+			fadeStep++;
+		}
 		Sdl.flip(Sdl.screen);
 	}
 }

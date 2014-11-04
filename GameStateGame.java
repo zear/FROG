@@ -21,6 +21,7 @@ public class GameStateGame implements GameState
 	{
 		if(level != null)
 			level.draw();
+
 		Sdl.flip(Sdl.screen);
 	}
 }

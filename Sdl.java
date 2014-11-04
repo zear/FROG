@@ -2,6 +2,7 @@ import sdljava.*;
 import sdljava.event.*;
 import sdljava.joystick.*;
 import sdljava.video.*;
+import java.nio.*;
 
 // Class Sdl handles libSDL specific features
 public class Sdl
@@ -19,6 +20,7 @@ public class Sdl
 	private static SDLEvent event;
 	private static SDLJoystick joy;
 	public static SDLSurface screen;
+	private static SDLSurface fadeSurface;
 	private static String windowTitle = "F.R.O.G.";
 	public static boolean enableJoystick = true;
 
@@ -102,6 +104,15 @@ public class Sdl
 			// todo
 		}
 
+		try
+		{
+			fadeSurface = SDLVideo.createRGBSurface(screen.getFlags(), screen.getWidth(), screen.getHeight(), screen.getFormat().getBitsPerPixel(), 0, 0, 0, 0);
+		}
+		catch (SDLException e)
+		{
+			// TODO
+		}
+
 		return 0;
 	}
 
@@ -149,6 +160,79 @@ public class Sdl
 			}
 			return false;
 		}
+	}
+
+	public static int stepper(int from, int to, int step, int totalSteps)
+	{
+		int curr = 0;
+		curr = from * (totalSteps - step) / totalSteps;
+		curr += (to * step) / totalSteps;
+		return curr;
+	}
+
+	public static void fade(SDLSurface surface, int to, int step, int totalSteps)
+	{
+		try
+		{
+			fadeSurface.setAlpha(SDLVideo.SDL_SRCALPHA, stepper(255, to, step, totalSteps));
+		}
+		catch (SDLException e)
+		{
+			// TODO
+		}
+
+		try
+		{
+			fadeSurface.blitSurface(Sdl.screen);
+		}
+		catch (SDLException e)
+		{
+			// TODO
+		}
+
+		// Classic style fade effect - very slow in sdljava because getRGB() generates an object for each pixel
+
+//		java.nio.ByteBuffer pixelData = surface.getPixelData();
+//		int pitch = surface.getPitch();
+//		SDLPixelFormat format = surface.getFormat();
+//		int length = 240*pitch;
+//		SDLColor rgb = null;
+//		int r = 0;
+//		int g = 0;
+//		int b = 0;
+
+//		pixelData.order(ByteOrder.LITTLE_ENDIAN);
+
+//		for(int i = 0; i < length; i+=2)
+//		{
+//			short pixel = pixelData.getShort(i);
+
+//			try
+//			{
+//				rgb = SDLVideo.getRGB(pixel, format);
+//			}
+//			catch (SDLException e)
+//			{
+//				// TODO
+//			}
+
+//			r = rgb.getRed();
+//			g = rgb.getGreen();
+//			b = rgb.getBlue();
+
+//			r = stepper(r, to, step, totalSteps);
+//			g = stepper(g, to, step, totalSteps);
+//			b = stepper(b, to, step, totalSteps);
+
+//			try
+//			{
+//				pixelData.putShort(i, (short)SDLVideo.mapRGB(format, r, g, b));
+//			}
+//			catch (SDLException e)
+//			{
+//				// TODO
+//			}
+//		}
 	}
 
 	public static SDLSurface loadImage(String filename)
