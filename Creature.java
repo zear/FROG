@@ -527,10 +527,17 @@ public class Creature extends GameObject
 				tile = levelLayer.getTile(i, y1/16);
 				tmpCol = collision.getCollision(tile);
 
-				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				if(this.getName().equals("swoosh"))
 				{
-					levelLayer.setTile(i, y1/16, 0);
-					remTile = false;
+					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+					{
+						levelLayer.setTile(i, y1/16, 0);
+						remTile = false;
+					}
+					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
+					{
+						levelLayer.setTile(i, y1/16, 79);
+					}
 				}
 
 				col = col | tmpCol;
@@ -596,10 +603,17 @@ public class Creature extends GameObject
 				tile = levelLayer.getTile(i, y1/16);
 				tmpCol = collision.getCollision(tile);
 
-				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				if(this.getName().equals("swoosh"))
 				{
-					levelLayer.setTile(i, y1/16, 0);
-					remTile = false;
+					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+					{
+						levelLayer.setTile(i, y1/16, 0);
+						remTile = false;
+					}
+					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
+					{
+						levelLayer.setTile(i, y1/16, 79);
+					}
 				}
 
 				col = col | tmpCol;
@@ -655,10 +669,17 @@ public class Creature extends GameObject
 				tile = levelLayer.getTile(x1/16, i);
 				tmpCol = collision.getCollision(tile);
 
-				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				if(this.getName().equals("swoosh"))
 				{
-					levelLayer.setTile(x1/16, i, 0);
-					remTile = false;
+					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+					{
+						levelLayer.setTile(x1/16, i, 0);
+						remTile = false;
+					}
+					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
+					{
+						levelLayer.setTile(x1/16, i, 79);
+					}
 				}
 
 				col = col | tmpCol;
@@ -704,10 +725,17 @@ public class Creature extends GameObject
 				tile = levelLayer.getTile(x1/16, i);
 				tmpCol = collision.getCollision(tile);
 
-				if(this.getName().equals("swoosh") && (tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+				if(this.getName().equals("swoosh"))
 				{
-					levelLayer.setTile(x1/16, i, 0);
-					remTile = false;
+					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
+					{
+						levelLayer.setTile(x1/16, i, 0);
+						remTile = false;
+					}
+					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
+					{
+						levelLayer.setTile(x1/16, i, 79);
+					}
 				}
 
 				col = col | tmpCol;

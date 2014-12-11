@@ -8,7 +8,8 @@ public class Collision
 	public static final int COLLISION_PLATFORM	= (1 << 1);
 	public static final int COLLISION_DAMAGE	= (1 << 2);
 	public static final int COLLISION_DESTRUCTIBLE	= (1 << 3);
-	public static final int COLLISION_CLIMB		= (1 << 4);
+	public static final int COLLISION_HIDDEN	= (1 << 4);
+	public static final int COLLISION_CLIMB		= (1 << 5);
 
 	private int[] map; // collision map
 
@@ -69,6 +70,8 @@ public class Collision
 				return COLLISION_CLIMB;
 			case 6:	// top of the ladder
 				return COLLISION_CLIMB | COLLISION_PLATFORM;
+			case 7:	// hidden block
+				return COLLISION_HIDDEN;
 
 			default:
 				return COLLISION_NONE;
