@@ -6,7 +6,7 @@ SRC		:= Program.java
 $(TARGET): $(SRC)
 	$(JC) $(CLASSPATH) $^
 
-release:
+release: $(TARGET)
 	jar cfm $(TARGET).jar manifest *.class
 
 clean:
