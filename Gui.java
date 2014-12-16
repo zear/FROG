@@ -89,7 +89,7 @@ public class Gui
 //				font.draw("** Fantastic Rescue Of Greeny v0.1 **", 5, 30 - dist);
 //				//font.draw("** FROG v0.1 **", 80, 30);
 //				//font.draw("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 20, 90);
-//				font.draw("(c) 2014, Licensed under GPLv2+", 20, 220 + dist);
+//				font.draw("(c) 2014, Licensed under LGPLv2.1+", 20, 220 + dist);
 			}
 
 			if(this.player.isDead())
