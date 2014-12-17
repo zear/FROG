@@ -1,4 +1,5 @@
-TARGET := frog$(shell date +-%Y.%m.%d)
+TARGET	:= frog$(shell date +-%Y.%m.%d)
+SRC_DIR	:= src
 
 # Path to sdljava bindings
 SDLJAVA ?= sdljava
@@ -6,7 +7,7 @@ SDLJAVA ?= sdljava
 JC := $(CROSS_COMPILE)gcj
 OBJCOPY := $(CROSS_COMPILE)objcopy
 
-CPPFLAGS := -I $(SDLJAVA)/src -I.
+CPPFLAGS := -I $(SDLJAVA)/src -I$(SRC_DIR)
 JFLAGS := -O3
 LDFLAGS := -L $(SDLJAVA)/lib -ljsdl -lgcj
 
@@ -36,7 +37,7 @@ OBJS := AI.o \
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(SRC_DIR)/$(OBJS)
 	$(JC) $(JFLAGS) --main=Program -o $@ $^ $(LDFLAGS)
 
 %.o: %.java
@@ -45,4 +46,4 @@ $(TARGET): $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET) $(SRC_DIR)/$(OBJS)
