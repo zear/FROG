@@ -29,12 +29,13 @@ Installation
 
 2. Compilation:
 
-The project Makefile provides an automatic way to build F.R.O.G.
-In order to compile, type `make`.
-After a successful compilation, running `make release` will produce a JAR file.
-`make clean` provides a way to remove a compiled build together with a produced JAR file.
+  The project Makefile provides an automatic way to build F.R.O.G.
+  In order to compile, type `make`.
+  After a successful compilation, running `make release` will produce a JAR file.
+  `make clean` provides a way to remove a compiled build together with a produced JAR file.
 
 3. Running:
-`LD_LIBRARY_PATH=":/path/to/libsdljava.so" java -jar frog-YYYY.MM.DD.jar`
+
+  `LD_LIBRARY_PATH=":/path/to/libsdljava.so" java -jar frog-YYYY.MM.DD.jar`
 
 The game is known to run at least with OpenJDK and JamVM JVMs.
