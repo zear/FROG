@@ -1,7 +1,6 @@
 import sdljava.*;
 import sdljava.video.*;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 enum ObjType
 {
@@ -56,23 +55,16 @@ public class GameObject
 	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
 	{
 		String templateName = null;
-		ListIterator<GameObjectTemplate> templi = tempList.listIterator();
-		GameObjectTemplate curElement = null;
 
-		if(templi.hasNext())
+		for (GameObjectTemplate curElement : tempList)
 		{
-			do
-			{
-				curElement = templi.next();
-				templateName = curElement.getName();
+			templateName = curElement.getName();
 
-				if(this.objName.equals(templateName))
-				{
-					objTemplate = curElement;
-					return; // Template for this object already exists. Abort.
-				}
+			if(this.objName.equals(templateName))
+			{
+				objTemplate = curElement;
+				return; // Template for this object already exists. Abort.
 			}
-			while(templi.hasNext());
 		}
 
 		// Add new template to the list
@@ -235,8 +227,6 @@ public class GameObject
 
 	public void changeAnimation(String name)
 	{
-		ListIterator<Animation> animli = this.objTemplate.getAnimation().listIterator();
-
 		if(curAnim == null)
 		{
 			return;
@@ -247,9 +237,10 @@ public class GameObject
 			return;
 		}
 
-		do
+		ArrayList <Animation> animList = this.objTemplate.getAnimation();
+
+		for (Animation curElement : animList)
 		{
-			Animation curElement = animli.next();
 			if(curElement.getAnimName().equals(name))
 			{
 				this.curAnim.setIsOver(false);
@@ -259,7 +250,6 @@ public class GameObject
 				return;
 			}
 		}
-		while(animli.hasNext());
 	}
 
 	public Animation getAnimation()
