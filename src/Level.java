@@ -358,20 +358,14 @@ public class Level
 
 		if(playerObj == null)
 		{
-			objsli = objs.listIterator();
-			do
+			for (GameObject curObj : objs)
 			{
-				if(!objsli.hasNext())
-					break;
-
-				GameObject curObj = objsli.next();
 				if(curObj instanceof Player)
 				{
 					playerObj = (Player)curObj;
 					break; // this assumes there is only one player on the level
 				}
 			}
-			while(objsli.hasNext());
 		}
 
 		if(playerObj != null)
@@ -476,11 +470,8 @@ public class Level
 
 		Player player = playerObj;
 
-		objsli = objs.listIterator();
-		do
+		for (GameObject tmpObj : objs)
 		{
-			GameObject tmpObj = objsli.next();
-
 			// Activity zone around the player - only objects within this zone have the logic computed
 			int zoneX = this.camera.getX() - 20;
 			int zoneY = this.camera.getY() - 20;
@@ -562,28 +553,17 @@ public class Level
 				}
 			}
 		}
-		while(objsli.hasNext());
 
 		// check collision with other objects
-		objsli = objs.listIterator();
-		do
+		for (GameObject curObj : objs)
 		{
-			if(!objsli.hasNext())
-				break;
-
-			GameObject curObj = objsli.next();
-
 			curObj.logic();
 
 			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
 			{
-				ListIterator<GameObject> objsli2 = playerObj.getAttackObjs().listIterator();
-				do
+				ArrayList<GameObject> attackObjs = playerObj.getAttackObjs();
+				for (GameObject tmpObj : attackObjs)
 				{
-					if(!objsli2.hasNext())
-						break;
-
-					GameObject tmpObj = objsli2.next();
 					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
 					{
 						Creature tmpCreature = (Creature)tmpObj;
@@ -603,17 +583,12 @@ public class Level
 						}
 					}
 				}
-				while(objsli2.hasNext());
 			}
 		}
-		while(objsli.hasNext());
 	}
 
 	public void draw() // draws map layers, objects and all the other map related stuff
 	{
-		ListIterator<LevelLayer> layli = layers.listIterator();
-
-		//System.out.printf("List: %d\n", layers.size());
 		if(playerObj.hp > 0)
 		{
 			camera.setTarget(playerObj);
@@ -625,7 +600,7 @@ public class Level
 
 		camera.track(layers.get(1), false); // update the camera
 
-		//Draw uniform background
+		//Draw uniform background.
 		try
 		{
 			//Sdl.screen.fillRect(SDLVideo.mapRGB(Sdl.screen.getFormat(), 0, 191, 243));
@@ -636,43 +611,21 @@ public class Level
 			//todo
 		}
 
-		// draw background layer
-		do
+		// Draw level layers.
+		for (LevelLayer curLayer : layers)
 		{
-			LevelLayer curLayer = layli.next();
-			if(curLayer.getId() == 0)
-				curLayer.draw(camera);
-		}
-		while(layli.hasNext());
+			if(curLayer.getId() == 2) // Draw game objects before drawing the foreground layer.
+			{
+				for (GameObject curObj : objs)
+				{
+					curObj.draw(camera);
+				}
+			}
 
-		// draw middle layer
-		layli = layers.listIterator();
-		do
-		{
-			LevelLayer curLayer = layli.next();
-			if(curLayer.getId() == 1)
-				curLayer.draw(camera);
-		}
-		while(layli.hasNext());
-
-		// draw objects
-		ListIterator<GameObject> objsli = objs.listIterator();
-		while(objsli.hasNext())
-		{
-			objsli.next().draw(camera);
+			curLayer.draw(camera);
 		}
 
-		// draw foreground layer
-		layli = layers.listIterator();
-		do
-		{
-			LevelLayer curLayer = layli.next();
-			if(curLayer.getId() == 2)
-				curLayer.draw(camera);
-		}
-		while(layli.hasNext());
-
-		// draw gui
+		// Draw gui.
 		this.gui.draw();
 	}
 }
