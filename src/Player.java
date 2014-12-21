@@ -9,7 +9,6 @@ public class Player extends Creature
 	public Camera viewport;
 	private boolean[] keys;
 	private boolean acceptInput = true;
-	private Replay replay;
 	private boolean dead = false;	// temporary
 	private int score;
 	private ArrayList<GameObject> attackObjs = null;
@@ -19,7 +18,6 @@ public class Player extends Creature
 		super(lay, col, lev);
 		viewport = new Camera();
 		keys = new boolean[6]; // left, right, up, down, jump, attack
-		replay = new Replay();
 		attackObjs = new ArrayList<GameObject>();
 	}
 
@@ -85,9 +83,6 @@ public class Player extends Creature
 //		Sdl.putInput(SDLKey.SDLK_z, keys[5]);
 		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[4]);
 		Sdl.putInput(SDLKey.SDLK_LALT, keys[5]);
-
-		replay.play();
-		replay.record(key, value);
 	}
 
 	public void updateKeys()
@@ -108,16 +103,6 @@ public class Player extends Creature
 			Sdl.toggleFullscreen();
 		if(Sdl.getInput(SDLKey.SDLK_c))
 			this.viewport.setTarget(0,0);
-		if(Sdl.getInput(SDLKey.SDLK_r))
-		{
-			this.replay.record = !this.replay.record;
-			System.out.printf("Recording: %d\n", this.replay.record != false ? 1 : 0);
-		}
-		if(Sdl.getInput(SDLKey.SDLK_p))
-		{
-			this.replay.play = !this.replay.play;
-			System.out.printf("Playback: %d\n", !!this.replay.play != false ? 1 : 0);
-		}
 		// debug
 		if(Sdl.getInput(SDLKey.SDLK_0))
 		{
