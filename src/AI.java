@@ -19,6 +19,7 @@ public class AI
 	public static final int JUMP_VY		= 1;
 	public static final int FLY_VX		= 0;
 	public static final int FLY_AMPLITUDE	= 1;
+	public static final int FLY_PERIOD	= 2;
 	public static final int SPAWN_OBJ_OBJVX	= 1;
 	public static final int SPAWN_OBJ_OBJVY	= 2;
 
@@ -29,8 +30,7 @@ public class AI
 		private int origTime;
 
 		// Variables used for sine wave
-		private float sineDisplacement;	// current height of the wave
-		private boolean sineDirection;	// direction of the wave (raising/falling)
+		private int sinePeriod;
 
 		// Variables used for action
 		private float var1;
@@ -76,24 +76,29 @@ public class AI
 			this.timer = origTime;
 		}
 
-		public float getSineDisplacement()
+		public int getSinePeriod()
 		{
-			return this.sineDisplacement;
+			return this.sinePeriod;
 		}
 
-		public void setSineDisplacement(float displacement)
+		public void decreaseSinePeriod(int step)
 		{
-			this.sineDisplacement = displacement;
+			this.sinePeriod-= step;
+
+			if(this.sinePeriod < 0)
+			{
+				this.sinePeriod = SineTable.STEPS - 1;
+			}
 		}
 
-		public boolean getSineDirection()
+		public void increaseSinePeriod(int step)
 		{
-			return this.sineDirection;
-		}
+			this.sinePeriod+= step;
 
-		public void setSineDirection(boolean direction)
-		{
-			this.sineDirection = direction;
+			if(this.sinePeriod >= SineTable.STEPS)
+			{
+				this.sinePeriod = 0;
+			}
 		}
 
 		public float getVar(int var)
@@ -202,24 +207,19 @@ public class AI
 		return this.curAction.getTimer();
 	}
 
-	public float getSineDisplacement()
+	public int getSinePeriod()
 	{
-		return this.curAction.getSineDisplacement();
+		return this.curAction.getSinePeriod();
 	}
 
-	public void setSineDisplacement(float displacement)
+	public void decreaseSinePeriod(int step)
 	{
-		this.curAction.setSineDisplacement(displacement);
+		this.curAction.decreaseSinePeriod(step);
 	}
 
-	public boolean getSineDirection()
+	public void increaseSinePeriod(int step)
 	{
-		return this.curAction.getSineDirection();
-	}
-
-	public void setSineDirection(boolean direction)
-	{
-		this.curAction.setSineDirection(direction);
+		this.curAction.increaseSinePeriod(step);
 	}
 
 	public float getVar(int var)

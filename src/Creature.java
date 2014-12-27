@@ -62,7 +62,8 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.FLY);
 			ai.setVar(AI.FLY_VX, 1.5f);
-			ai.setVar(AI.FLY_AMPLITUDE, 3f);
+			ai.setVar(AI.FLY_AMPLITUDE, 1f);
+			ai.setVar(AI.FLY_PERIOD, 5f);
 		}
 	}
 
@@ -92,7 +93,8 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.FLY, 60);
 			ai.setVar(AI.FLY_VX, 0.75f);
-			ai.setVar(AI.FLY_AMPLITUDE, 1.5f);
+			ai.setVar(AI.FLY_AMPLITUDE, 1f);
+			ai.setVar(AI.FLY_PERIOD, 5f);
 			ai.addAction(AI.TURN);
 		}
 	}
@@ -221,44 +223,15 @@ public class Creature extends GameObject
 			case AI.FLY:
 				this.ai.doTimer();
 
-				float sine;
-
 				if(this.ai.getVar(AI.FLY_AMPLITUDE) == 0)
 				{
-					sine = 0f;
+					this.fly((this.direction ? this.ai.getVar(AI.FLY_VX) : -this.ai.getVar(AI.FLY_VX)), 0f);
 				}
 				else
 				{
-					sine = (float)Math.sin(this.ai.getSineDisplacement());
+					this.ai.increaseSinePeriod((int)this.ai.getVar(AI.FLY_PERIOD));
 
-					if(this.ai.getSineDirection())
-					{
-						this.ai.setSineDisplacement(this.ai.getSineDisplacement() - 0.05f);
-					}
-					else
-					{
-						this.ai.setSineDisplacement(this.ai.getSineDisplacement() + 0.05f);
-					}
-
-					if(this.ai.getSineDisplacement() <= -1)
-					{
-						this.ai.setSineDisplacement(-1);
-						this.ai.setSineDirection(!this.ai.getSineDirection());
-					}
-					else if(this.ai.getSineDisplacement() >= 1)
-					{
-						this.ai.setSineDisplacement(1);
-						this.ai.setSineDirection(!this.ai.getSineDirection());
-					}
-				}
-
-				if(!this.direction)	// left
-				{
-					this.fly(-this.ai.getVar(AI.FLY_VX), sine * this.ai.getVar(AI.FLY_AMPLITUDE));
-				}
-				else			// right
-				{
-					this.fly(this.ai.getVar(AI.FLY_VX), sine * this.ai.getVar(AI.FLY_AMPLITUDE));
+					this.fly((this.direction ? this.ai.getVar(AI.FLY_VX) : -this.ai.getVar(AI.FLY_VX)), SineTable.TABLE[this.ai.getSinePeriod()]*this.ai.getVar(AI.FLY_AMPLITUDE));
 				}
 
 				this.affectedByGravity = false;
