@@ -293,11 +293,11 @@ public class GameObject
 
 		if(r.x < -this.w + 1)
 			return;
-		if(r.x > 320)
+		if(r.x > Sdl.SCREEN_WIDTH)
 			return;
 		if(r.y < -this.h + 1)
 			return;
-		if(r.y > 240)
+		if(r.y > Sdl.SCREEN_HEIGHT)
 			return;
 
 		try

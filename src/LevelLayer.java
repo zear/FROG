@@ -5,6 +5,8 @@ import java.util.ArrayList;
 // LevelLayer keeps data related to a single map layer
 public class LevelLayer
 {
+	public static final int TILE_SIZE = 16;
+
 	private int id;
 	private Tiles tiles;
 	private SDLSurface img;
@@ -167,12 +169,12 @@ public class LevelLayer
 		int y;
 		int tileNum;
 
-		for(i = camera.getY()/16; i < camera.getY()/16 + 15 + 1; i++)
+		for(i = camera.getY()/LevelLayer.TILE_SIZE; i < camera.getY()/LevelLayer.TILE_SIZE + 15 + 1; i++)
 		{
 			if(i >= tiles.getNumOfRows())
 				break;
 
-			for(j = camera.getX()/16; j < camera.getX()/16 + 20 + 1; j++)
+			for(j = camera.getX()/LevelLayer.TILE_SIZE; j < camera.getX()/LevelLayer.TILE_SIZE + 20 + 1; j++)
 			{
 				if(j >= tiles.getNumOfElements(i))
 					break;

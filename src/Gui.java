@@ -94,7 +94,7 @@ public class Gui
 
 			if(this.player.isDead())
 			{
-				font.draw("Game Over", 320/2 - 36, 240/2);
+				font.drawCentered("Game Over", Sdl.SCREEN_HEIGHT/2);
 			}
 		}
 		catch (SDLException e)

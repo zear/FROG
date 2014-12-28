@@ -475,8 +475,8 @@ public class Level
 			// Activity zone around the player - only objects within this zone have the logic computed
 			int zoneX = this.camera.getX() - 20;
 			int zoneY = this.camera.getY() - 20;
-			int zoneW = 320 + 40;
-			int zoneH = 240 + 40;
+			int zoneW = Sdl.SCREEN_WIDTH + 40;
+			int zoneH = Sdl.SCREEN_HEIGHT + 40;
 			int ox = (int)tmpObj.x;
 			int oy = (int)tmpObj.y;
 

@@ -104,7 +104,7 @@ public class Font
 				width += this.kerning;
 		}
 
-		draw(text, 320/2 - width/2, y);
+		draw(text, Sdl.SCREEN_WIDTH/2 - width/2, y);
 	}
 
 }

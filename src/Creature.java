@@ -310,7 +310,7 @@ public class Creature extends GameObject
 			x = (int)(super.x) - 1;
 		}
 
-		tile = levelLayer.getTile(x/16, y/16);
+		tile = levelLayer.getTile(x/LevelLayer.TILE_SIZE, y/LevelLayer.TILE_SIZE);
 		col = col | collision.getCollision(tile);
 
 		if(col == Collision.COLLISION_NONE)
@@ -337,7 +337,7 @@ public class Creature extends GameObject
 				x = (int)(super.x) + super.w;
 			}
 
-			tile = levelLayer.getTile(x/16, y/16);
+			tile = levelLayer.getTile(x/LevelLayer.TILE_SIZE, y/LevelLayer.TILE_SIZE);
 			col = col | collision.getCollision(tile);
 
 			if(col != Collision.COLLISION_NONE)
@@ -374,18 +374,18 @@ public class Creature extends GameObject
 			y1 = (int)(super.y) + 1 + super.h - 1;
 
 			if(x1 < 0)
-				x1 = -16;
+				x1 = -LevelLayer.TILE_SIZE;
 
-			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+			for(int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				col = col | collision.getCollision(tile);
 
 				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
 					{
 						this.canClimb = true;
-						this.climbX = i * 16;
+						this.climbX = i * LevelLayer.TILE_SIZE;
 						break;
 					}
 				}
@@ -400,20 +400,20 @@ public class Creature extends GameObject
 			y1 = (int)(super.y) - 1;
 
 			if(x1 < 0)
-				x1 = -16;
+				x1 = -LevelLayer.TILE_SIZE;
 			if(y1 < 0)
-				y1 = -16;
+				y1 = -LevelLayer.TILE_SIZE;
 
-			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+			for(int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				col = col | collision.getCollision(tile);
 
 				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
 					{
 						this.canClimb = true;
-						this.climbX = i * 16;
+						this.climbX = i * LevelLayer.TILE_SIZE;
 						break;
 					}
 				}
@@ -491,25 +491,25 @@ public class Creature extends GameObject
 			y1 = (int)(curVy + super.y) + super.h - 1;
 
 			if(x1 < 0)
-				x1 = -16;
+				x1 = -LevelLayer.TILE_SIZE;
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
-			for(int i = x1/16; i <= x2/16; i++)
+			for(int i = x1/LevelLayer.TILE_SIZE; i <= x2/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				tmpCol = collision.getCollision(tile);
 
 				if(this.getName().equals("swoosh"))
 				{
 					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
-						levelLayer.setTile(i, y1/16, 0);
+						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 0);
 						remTile = false;
 					}
 					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
-						levelLayer.setTile(i, y1/16, 79);
+						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 79);
 					}
 				}
 
@@ -524,7 +524,7 @@ public class Creature extends GameObject
 			}
 			else if((col & Collision.COLLISION_PLATFORM) > 0)
 			{
-				if(((int)this.y + super.h - 1)/16*16 < (y1)/16*16 && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
+				if(((int)this.y + super.h - 1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE < (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
 				{
 					this.vy = 0;
 					this.y = (float)ceil(this.y) - 0.2f;
@@ -539,16 +539,16 @@ public class Creature extends GameObject
 			}
 
 			col = Collision.COLLISION_NONE;
-			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+			for(int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				col = col | collision.getCollision(tile);
 
 				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
 					{
 						this.canClimb = true;
-						this.climbX = i * 16;
+						this.climbX = i * LevelLayer.TILE_SIZE;
 						break;
 					}
 				}
@@ -565,27 +565,27 @@ public class Creature extends GameObject
 			y1 = (int)(curVy + super.y);
 
 			if(x1 < 0)
-				x1 = -16;
+				x1 = -LevelLayer.TILE_SIZE;
 			if(y1 < 0)
-				y1 = -16;
+				y1 = -LevelLayer.TILE_SIZE;
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
-			for(int i = x1/16; i <= x2/16; i++)
+			for(int i = x1/LevelLayer.TILE_SIZE; i <= x2/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				tmpCol = collision.getCollision(tile);
 
 				if(this.getName().equals("swoosh"))
 				{
 					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
-						levelLayer.setTile(i, y1/16, 0);
+						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 0);
 						remTile = false;
 					}
 					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
-						levelLayer.setTile(i, y1/16, 79);
+						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 79);
 					}
 				}
 
@@ -602,16 +602,16 @@ public class Creature extends GameObject
 			}
 
 			col = Collision.COLLISION_NONE;
-			for(int i = (x1 + 6)/16; i <= (x2 - 6)/16; i++)
+			for(int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(i, y1/16);
+				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
 				col = col | collision.getCollision(tile);
 
 				if((col & Collision.COLLISION_CLIMB) > 0)
 				{
 					{
 						this.canClimb = true;
-						this.climbX = i * 16;
+						this.climbX = i * LevelLayer.TILE_SIZE;
 						break;
 					}
 				}
@@ -631,27 +631,27 @@ public class Creature extends GameObject
 			y2 = (int)(super.y) + super.h - 1;
 
 			if(y1 < 0)
-				y1 = -16;
+				y1 = -LevelLayer.TILE_SIZE;
 			if(y2 < 0)
-				y2 = -16;
+				y2 = -LevelLayer.TILE_SIZE;
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
-			for(int i = y1/16; i <= y2/16; i++)
+			for(int i = y1/LevelLayer.TILE_SIZE; i <= y2/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(x1/16, i);
+				tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, i);
 				tmpCol = collision.getCollision(tile);
 
 				if(this.getName().equals("swoosh"))
 				{
 					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
-						levelLayer.setTile(x1/16, i, 0);
+						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 0);
 						remTile = false;
 					}
 					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
-						levelLayer.setTile(x1/16, i, 79);
+						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 79);
 					}
 				}
 
@@ -685,29 +685,29 @@ public class Creature extends GameObject
 			y2 = (int)(super.y) + super.h - 1;
 
 			if(x1 < 0)
-				x1 = -16;
+				x1 = -LevelLayer.TILE_SIZE;
 			if(y1 < 0)
-				y1 = -16;
+				y1 = -LevelLayer.TILE_SIZE;
 			if(y2 < 0)
-				y2 = -16;
+				y2 = -LevelLayer.TILE_SIZE;
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
-			for(int i = y1/16; i <= y2/16; i++)
+			for(int i = y1/LevelLayer.TILE_SIZE; i <= y2/LevelLayer.TILE_SIZE; i++)
 			{
-				tile = levelLayer.getTile(x1/16, i);
+				tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, i);
 				tmpCol = collision.getCollision(tile);
 
 				if(this.getName().equals("swoosh"))
 				{
 					if((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
-						levelLayer.setTile(x1/16, i, 0);
+						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 0);
 						remTile = false;
 					}
 					if((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
-						levelLayer.setTile(x1/16, i, 79);
+						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 79);
 					}
 				}
 
@@ -753,20 +753,20 @@ public class Creature extends GameObject
 //			this.vx = 0;
 //			super.x = 0;
 //		}
-//		if(((int)(super.x + this.vx) + super.w - 1)/16 >= levelLayer.getWidth())
+//		if(((int)(super.x + this.vx) + super.w - 1)/LevelLayer.TILE_SIZE >= levelLayer.getWidth())
 //		{
 //			this.vx = 0;
-//			super.x = levelLayer.getWidth() * 16 - super.w;
+//			super.x = levelLayer.getWidth() * LevelLayer.TILE_SIZE - super.w;
 //		}
 //		if(super.y + this.vy < 0)
 //		{
 //			this.vy = 0;
 //			super.y = 0;
 //		}
-//		if(((int)(super.y + this.vy) + super.h)/16 >= levelLayer.getHeight())
+//		if(((int)(super.y + this.vy) + super.h)/LevelLayer.TILE_SIZE >= levelLayer.getHeight())
 //		{
 //			this.vy = 0;
-//			super.y = levelLayer.getHeight() * 16 - super.h;
+//			super.y = levelLayer.getHeight() * LevelLayer.TILE_SIZE - super.h;
 //		}
 
 //		// check y
@@ -780,8 +780,8 @@ public class Creature extends GameObject
 //			x2 = (int)(super.x) + super.w - 1;
 //			y1 = (int)(this.vy + super.y) + super.h - 1;
 
-//			tile = levelLayer.getTile(x1/16, y1/16);
-//			tile2 = levelLayer.getTile(x2/16, y1/16);
+//			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
+//			tile2 = levelLayer.getTile(x2/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 
 //			if(collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
@@ -802,8 +802,8 @@ public class Creature extends GameObject
 //			x2 = (int)(super.x) + super.w - 1;
 //			y1 = (int)(this.vy + super.y);
 
-//			tile = levelLayer.getTile(x1/16, y1/16);
-//			tile2 = levelLayer.getTile(x2/16, y1/16);
+//			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
+//			tile2 = levelLayer.getTile(x2/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 
 //			if(collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
@@ -826,8 +826,8 @@ public class Creature extends GameObject
 //			y1 = (int)(super.y);
 //			y2 = (int)(super.y) + super.h - 1;
 
-//			tile = levelLayer.getTile(x1/16, y1/16);
-//			tile2 = levelLayer.getTile(x1/16, y2/16);
+//			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
+//			tile2 = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y2/LevelLayer.TILE_SIZE);
 
 //			if(collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
@@ -849,8 +849,8 @@ public class Creature extends GameObject
 //			y1 = (int)(super.y);
 //			y2 = (int)(super.y) + super.h - 1;
 
-//			tile = levelLayer.getTile(x1/16, y1/16);
-//			tile2 = levelLayer.getTile(x1/16, y2/16);
+//			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
+//			tile2 = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y2/LevelLayer.TILE_SIZE);
 
 //			if(collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{

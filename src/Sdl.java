@@ -7,6 +7,9 @@ import java.nio.*;
 // Class Sdl handles libSDL specific features
 public class Sdl
 {
+	public static final int SCREEN_WIDTH = 320;
+	public static final int SCREEN_HEIGHT = 240;
+	public static final int SCREEN_BPP = 16;
 	public static long startFrameTime; // = SDLTimer.getTicks();
 	public static long newFrameTime;
 	public static long counterLastFull;			// for FPS counter
@@ -47,7 +50,7 @@ public class Sdl
 		{
 			try
 			{
-				screen = SDLVideo.setVideoMode(320, 240, 16, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF);
+				screen = SDLVideo.setVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF);
 			}
 			catch (SDLException e)
 			{
@@ -58,7 +61,7 @@ public class Sdl
 		{
 			try
 			{
-				screen = SDLVideo.setVideoMode(320, 240, 16, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF | SDLVideo.SDL_FULLSCREEN);
+				screen = SDLVideo.setVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF | SDLVideo.SDL_FULLSCREEN);
 			}
 			catch (SDLException e)
 			{
@@ -97,7 +100,7 @@ public class Sdl
 
 		try
 		{
-			screen = SDLVideo.setVideoMode(320, 240, 16, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF);
+			screen = SDLVideo.setVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF);
 		}
 		catch (SDLException e)
 		{
@@ -195,7 +198,7 @@ public class Sdl
 //		java.nio.ByteBuffer pixelData = surface.getPixelData();
 //		int pitch = surface.getPitch();
 //		SDLPixelFormat format = surface.getFormat();
-//		int length = 240*pitch;
+//		int length = SCREEN_HEIGHT*pitch;
 //		SDLColor rgb = null;
 //		int r = 0;
 //		int g = 0;

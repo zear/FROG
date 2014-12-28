@@ -43,14 +43,14 @@ public class Camera
 
 	public void setCamera(GameObject obj)
 	{
-		this.x = (int)obj.x - 320/2;
-		this.y = (int)obj.y - 240/2;
+		this.x = (int)obj.x - Sdl.SCREEN_WIDTH/2;
+		this.y = (int)obj.y - Sdl.SCREEN_HEIGHT/2;
 	}
 
 	public void setCamera(int x, int y)
 	{
-		this.x = x - 320/2;
-		this.y = y - 240/2;
+		this.x = x - Sdl.SCREEN_WIDTH/2;
+		this.y = y - Sdl.SCREEN_HEIGHT/2;
 	}
 
 	public void track(LevelLayer layer, boolean canLeaveScreen)
@@ -70,18 +70,18 @@ public class Camera
 				{
 					this.x = targetX;
 				}
-				else if(this.targetX + t.w - 1 > this.x + 320)
+				else if(this.targetX + t.w - 1 > this.x + Sdl.SCREEN_WIDTH)
 				{
-					this.x = targetX + t.w - 1 - 320;
+					this.x = targetX + t.w - 1 - Sdl.SCREEN_WIDTH;
 				}
 
 				if(this.targetY < this.y + MUST_FOLLOW_DIST)
 				{
 					this.y = targetY - MUST_FOLLOW_DIST;
 				}
-				else if(this.targetY + t.h - 1 > this.y + 240 - MUST_FOLLOW_DIST)
+				else if(this.targetY + t.h - 1 > this.y + Sdl.SCREEN_HEIGHT - MUST_FOLLOW_DIST)
 				{
-					this.y = targetY + t.h - 1 - 240 + MUST_FOLLOW_DIST;
+					this.y = targetY + t.h - 1 - Sdl.SCREEN_HEIGHT + MUST_FOLLOW_DIST;
 				}
 			}
 		}
@@ -90,25 +90,25 @@ public class Camera
 		{
 			Creature t = (Creature)this.target;
 
-			if(this.targetX < this.x + 320/2 - 16)
+			if(this.targetX < this.x + Sdl.SCREEN_WIDTH/2 - 16)
 			{
-				this.x -= this.x + 320/2 - 16 - this.targetX;
+				this.x -= this.x + Sdl.SCREEN_WIDTH/2 - 16 - this.targetX;
 			}
-			else if(this.targetX + t.w - 1 > this.x + 320/2 + 16)
+			else if(this.targetX + t.w - 1 > this.x + Sdl.SCREEN_WIDTH/2 + 16)
 			{
-				this.x += (this.targetX + t.w - 1) - (this.x + 320/2 + 16);
+				this.x += (this.targetX + t.w - 1) - (this.x + Sdl.SCREEN_WIDTH/2 + 16);
 			}
 
 			this.trackX = false;
 
 			if(t.isOnGround)
 			{
-				if(this.targetY != this.y + 240/2)
+				if(this.targetY != this.y + Sdl.SCREEN_HEIGHT/2)
 					this.trackY = true;
 				else
 					this.trackY = false;
 			}
-			else if(this.targetY > this.y + 240/2)
+			else if(this.targetY > this.y + Sdl.SCREEN_HEIGHT/2)
 			{
 				this.trackY = true;
 			}
@@ -121,16 +121,16 @@ public class Camera
 
 		if(this.trackX)
 		{
-			if(this.x > this.targetX - 320/2)
+			if(this.x > this.targetX - Sdl.SCREEN_WIDTH/2)
 				this.x-= 1;
-			if(this.x < this.targetX - 320/2)
+			if(this.x < this.targetX - Sdl.SCREEN_WIDTH/2)
 				this.x+= 1;
 		}
 		if(this.trackY)
 		{
-			if(this.y > this.targetY - 240/2)
+			if(this.y > this.targetY - Sdl.SCREEN_HEIGHT/2)
 				this.y-= 1;
-			if(this.y < this.targetY - 240/2)
+			if(this.y < this.targetY - Sdl.SCREEN_HEIGHT/2)
 				this.y+= 1;
 		}
 
@@ -139,13 +139,13 @@ public class Camera
 		if(this.y < 0)
 			this.y = 0;
 
-		if(this.x + 320 > (layer.getWidth()) * 16)
+		if(this.x + Sdl.SCREEN_WIDTH > (layer.getWidth()) * LevelLayer.TILE_SIZE)
 		{
-			this.x = (layer.getWidth()) * 16 - 320;
+			this.x = (layer.getWidth()) * LevelLayer.TILE_SIZE - Sdl.SCREEN_WIDTH;
 		}
-		if(this.y + 240 > (layer.getHeight()) * 16)
+		if(this.y + Sdl.SCREEN_HEIGHT > (layer.getHeight()) * LevelLayer.TILE_SIZE)
 		{
-			this.y = (layer.getHeight()) * 16 - 240;
+			this.y = (layer.getHeight()) * LevelLayer.TILE_SIZE - Sdl.SCREEN_HEIGHT;
 		}
 	}
 
@@ -157,13 +157,13 @@ public class Camera
 			this.targetY = (int)target.getY();
 		}
 
-		if(this.x > this.targetX - 320/2)
+		if(this.x > this.targetX - Sdl.SCREEN_WIDTH/2)
 			this.x--;
-		if(this.x < this.targetX - 320/2)
+		if(this.x < this.targetX - Sdl.SCREEN_WIDTH/2)
 			this.x++;
-		if(this.y > this.targetY - 240/2)
+		if(this.y > this.targetY - Sdl.SCREEN_HEIGHT/2)
 			this.y--;
-		if(this.y < this.targetY - 240/2)
+		if(this.y < this.targetY - Sdl.SCREEN_HEIGHT/2)
 			this.y++;
 
 		if(this.x < 0)
@@ -171,13 +171,13 @@ public class Camera
 		if(this.y < 0)
 			this.y = 0;
 
-		if(this.x + 320 > (layer.getWidth()) * 16)
+		if(this.x + Sdl.SCREEN_WIDTH > (layer.getWidth()) * LevelLayer.TILE_SIZE)
 		{
-			this.x = (layer.getWidth()) * 16 - 320;
+			this.x = (layer.getWidth()) * LevelLayer.TILE_SIZE - Sdl.SCREEN_WIDTH;
 		}
-		if(this.y + 240 > (layer.getHeight()) * 16)
+		if(this.y + Sdl.SCREEN_HEIGHT > (layer.getHeight()) * LevelLayer.TILE_SIZE)
 		{
-			this.y = (layer.getHeight()) * 16 - 240;
+			this.y = (layer.getHeight()) * LevelLayer.TILE_SIZE - Sdl.SCREEN_HEIGHT;
 		}
 	}
 }
