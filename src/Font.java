@@ -77,9 +77,6 @@ public class Font
 				y += this.h + this.leading;
 			}
 
-			r.x += this.kerning + this.w;
-			r.y = y;
-
 			try
 			{
 				this.img.blitSurface(this.imgClip[letterCh], Sdl.screen, r);
@@ -90,6 +87,9 @@ public class Font
 			}
 
 			letterNum++;
+
+			r.x += this.kerning + this.w;
+			r.y = y;
 		}
 	}
 
@@ -99,6 +99,9 @@ public class Font
 
 		for(int i = 0; i < text.length(); i++)
 		{
+			if(text.charAt(i) == '\n') // line break
+				break;
+
 			width += this.w;
 			if(i < text.length() - 1)
 				width += this.kerning;

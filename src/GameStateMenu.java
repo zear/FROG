@@ -219,9 +219,9 @@ public class GameStateMenu implements GameState
 					font.draw(word, 130, 130 + i * 12);
 				}
 
-				font.draw("** Fantastic Rescue Of Greeny v0.1 **", 5, 30);
-				font.draw("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 20, 60);
-				font.draw("(c) 2014, Licensed under LGPLv2.1+", 20, 220);
+				font.drawCentered("** Fantastic Rescue Of Greeny v0.1 **", 30);
+				font.drawCentered("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 60);
+				font.drawCentered("(c) 2014, Licensed under LGPLv2.1+", 220);
 			}
 		}
 
