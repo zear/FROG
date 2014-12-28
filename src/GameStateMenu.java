@@ -180,8 +180,6 @@ public class GameStateMenu implements GameState
 		}
 		else if(curMenu != null)
 		{
-			font.draw("->", 110, 130 + curSelection * 12);
-
 			for(int i = 0; i < curMenu.length; i++)
 			{
 				String word = null;
@@ -216,7 +214,12 @@ public class GameStateMenu implements GameState
 
 				if(word != null)
 				{
-					font.draw(word, 130, 130 + i * 12);
+					if(i == curSelection)
+					{
+						word = "> " + word + " <";
+					}
+
+					font.drawCentered(word, 130 + i * 12);
 				}
 
 				font.drawCentered("** Fantastic Rescue Of Greeny v0.1 **", 30);
