@@ -4,13 +4,13 @@ import sdljava.video.*;
 
 public class GameStateMenu implements GameState
 {
-	private final int MENU_EPISODES = 0;
-	private final int MENU_OPTIONS = 1;
-	private final int MENU_EXIT = 2;
-	private final int MENU_FPS = 3;
-	private final int MENU_DEBUG = 4;
-	private final int MENU_SEPARATOR = 5;
-	private final int MENU_BACK = 6;
+	private static final int MENU_EPISODES = 0;
+	private static final int MENU_OPTIONS = 1;
+	private static final int MENU_EXIT = 2;
+	private static final int MENU_FPS = 3;
+	private static final int MENU_DEBUG = 4;
+	private static final int MENU_SEPARATOR = 5;
+	private static final int MENU_BACK = 6;
 
 	private int[] curMenu;
 	private int[] parentMenu = null;
