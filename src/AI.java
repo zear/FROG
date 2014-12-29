@@ -23,7 +23,7 @@ public class AI
 	public static final int SPAWN_OBJ_OBJVX	= 1;
 	public static final int SPAWN_OBJ_OBJVY	= 2;
 
-	private class AIAction
+	private static class AIAction
 	{
 		private int type;
 		private int timer;
