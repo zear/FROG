@@ -62,7 +62,7 @@ public class AI
 
 		public void doTimer()
 		{
-			if(this.timer > 0)
+			if (this.timer > 0)
 				timer--;
 		}
 
@@ -85,7 +85,7 @@ public class AI
 		{
 			this.sinePeriod-= step;
 
-			if(this.sinePeriod < 0)
+			if (this.sinePeriod < 0)
 			{
 				this.sinePeriod = SineTable.STEPS - 1;
 			}
@@ -95,7 +95,7 @@ public class AI
 		{
 			this.sinePeriod+= step;
 
-			if(this.sinePeriod >= SineTable.STEPS)
+			if (this.sinePeriod >= SineTable.STEPS)
 			{
 				this.sinePeriod = 0;
 			}
@@ -103,7 +103,7 @@ public class AI
 
 		public float getVar(int var)
 		{
-			switch(var)
+			switch (var)
 			{
 				case 0:
 					return var1;
@@ -119,7 +119,7 @@ public class AI
 
 		public void setVar(int var, float value)
 		{
-			switch(var)
+			switch (var)
 			{
 				case 0:
 					this.var1 = value;
@@ -158,7 +158,7 @@ public class AI
 
 	public boolean hasActions()
 	{
-		if(this.curAction == null)
+		if (this.curAction == null)
 			return false;
 		return true;
 	}
@@ -184,7 +184,7 @@ public class AI
 	public void setNextAction()
 	{
 		curAction.resetTimer();
-		if(actionListIterator.hasNext())
+		if (actionListIterator.hasNext())
 			curAction = actionListIterator.next();
 		else
 		{

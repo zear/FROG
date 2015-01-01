@@ -27,7 +27,7 @@ public class Projectile extends Creature
 
 	public void ttlCountdown()
 	{
-		if(this.ttl > 0)
+		if (this.ttl > 0)
 			this.ttl--;
 	}
 }

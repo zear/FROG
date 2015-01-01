@@ -27,9 +27,9 @@ public class Font
 		this.h = h;
 		this.imgClip = new SDLRect[256];
 
-		for(i = 0, y = -this.h; i < this.imgClip.length;)
+		for (i = 0, y = -this.h; i < this.imgClip.length;)
 		{
-			for(j = 0, x = 0, y += this.h; j < 16; j++, x += this.w, i++)
+			for (j = 0, x = 0, y += this.h; j < 16; j++, x += this.w, i++)
 			{
 				this.imgClip[i] = new SDLRect();
 				this.imgClip[i].x = x;
@@ -65,13 +65,13 @@ public class Font
 		r.x = x;
 		r.y = y;
 
-		if(text == null)
+		if (text == null)
 			return;
 
-		for(int i = 0; i < text.length(); i++)
+		for (int i = 0; i < text.length(); i++)
 		{
 			letterCh = text.charAt(letterNum);
-			if(letterCh == '\n') // line break
+			if (letterCh == '\n') // line break
 			{
 				r.x = origX - this.w;
 				y += this.h + this.leading;
@@ -97,13 +97,13 @@ public class Font
 	{
 		int width = 0;
 
-		for(int i = 0; i < text.length(); i++)
+		for (int i = 0; i < text.length(); i++)
 		{
-			if(text.charAt(i) == '\n') // line break
+			if (text.charAt(i) == '\n') // line break
 				break;
 
 			width += this.w;
-			if(i < text.length() - 1)
+			if (i < text.length() - 1)
 				width += this.kerning;
 		}
 

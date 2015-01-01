@@ -60,7 +60,7 @@ public class GameObject
 		{
 			templateName = curElement.getName();
 
-			if(this.objName.equals(templateName))
+			if (this.objName.equals(templateName))
 			{
 				objTemplate = curElement;
 				return; // Template for this object already exists. Abort.
@@ -132,7 +132,7 @@ public class GameObject
 	}
 	public void putDirection(int direction)
 	{
-		if(direction > 0)
+		if (direction > 0)
 			this.direction = true;
 		else
 			this.direction = false;
@@ -177,7 +177,7 @@ public class GameObject
 
 	private void invincibilityCountdown()
 	{
-		if(this.invincibilityTimer > 0)
+		if (this.invincibilityTimer > 0)
 			this.invincibilityTimer--;
 		else
 			this.vulnerable = true;
@@ -188,7 +188,7 @@ public class GameObject
 		Animation tmp;
 
 		tmp = this.objTemplate.addAnimation(fp);
-		if(tmp != null && this.curAnim == null)
+		if (tmp != null && this.curAnim == null)
 			this.curAnim = tmp;
 	}
 
@@ -201,11 +201,11 @@ public class GameObject
 
 	private void blinkingCountdown()
 	{
-		if(this.blinkTimer > 0)
+		if (this.blinkTimer > 0)
 		{
 			this.blinkTimer--;
 
-			if(blinkTimer%5 == 0)
+			if (blinkTimer%5 == 0)
 				this.doDraw = !this.doDraw;
 		}
 		else
@@ -227,12 +227,12 @@ public class GameObject
 
 	public void changeAnimation(String name)
 	{
-		if(curAnim == null)
+		if (curAnim == null)
 		{
 			return;
 		}
 
-		if(curAnim.getAnimName().equals(name)) // don't change the animation if it's already selected
+		if (curAnim.getAnimName().equals(name)) // don't change the animation if it's already selected
 		{
 			return;
 		}
@@ -241,7 +241,7 @@ public class GameObject
 
 		for (Animation curElement : animList)
 		{
-			if(curElement.getAnimName().equals(name))
+			if (curElement.getAnimName().equals(name))
 			{
 				this.curAnim.setIsOver(false);
 				this.curAnim = curElement;
@@ -269,18 +269,18 @@ public class GameObject
 
 	public void draw(Camera camera) // draws game object
 	{
-		if(curAnim == null)
+		if (curAnim == null)
 			return;
 
-		if(this instanceof Player)
+		if (this instanceof Player)
 		{
-			if(((Player)this).isDead())
+			if (((Player)this).isDead())
 				return;
 		}
 
 		this.blinkingCountdown();
 
-		if(!doDraw)
+		if (!doDraw)
 			return;
 
 		SDLRect r = new SDLRect();
@@ -291,44 +291,44 @@ public class GameObject
 		r.x += this.curAnim.getOffsetX(direction);
 		r.y += this.curAnim.getOffsetY(direction);
 
-		if(r.x < -this.w + 1)
+		if (r.x < -this.w + 1)
 			return;
-		if(r.x > Sdl.SCREEN_WIDTH)
+		if (r.x > Sdl.SCREEN_WIDTH)
 			return;
-		if(r.y < -this.h + 1)
+		if (r.y < -this.h + 1)
 			return;
-		if(r.y > Sdl.SCREEN_HEIGHT)
+		if (r.y > Sdl.SCREEN_HEIGHT)
 			return;
 
 		try
 		{
-			if(this instanceof Player)
+			if (this instanceof Player)
 			{
 				//System.out.printf("%s, Frame %d/%d: %d\n", this.curAnim.getName(), frameNum, this.curAnim.getLength(this.direction) - 1, this.curAnim.getFrame(this.direction, frameNum));
 			}
 			SDLRect[] imgClip = this.objTemplate.getImgClip();
 			this.objTemplate.getImg().blitSurface(imgClip[this.curAnim.getFrame(this.direction, frameNum)], Sdl.screen, r);
-//			if(frameDelay == 0)
+//			if (frameDelay == 0)
 //			{
 //				frameDelay = this.curAnim.getFrameRate();
-//				if(frameNum > 0)
+//				if (frameNum > 0)
 //					frameNum--;
 //				else
 //				{
-//					if(this.curAnim.isLooping())
+//					if (this.curAnim.isLooping())
 //						frameNum = this.curAnim.getLength(this.direction) - 1;
 //					else
 //						this.curAnim.setIsOver(true);
 //				}
 //			}
-			if(frameDelay == 0)
+			if (frameDelay == 0)
 			{
 				frameDelay = this.curAnim.getFrameRate();
-				if(frameNum < this.curAnim.getLength(this.direction) - 1)
+				if (frameNum < this.curAnim.getLength(this.direction) - 1)
 					frameNum++;
 				else
 				{
-					if(this.curAnim.isLooping())
+					if (this.curAnim.isLooping())
 						frameNum = 0;
 					else
 						this.curAnim.setIsOver(true);
@@ -344,7 +344,7 @@ public class GameObject
 			// todo
 		}
 
-		if(Game.debugMode)
+		if (Game.debugMode)
 		{
 			r.x = (int)this.x - camera.getX();
 			r.y = (int)this.y - camera.getY();

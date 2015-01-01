@@ -97,23 +97,23 @@ public class Player extends Creature
 		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
 
 		// TODO: move this elsewhere
-		if(Sdl.getInput(SDLKey.SDLK_ESCAPE))
+		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
 			Program.game.changeState(GameStateEnum.STATE_MENU);
-		if(Sdl.getInput(SDLKey.SDLK_f))
+		if (Sdl.getInput(SDLKey.SDLK_f))
 			Sdl.toggleFullscreen();
-		if(Sdl.getInput(SDLKey.SDLK_c))
+		if (Sdl.getInput(SDLKey.SDLK_c))
 			this.viewport.setTarget(0,0);
 		// debug
-		if(Sdl.getInput(SDLKey.SDLK_0))
+		if (Sdl.getInput(SDLKey.SDLK_0))
 		{
 			Sdl.putInput(SDLKey.SDLK_0, false);
 
-			if(Sdl.frameTime == 1000/Sdl.framesPerSecond)
+			if (Sdl.frameTime == 1000/Sdl.framesPerSecond)
 				Sdl.frameTime *= 10;
 			else
 				Sdl.frameTime = 1000/Sdl.framesPerSecond;
 		}
-		if(Sdl.getInput(SDLKey.SDLK_d))
+		if (Sdl.getInput(SDLKey.SDLK_d))
 		{
 			Sdl.putInput(SDLKey.SDLK_d, false);
 

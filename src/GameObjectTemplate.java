@@ -32,9 +32,9 @@ public class GameObjectTemplate
 		this.tileH = h;
 		this.imgClip = new SDLRect[this.imgSize];
 
-		for(i = 0, y = -tileH; i < imgSize;)
+		for (i = 0, y = -tileH; i < imgSize;)
 		{
-			for(j = 0, x = 0, y += tileH; j < imgRowW; j++, x += tileW, i++)
+			for (j = 0, x = 0, y += tileH; j < imgRowW; j++, x += tileW, i++)
 			{
 				imgClip[i] = new SDLRect();
 				imgClip[i].x = x;
@@ -70,10 +70,10 @@ public class GameObjectTemplate
 		String word;
 		Animation tmp = null;
 
-		while(fp.hasNext())
+		while (fp.hasNext())
 		{
 			word = fp.getNext();
-			if(word.equals("END"))
+			if (word.equals("END"))
 			{
 				return tmp;
 			}

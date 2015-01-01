@@ -14,12 +14,12 @@ public class GameStateGame implements GameState
 
 	public void logic()
 	{
-		if(level != null)
+		if (level != null)
 			level.logic();
 	}
 	public void draw()
 	{
-		if(level != null)
+		if (level != null)
 			level.draw();
 
 		Sdl.flip(Sdl.screen);

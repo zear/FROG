@@ -62,13 +62,13 @@ public class LevelLayer
 
 	public int getTile(int x, int y)
 	{
-		if(x < 0)
+		if (x < 0)
 			return -1;
-		if(y < 0)
+		if (y < 0)
 			return -1;
-		if(x > getWidth() - 1)
+		if (x > getWidth() - 1)
 			return -1;
-		if(y > getHeight() - 1)
+		if (y > getHeight() - 1)
 			return -1;
 
 		return tiles.getElement(y, x);
@@ -76,13 +76,13 @@ public class LevelLayer
 
 	public void setTile(int x, int y, int value)
 	{
-		if(x < 0)
+		if (x < 0)
 			return;
-		if(y < 0)
+		if (y < 0)
 			return;
-		if(x > getWidth() - 1)
+		if (x > getWidth() - 1)
 			return;
-		if(y > getHeight() - 1)
+		if (y > getHeight() - 1)
 			return;
 
 		tiles.setElement(y, x, value);
@@ -122,9 +122,9 @@ public class LevelLayer
 		this.tileH = h;
 		this.imgClip = new SDLRect[this.imgSize];
 
-		for(i = 0, y = -tileH; i < imgSize;)
+		for (i = 0, y = -tileH; i < imgSize;)
 		{
-			for(j = 0, x = 0, y += tileH; j < imgRowW; j++, x += tileW, i++)
+			for (j = 0, x = 0, y += tileH; j < imgRowW; j++, x += tileW, i++)
 			{
 				imgClip[i] = new SDLRect();
 				imgClip[i].x = x;
@@ -141,19 +141,19 @@ public class LevelLayer
 		String [] words;
 		int token;
 
-		while(fp.hasNext())
+		while (fp.hasNext())
 		{
 			line = fp.getLine();
 			words = line.split("\\s");
 			token = -1;
 
-			if(words[0].equals("END"))
+			if (words[0].equals("END"))
 				return;
 
-			if(words.length > 0 && !(words[0].equals("END")))
+			if (words.length > 0 && !(words[0].equals("END")))
 				tiles.addRow();
 
-			while(token < words.length - 1)
+			while (token < words.length - 1)
 			{
 				token++;
 				tiles.putElement(tiles.getNumOfRows() - 1, Integer.parseInt(words[token]));
@@ -169,19 +169,19 @@ public class LevelLayer
 		int y;
 		int tileNum;
 
-		for(i = camera.getY()/LevelLayer.TILE_SIZE; i < camera.getY()/LevelLayer.TILE_SIZE + 15 + 1; i++)
+		for (i = camera.getY()/LevelLayer.TILE_SIZE; i < camera.getY()/LevelLayer.TILE_SIZE + 15 + 1; i++)
 		{
-			if(i >= tiles.getNumOfRows())
+			if (i >= tiles.getNumOfRows())
 				break;
 
-			for(j = camera.getX()/LevelLayer.TILE_SIZE; j < camera.getX()/LevelLayer.TILE_SIZE + 20 + 1; j++)
+			for (j = camera.getX()/LevelLayer.TILE_SIZE; j < camera.getX()/LevelLayer.TILE_SIZE + 20 + 1; j++)
 			{
-				if(j >= tiles.getNumOfElements(i))
+				if (j >= tiles.getNumOfElements(i))
 					break;
 
 				tileNum = tiles.getElement(i, j);
 
-				if(tileNum != 0) // don't bother drawing tile #0 (transparent)
+				if (tileNum != 0) // don't bother drawing tile #0 (transparent)
 				{
 					SDLRect r = new SDLRect();
 					r.x = j * tileW - camera.getX();

@@ -17,7 +17,7 @@ public class Gui
 		this.hpBar = Sdl.loadImage("./data/gfx/health.bmp");
 		this.hpBarClip = new SDLRect[2];
 
-		for(int i = 0; i < 2; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			this.hpBarClip[i] = new SDLRect();
 			this.hpBarClip[i].x = i * 12;
@@ -41,7 +41,7 @@ public class Gui
 	{
 		SDLRect r = new SDLRect();
 
-		if(this.player == null)
+		if (this.player == null)
 			return;
 
 		try
@@ -49,33 +49,33 @@ public class Gui
 			r.x = 5;
 			r.y = 2;
 
-			if(this.player.getHp() > 0)
+			if (this.player.getHp() > 0)
 				this.hpBar.blitSurface(this.hpBarClip[1], Sdl.screen, r);
 			else
 				this.hpBar.blitSurface(this.hpBarClip[0], Sdl.screen, r);
 			r.x = r.x + 13;
-			if(this.player.getHp() > 1)
+			if (this.player.getHp() > 1)
 				this.hpBar.blitSurface(this.hpBarClip[1], Sdl.screen, r);
 			else
 				this.hpBar.blitSurface(this.hpBarClip[0], Sdl.screen, r);
 			r.x = r.x + 13;
-			if(this.player.getHp() > 2)
+			if (this.player.getHp() > 2)
 				this.hpBar.blitSurface(this.hpBarClip[1], Sdl.screen, r);
 			else
 				this.hpBar.blitSurface(this.hpBarClip[0], Sdl.screen, r);
 
 				font.draw("".format("%6dp", this.player.getScore()), 255, 1);
 
-			if(Game.drawFps)
+			if (Game.drawFps)
 			{
 				font.draw("" + (Sdl.fpsIsCapped ? "" : "!") + Sdl.fpsCalculated, 290, 14);
 			}
 
 			Sdl.fpsIsCapped = false;
 
-			if(timer2 > 0)
+			if (timer2 > 0)
 			{
-				if(timer > 0)
+				if (timer > 0)
 				{
 					timer--;
 //					font.draw("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 20, 90);
@@ -92,7 +92,7 @@ public class Gui
 //				font.draw("(c) 2014, Licensed under LGPLv2.1+", 20, 220 + dist);
 			}
 
-			if(this.player.isDead())
+			if (this.player.isDead())
 			{
 				font.drawCentered("Game Over", Sdl.SCREEN_HEIGHT/2);
 			}

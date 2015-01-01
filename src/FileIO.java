@@ -21,7 +21,7 @@ public class FileIO
 
 	public void open(File file)
 	{
-		if(file == null)
+		if (file == null)
 		{
 			System.out.printf("File is empty!\n");
 			return;
@@ -38,7 +38,7 @@ public class FileIO
 			System.out.printf("File %s not found!\n", file);
 		}
 
-		if(fr != null)
+		if (fr != null)
 		{
 			//try
 			//{
@@ -76,7 +76,7 @@ public class FileIO
 		try
 		{
 			String nextLine = br.readLine();
-			if(nextLine == null)
+			if (nextLine == null)
 				this.hasNext = false;
 
 			return nextLine;
@@ -91,7 +91,7 @@ public class FileIO
 
 	public boolean nextLine()
 	{
-		if((this.line = this.getLine()) != null)
+		if ((this.line = this.getLine()) != null)
 		{
 			words = this.line.split("\\s");
 			token = -1;
@@ -103,13 +103,13 @@ public class FileIO
 
 	public String getNext()
 	{
-		if(words == null)
-			if(nextLine())
+		if (words == null)
+			if (nextLine())
 				return "EOF";
 		token++;
-		if(token >= this.words.length)
+		if (token >= this.words.length)
 		{
-			if(nextLine())
+			if (nextLine())
 				return "EOF";
 			token++;
 		}

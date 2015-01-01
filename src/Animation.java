@@ -53,7 +53,7 @@ public class Animation
 
 	public int getLength(boolean direction)
 	{
-		if(!direction)	// left
+		if (!direction)	// left
 			return this.left.getLength();
 		else		// right
 			return this.right.getLength();
@@ -61,7 +61,7 @@ public class Animation
 
 	public int getFrame(boolean direction, int i)
 	{
-		if(!direction)	// left
+		if (!direction)	// left
 			return this.left.getFrame(i);
 		else		// right
 			return this.right.getFrame(i);
@@ -74,7 +74,7 @@ public class Animation
 
 	public int getOffsetX(boolean direction)
 	{
-		if(!direction)	// left
+		if (!direction)	// left
 			return this.left.getOffsetX();
 		else		// right
 			return this.right.getOffsetX();
@@ -82,7 +82,7 @@ public class Animation
 
 	public int getOffsetY(boolean direction)
 	{
-		if(!direction)	// left
+		if (!direction)	// left
 			return this.left.getOffsetY();
 		else		// right
 			return this.right.getOffsetY();
@@ -109,7 +109,7 @@ public class Animation
 		String [] words;
 		int token;
 
-		//if(fp != null) System.out.printf("fp is not null. It is: %s\n", fp.getNext());
+		//if (fp != null) System.out.printf("fp is not null. It is: %s\n", fp.getNext());
 		// name, speed, loop
 		this.name = name;
 		this.frameRate = Integer.parseInt(fp.getNext());
@@ -128,7 +128,7 @@ public class Animation
 			words = line.split("\\s");
 			token = 0; // skip the first word
 
-			while(token < words.length - 1)
+			while (token < words.length - 1)
 			{
 				token++;
 				this.left.addFrame(Integer.parseInt(words[token]));
@@ -144,7 +144,7 @@ public class Animation
 			words = line.split("\\s");
 			token = 0; // skip the first word
 
-			while(token < words.length - 1)
+			while (token < words.length - 1)
 			{
 				token++;
 				this.right.addFrame(Integer.parseInt(words[token]));

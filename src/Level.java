@@ -42,7 +42,7 @@ public class Level
 	private void load(String fileName)
 	{
 		File file;
-		if(Program.levelName == null)
+		if (Program.levelName == null)
 		{
 			file = new File("./data/level/" + fileName);
 		}
@@ -54,11 +54,11 @@ public class Level
 		FileIO fp = new FileIO(file);
 
 
-		if(fp != null)
+		if (fp != null)
 		{
 			LevelLayer curElem = null;
 
-			while(fp.hasNext())
+			while (fp.hasNext())
 			{
 				String next = fp.getNext();
 
@@ -90,7 +90,7 @@ public class Level
 		String line;
 		String [] words;
 
-		while(fp.hasNext())
+		while (fp.hasNext())
 		{
 			line = fp.getLine();
 			words = line.split("\\s");
@@ -129,9 +129,9 @@ public class Level
 		String [] words;
 		GameObject newObj = null;
 
-		for(GameObject curObjTemp : objTemp2)
+		for (GameObject curObjTemp : objTemp2)
 		{
-			if(fileName.equals(curObjTemp.getFileName()))
+			if (fileName.equals(curObjTemp.getFileName()))
 			{
 				loadObjectFromTemplate(curObjTemp, list);
 				return;
@@ -140,10 +140,10 @@ public class Level
 
 		fp = new FileIO(new File("./data/obj/" + fileName + ".obj"));
 
-		while(fp.hasNext())
+		while (fp.hasNext())
 		{
 			line = fp.getLine();
-			if(line == null)
+			if (line == null)
 			{
 				return;
 			}
@@ -195,7 +195,7 @@ public class Level
 				newObj.setType(type);
 				newObj.setFileName(fileName);
 			}
-			else if(newObj != null)
+			else if (newObj != null)
 			{
 				if (words[0].equals("NAME"))
 				{
@@ -215,7 +215,7 @@ public class Level
 				}
 				else if (words[0].equals("HP"))
 				{
-					if(newObj instanceof Creature)
+					if (newObj instanceof Creature)
 						((Creature)newObj).setHp(Integer.parseInt(words[1]));
 				}
 				else if (words[0].equals("VULN"))
@@ -224,28 +224,28 @@ public class Level
 				}
 				else if (words[0].equals("WALK_V"))
 				{
-					if(newObj instanceof Player)
+					if (newObj instanceof Player)
 					{
 						((Player)newObj).setWalkV(Float.parseFloat(words[1]));
 					}
 				}
 				else if (words[0].equals("JUMP_V"))
 				{
-					if(newObj instanceof Player)
+					if (newObj instanceof Player)
 					{
 						((Player)newObj).setJumpV(Float.parseFloat(words[1]));
 					}
 				}
 				else if (words[0].equals("TTL"))
 				{
-					if(newObj instanceof Projectile)
+					if (newObj instanceof Projectile)
 					{
 						((Projectile)newObj).setTtl(Integer.parseInt(words[1]));
 					}
 				}
 				else if (words[0].equals("POINTS"))
 				{
-					if(newObj instanceof Item)
+					if (newObj instanceof Item)
 					{
 						((Item)newObj).setPoints(Integer.parseInt(words[1]));
 					}
@@ -263,9 +263,9 @@ public class Level
 	{
 		GameObject newObj = null;
 
-		if(template != null)
+		if (template != null)
 		{
-			switch(template.getType())
+			switch (template.getType())
 			{
 				case OBJECT:
 					list.add(new GameObject());
@@ -293,7 +293,7 @@ public class Level
 			}
 		}
 
-		if(newObj != null)
+		if (newObj != null)
 		{
 			newObj.setFileName(template.getFileName());
 			newObj.setName(template.getName());
@@ -303,21 +303,21 @@ public class Level
 			newObj.setTemplate(template.getTemplate());
 			newObj.setVulnerability(template.isVulnerable());
 			newObj.setAnimation(template.getAnimation());
-			if(newObj instanceof Creature)
+			if (newObj instanceof Creature)
 			{
 				((Creature)newObj).setHp(((Creature)template).getHp());
 				((Creature)newObj).loadAI();
 			}
-			if(newObj instanceof Player)
+			if (newObj instanceof Player)
 			{
 				((Player)newObj).setWalkV(((Player)template).getWalkV());
 				((Player)newObj).setJumpV(((Player)template).getJumpV());
 			}
-			if(newObj instanceof Projectile)
+			if (newObj instanceof Projectile)
 			{
 				((Projectile)newObj).setTtl(((Projectile)template).getTtl());
 			}
-			if(newObj instanceof Item)
+			if (newObj instanceof Item)
 			{
 				((Item)newObj).setPoints(((Item)template).getPoints());
 			}
@@ -333,34 +333,34 @@ public class Level
 		{
 			GameObject curObj = objsli.next();
 
-			if(curObj.getRemoval())
+			if (curObj.getRemoval())
 			{
-				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
+				if (curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
 					playerObj.getAttackObjs().remove(curObj);
 				objsli.remove();
 			}
 		}
 		// 2) newly added objects
 		ListIterator<GameObject> newObjsli = newObjs.listIterator();
-		if(newObjsli.hasNext())
+		if (newObjsli.hasNext())
 		{
 			do
 			{
 				GameObject curObj = newObjsli.next();
 
-				if(curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
+				if (curObj.getName().equals("swoosh") && playerObj.getAttackObjs() != null)
 					playerObj.getAttackObjs().add(curObj);
 				objs.add(curObj);
 			}
-			while(newObjsli.hasNext());
+			while (newObjsli.hasNext());
 			newObjs = new ArrayList<GameObject>();
 		}
 
-		if(playerObj == null)
+		if (playerObj == null)
 		{
 			for (GameObject curObj : objs)
 			{
-				if(curObj instanceof Player)
+				if (curObj instanceof Player)
 				{
 					playerObj = (Player)curObj;
 					break; // this assumes there is only one player on the level
@@ -368,14 +368,14 @@ public class Level
 			}
 		}
 
-		if(playerObj != null)
+		if (playerObj != null)
 		{
-			if(camera == null)
+			if (camera == null)
 			{
 				camera = playerObj.viewport;
 				camera.setCamera(playerObj);
 			}
-			else if(playerObj.hp > 0)
+			else if (playerObj.hp > 0)
 			{
 				camera = playerObj.viewport;
 			}
@@ -384,17 +384,17 @@ public class Level
 			// check input
 			playerObj.updateKeys();
 
-			if(!playerObj.isDead())
+			if (!playerObj.isDead())
 			{
-				if(playerObj.acceptInput())
+				if (playerObj.acceptInput())
 				{
-					if(playerObj.getAction(0))		// left
+					if (playerObj.getAction(0))		// left
 						playerObj.walk(-playerObj.getWalkV());
-					if(playerObj.getAction(1))		// right
+					if (playerObj.getAction(1))		// right
 						playerObj.walk(playerObj.getWalkV());
-					if(playerObj.getAction(2))		// up
+					if (playerObj.getAction(2))		// up
 					{
-						if(playerObj.isClimbing)
+						if (playerObj.isClimbing)
 						{
 							playerObj.climb(-1f);
 						}
@@ -403,9 +403,9 @@ public class Level
 							playerObj.tryClimb();
 						}
 					}
-					if(playerObj.getAction(3))		// down
+					if (playerObj.getAction(3))		// down
 					{
-						if(playerObj.isClimbing)
+						if (playerObj.isClimbing)
 						{
 							playerObj.climb(1f);
 						}
@@ -414,20 +414,20 @@ public class Level
 							playerObj.tryCrouch();
 						}
 					}
-					if(playerObj.getAction(4))		// jump
+					if (playerObj.getAction(4))		// jump
 					{
 						playerObj.setAction(2, false);
 						playerObj.setAction(4, false);
 						playerObj.jump(-playerObj.getJumpV());
 					}
-					if(playerObj.getAction(5))		// attack
+					if (playerObj.getAction(5))		// attack
 					{
 						int x;
 
 						//playerObj.setAction(5, false);
 						playerObj.setAcceptInput(false);
 
-						if(!playerObj.direction)	// left
+						if (!playerObj.direction)	// left
 						{
 							x = (int)playerObj.x - 15;
 						}
@@ -450,7 +450,7 @@ public class Level
 						Projectile swoosh = (Projectile)newObjs.get(newObjs.size() - 1);
 
 						swoosh.putX(x);
-						if(playerObj.isCrouching)
+						if (playerObj.isCrouching)
 							swoosh.putY((int)playerObj.y + 14);
 						else
 							swoosh.putY((int)playerObj.y + 7);
@@ -480,9 +480,9 @@ public class Level
 			int ox = (int)tmpObj.x;
 			int oy = (int)tmpObj.y;
 
-			if((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
+			if ((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
 			{
-				if(tmpObj instanceof Creature && tmpObj != player)
+				if (tmpObj instanceof Creature && tmpObj != player)
 				{
 					Creature tmpCreature = (Creature)tmpObj;
 
@@ -494,14 +494,14 @@ public class Level
 					tmpCreature.doAi();
 					tmpCreature.move();
 
-					if(player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
+					if (player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
 					{
-						if((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
+						if ((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 						{
-							if((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
+							if ((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
 							{
 								// Pushes the player away from the creature.
-								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+								if (px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
 								{
 									player.vx += 1;
 								}
@@ -514,14 +514,14 @@ public class Level
 								player.setInvincibility(90);
 								player.setBlinking(90);
 
-								if(player.hp <= 0)
+								if (player.hp <= 0)
 								{
 									camera.setTarget(tmpCreature);
 								}
 								//player.setAcceptInput(false);
 
 								// Pushes the creature away from the player.
-//								if(px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
+//								if (px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
 //								{
 //									tmpCreature.vx -= 2;
 //								}
@@ -533,7 +533,7 @@ public class Level
 						}
 					}
 				}
-				else if(tmpObj instanceof Item && tmpObj != player)
+				else if (tmpObj instanceof Item && tmpObj != player)
 				{
 					Item tmpItem = (Item)tmpObj;
 
@@ -542,9 +542,9 @@ public class Level
 					int ix = (int)tmpItem.x;
 					int iy = (int)tmpItem.y;
 
-					if((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
+					if ((px >= ix && px <= ix + tmpItem.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpItem.w - 1) || (px < ix && px + player.w - 1 > ix + tmpItem.w - 1))
 					{
-						if((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
+						if ((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
 						{
 							player.addScore(((Item)tmpObj).getPoints());
 							tmpItem.setRemoval(true);
@@ -559,12 +559,12 @@ public class Level
 		{
 			curObj.logic();
 
-			if(curObj.isVulnerable() && curObj != playerObj) // check if can get damage
+			if (curObj.isVulnerable() && curObj != playerObj) // check if can get damage
 			{
 				ArrayList<GameObject> attackObjs = playerObj.getAttackObjs();
 				for (GameObject tmpObj : attackObjs)
 				{
-					if(tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
+					if (tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
 					{
 						Creature tmpCreature = (Creature)tmpObj;
 
@@ -573,9 +573,9 @@ public class Level
 						int cx = (int)tmpCreature.x;
 						int cy = (int)tmpCreature.y;
 
-						if((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1) || (ox < cx && ox + curObj.w - 1 > cx + tmpCreature.w - 1))
+						if ((ox >= cx && ox <= cx + tmpCreature.w - 1) || (ox + curObj.w - 1 >= cx && ox + curObj.w - 1 <= cx + tmpCreature.w - 1) || (ox < cx && ox + curObj.w - 1 > cx + tmpCreature.w - 1))
 						{
-							if((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
+							if ((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
 							{
 								curObj.setRemoval(true);
 								tmpCreature.setRemoval(true);
@@ -589,7 +589,7 @@ public class Level
 
 	public void draw() // draws map layers, objects and all the other map related stuff
 	{
-		if(playerObj.hp > 0)
+		if (playerObj.hp > 0)
 		{
 			camera.setTarget(playerObj);
 		}
@@ -614,7 +614,7 @@ public class Level
 		// Draw level layers.
 		for (LevelLayer curLayer : layers)
 		{
-			if(curLayer.getId() == 2) // Draw game objects before drawing the foreground layer.
+			if (curLayer.getId() == 2) // Draw game objects before drawing the foreground layer.
 			{
 				for (GameObject curObj : objs)
 				{

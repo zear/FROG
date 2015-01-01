@@ -77,23 +77,23 @@ public class GameStateMenu implements GameState
 	{
 		input();
 
-		if(keys[2]) // up
+		if (keys[2]) // up
 		{
 			keys[2] = false;
 			curSelection--;
 
-			if(curSelection >= 0 && curMenu[curSelection] == MENU_SEPARATOR)
+			if (curSelection >= 0 && curMenu[curSelection] == MENU_SEPARATOR)
 				curSelection--;
 		}
-		else if(keys[3]) // down
+		else if (keys[3]) // down
 		{
 			keys[3] = false;
 			curSelection++;
 
-			if(curSelection < curMenu.length && curMenu[curSelection] == MENU_SEPARATOR)
+			if (curSelection < curMenu.length && curMenu[curSelection] == MENU_SEPARATOR)
 				curSelection++;
 		}
-		else if(keys[4]) // accept
+		else if (keys[4]) // accept
 		{
 			keys[4] = false;
 			selected = true;
@@ -109,14 +109,14 @@ public class GameStateMenu implements GameState
 		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[4]);
 		Sdl.putInput(SDLKey.SDLK_LALT, keys[5]);
 
-		if(curSelection < 0)
+		if (curSelection < 0)
 			curSelection = curMenu.length - 1;
-		else if(curSelection >= curMenu.length)
+		else if (curSelection >= curMenu.length)
 			curSelection = 0;
 
-		if(selected)
+		if (selected)
 		{
-			switch(curMenu[curSelection])
+			switch (curMenu[curSelection])
 			{
 				case MENU_EPISODES:
 					Program.game.changeState(GameStateEnum.STATE_GAME);
@@ -137,7 +137,7 @@ public class GameStateMenu implements GameState
 					Game.debugMode = !Game.debugMode;
 				break;
 				case MENU_BACK:
-					if(parentMenu != null)
+					if (parentMenu != null)
 					{
 						curMenu = parentMenu;
 						parentMenu = null;
@@ -164,7 +164,7 @@ public class GameStateMenu implements GameState
 			//todo
 		}
 
-		if(drawLoading)
+		if (drawLoading)
 		{
 			drawLoading = false;
 			try
@@ -178,13 +178,13 @@ public class GameStateMenu implements GameState
 
 			font.drawCentered("Just a moment...", 130);
 		}
-		else if(curMenu != null)
+		else if (curMenu != null)
 		{
-			for(int i = 0; i < curMenu.length; i++)
+			for (int i = 0; i < curMenu.length; i++)
 			{
 				String word = null;
 
-				switch(curMenu[i])
+				switch (curMenu[i])
 				{
 					case MENU_EPISODES:
 						word = "Play";
@@ -212,9 +212,9 @@ public class GameStateMenu implements GameState
 					break;
 				}
 
-				if(word != null)
+				if (word != null)
 				{
-					if(i == curSelection)
+					if (i == curSelection)
 					{
 						word = "> " + word + " <";
 					}
@@ -228,7 +228,7 @@ public class GameStateMenu implements GameState
 			}
 		}
 
-		if(fadeStep < fadeTotalSteps)
+		if (fadeStep < fadeTotalSteps)
 		{
 			Sdl.fade(Sdl.screen, fadeTo, fadeStep, fadeTotalSteps);
 			fadeStep++;

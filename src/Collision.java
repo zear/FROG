@@ -34,11 +34,11 @@ public class Collision
 			// todo
 		}
 
-		if(fp != null)
+		if (fp != null)
 		{
 			int index = 0;
 
-			while(fp.hasNext())
+			while (fp.hasNext())
 			{
 				String next = fp.getNext();
 
@@ -53,10 +53,10 @@ public class Collision
 
 	public int getCollision(int index)
 	{
-		if(index == -1)
+		if (index == -1)
 			return COLLISION_SOLID;
 
-		switch(map[index])
+		switch (map[index])
 		{
 			case 1:	// solid
 				return COLLISION_SOLID;

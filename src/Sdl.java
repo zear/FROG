@@ -46,7 +46,7 @@ public class Sdl
 
 	public static void toggleFullscreen()
 	{
-		if((screen.getFlags() & SDLVideo.SDL_FULLSCREEN) > 0)
+		if ((screen.getFlags() & SDLVideo.SDL_FULLSCREEN) > 0)
 		{
 			try
 			{
@@ -86,7 +86,7 @@ public class Sdl
 
 		System.out.printf("Joysticks found: %d\n", SDLJoystick.numJoysticks());
 
-		if(SDLJoystick.numJoysticks() > 0)
+		if (SDLJoystick.numJoysticks() > 0)
 		{
 			try
 			{
@@ -121,7 +121,7 @@ public class Sdl
 
 	public static void unloadSDL()
 	{
-		if(joy != null)
+		if (joy != null)
 		{
 			joy.joystickClose();
 		}
@@ -137,7 +137,7 @@ public class Sdl
 		startFrameTime = newFrameTime;
 		accumulator += deltaTime;
 
-		if(newFrameTime - counterLastFull > 1000)
+		if (newFrameTime - counterLastFull > 1000)
 		{
 			fpsCalculated = (int)((newFrameTime - counterLastFull)/frameTime);
 			counterLastFull = newFrameTime;
@@ -206,7 +206,7 @@ public class Sdl
 
 //		pixelData.order(ByteOrder.LITTLE_ENDIAN);
 
-//		for(int i = 0; i < length; i+=2)
+//		for (int i = 0; i < length; i+=2)
 //		{
 //			short pixel = pixelData.getShort(i);
 
@@ -244,7 +244,7 @@ public class Sdl
 		SDLSurface optimizedImg;
 		long colorkey = 0;
 
-		if(filename == null)
+		if (filename == null)
 		{
 			return null;
 		}
@@ -306,9 +306,9 @@ public class Sdl
 	{
 		try
 		{
-			while((event = SDLEvent.pollEvent()) != null)
+			while ((event = SDLEvent.pollEvent()) != null)
 			{
-				switch(event.getType())
+				switch (event.getType())
 				{
 					case SDLEvent.SDL_QUIT:
 						// exit program
@@ -331,10 +331,10 @@ public class Sdl
 
 					case SDLEvent.SDL_JOYBUTTONDOWN:
 					{
-						if(Sdl.enableJoystick)
+						if (Sdl.enableJoystick)
 						{
 							SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
-							switch(but.getButton())
+							switch (but.getButton())
 							{
 								case 0:
 									//putInput(SDLKey.SDLK_z, true);
@@ -354,10 +354,10 @@ public class Sdl
 
 					case SDLEvent.SDL_JOYBUTTONUP:
 					{
-						if(Sdl.enableJoystick)
+						if (Sdl.enableJoystick)
 						{
 							SDLJoyButtonEvent but = (SDLJoyButtonEvent)event;
-							switch(but.getButton())
+							switch (but.getButton())
 							{
 								case 0:
 									//putInput(SDLKey.SDLK_z, false);
@@ -376,22 +376,22 @@ public class Sdl
 					break;
 					case SDLEvent.SDL_JOYAXISMOTION:
 					{
-						if(Sdl.enableJoystick)
+						if (Sdl.enableJoystick)
 						{
 							SDLJoyAxisEvent axis = (SDLJoyAxisEvent)event;
 
 							final int deadzone = 1000;
 							int value = axis.getValue();
 
-							switch(axis.getAxis())
+							switch (axis.getAxis())
 							{
 								case 0: // left-right
-									if(value < -deadzone)
+									if (value < -deadzone)
 									{
 										putInput(SDLKey.SDLK_LEFT, true);
 										putInput(SDLKey.SDLK_RIGHT, false);
 									}
-									else if(value > deadzone)
+									else if (value > deadzone)
 									{
 										putInput(SDLKey.SDLK_LEFT, false);
 										putInput(SDLKey.SDLK_RIGHT, true);
@@ -403,12 +403,12 @@ public class Sdl
 									}
 								break;
 								case 1: // up-down
-									if(value < -deadzone)
+									if (value < -deadzone)
 									{
 										putInput(SDLKey.SDLK_UP, true);
 										putInput(SDLKey.SDLK_DOWN, false);
 									}
-									else if(value > deadzone)
+									else if (value > deadzone)
 									{
 										putInput(SDLKey.SDLK_UP, false);
 										putInput(SDLKey.SDLK_DOWN, true);

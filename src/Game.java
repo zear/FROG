@@ -17,23 +17,23 @@ public class Game
 
 	private void checkState()
 	{
-		if(newState != activeState)
+		if (newState != activeState)
 		{
-			if(activeState != null)
+			if (activeState != null)
 				activeState.unloadState();
-			if(newState != null)
+			if (newState != null)
 				newState.loadState();
 
 			activeState = newState;
 		}
 
-		if(activeState == null) // exit state
+		if (activeState == null) // exit state
 			setQuit(true);
 	}
 
 	public void changeState(GameStateEnum state)
 	{
-		switch(state)
+		switch (state)
 		{
 			case STATE_EXIT:
 				newState = null;
@@ -52,10 +52,10 @@ public class Game
 	// this is the main program loop
 	public boolean mainLoop()
 	{
-		if(Sdl.fps())
+		if (Sdl.fps())
 		{
 			checkState();
-			if(activeState != null)
+			if (activeState != null)
 			{
 				Input.getInput();
 				activeState.logic();
