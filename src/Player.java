@@ -97,8 +97,10 @@ public class Player extends Creature
 		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
 
 		// TODO: move this elsewhere
+		if (keys[4] && dead)
+			GameStateGame.leaveGame = true;
 		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
-			Program.game.changeState(GameStateEnum.STATE_MENU);
+			GameStateGame.leaveGame = true;
 		if (Sdl.getInput(SDLKey.SDLK_f))
 			Sdl.toggleFullscreen();
 		if (Sdl.getInput(SDLKey.SDLK_c))

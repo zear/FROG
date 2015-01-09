@@ -173,11 +173,11 @@ public class Sdl
 		return curr;
 	}
 
-	public static void fade(SDLSurface surface, int to, int step, int totalSteps)
+	public static void fade(SDLSurface surface, int from, int to, int step, int totalSteps)
 	{
 		try
 		{
-			fadeSurface.setAlpha(SDLVideo.SDL_SRCALPHA, stepper(255, to, step, totalSteps));
+			fadeSurface.setAlpha(SDLVideo.SDL_SRCALPHA, stepper(from, to, step, totalSteps));
 		}
 		catch (SDLException e)
 		{

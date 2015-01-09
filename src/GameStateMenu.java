@@ -230,7 +230,7 @@ public class GameStateMenu implements GameState
 
 		if (fadeStep < fadeTotalSteps)
 		{
-			Sdl.fade(Sdl.screen, fadeTo, fadeStep, fadeTotalSteps);
+			Sdl.fade(Sdl.screen, 255, fadeTo, fadeStep, fadeTotalSteps);
 			fadeStep++;
 		}
 		Sdl.flip(Sdl.screen);
