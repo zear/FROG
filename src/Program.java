@@ -25,7 +25,7 @@ public class Program
 			}
 			if (args[i].equals("-help") || args[i].equals("-h") || args[i].equals("--h"))
 			{
-				System.out.printf("(c) 2013-2014 Artur Rojek, Daniel Garcia.\n\nList of commandline parameters:\n-level [name.lvl]\tlaunches a specified level\n-nojoy\t\t\tdisable joystick support\n-help\t\t\tthis screen\n");
+				System.out.printf("(c) 2014-2015 Artur Rojek, Daniel Garcia.\n\nList of commandline parameters:\n-level [name.lvl]\tlaunches a specified level\n-nojoy\t\t\tdisable joystick support\n-help\t\t\tthis screen\n");
 				return;
 			}
 			if (args[i].equals("-nojoy"))
