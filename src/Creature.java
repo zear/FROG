@@ -38,33 +38,7 @@ public class Creature extends GameObject
 	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
 	{
 		super.load(fileName, w, h, rowW, size, tempList);
-		this.ai = new AI();
-
-		// Let's hardcode the AI behaviour for now.
-		if (super.getName().equals("jumper"))
-		{
-			ai.addAction(AI.JUMP);
-			ai.setVar(AI.JUMP_VX, 1.5f);
-			ai.setVar(AI.JUMP_VY, 4.0f);
-		}
-		else if (super.getName().equals("badass"))
-		{
-			ai.addAction(AI.WALK);
-			ai.setVar(AI.WALK_VX, 0.5f);
-			ai.setVar(AI.WALK_DROP, 1f); // don't drop
-		}
-		else if (super.getName().equals("swoosh"))
-		{
-			ai.addAction(AI.WALK);
-			ai.setVar(AI.WALK_VX, 5f);
-		}
-		else if (super.getName().equals("dragonfly"))
-		{
-			ai.addAction(AI.FLY);
-			ai.setVar(AI.FLY_VX, 1.5f);
-			ai.setVar(AI.FLY_AMPLITUDE, 1f);
-			ai.setVar(AI.FLY_PERIOD, 5f);
-		}
+		loadAI();
 	}
 
 	public void loadAI()
