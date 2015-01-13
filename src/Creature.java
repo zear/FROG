@@ -46,24 +46,24 @@ public class Creature extends GameObject
 		this.ai = new AI();
 
 		// Let's hardcode the AI behaviour for now.
-		if (super.getName().equals("jumper"))
+		if (this.getName().equals("jumper"))
 		{
 			ai.addAction(AI.JUMP);
 			ai.setVar(AI.JUMP_VX, 1.5f);
 			ai.setVar(AI.JUMP_VY, 4.0f);
 		}
-		else if (super.getName().equals("badass"))
+		else if (this.getName().equals("badass"))
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(AI.WALK_VX, 0.5f);
 			ai.setVar(AI.WALK_DROP, 1f); // don't drop
 		}
-		else if (super.getName().equals("swoosh"))
+		else if (this.getName().equals("swoosh"))
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(AI.WALK_VX, 5f);
 		}
-		else if (super.getName().equals("dragonfly"))
+		else if (this.getName().equals("dragonfly"))
 		{
 			ai.addAction(AI.FLY, 60);
 			ai.setVar(AI.FLY_VX, 0.75f);
@@ -260,7 +260,7 @@ public class Creature extends GameObject
 		int tile;
 
 		int x;
-		int y = (int)(super.y) + super.h;
+		int y = (int)(this.y) + this.h;
 
 		if (!this.isOnGround)
 			return;
@@ -272,7 +272,7 @@ public class Creature extends GameObject
 			// .---.
 			//      #
 
-			x = (int)(super.x) + super.w;
+			x = (int)(this.x) + this.w;
 		}
 		else		// left
 		{
@@ -281,7 +281,7 @@ public class Creature extends GameObject
 			//  .---.
 			// #
 
-			x = (int)(super.x) - 1;
+			x = (int)(this.x) - 1;
 		}
 
 		tile = levelLayer.getTile(x/LevelLayer.TILE_SIZE, y/LevelLayer.TILE_SIZE);
@@ -299,7 +299,7 @@ public class Creature extends GameObject
 				//  .---.
 				// #
 
-				x = (int)(super.x) - 1;
+				x = (int)(this.x) - 1;
 			}
 			else
 			{
@@ -308,7 +308,7 @@ public class Creature extends GameObject
 				// .---.
 				//      #
 
-				x = (int)(super.x) + super.w;
+				x = (int)(this.x) + this.w;
 			}
 
 			tile = levelLayer.getTile(x/LevelLayer.TILE_SIZE, y/LevelLayer.TILE_SIZE);
@@ -335,8 +335,8 @@ public class Creature extends GameObject
 		int col = Collision.COLLISION_NONE;
 		int tile;
 
-		int x1 = (int)(super.x);
-		int x2 = (int)(super.x) + super.w - 1;
+		int x1 = (int)(this.x);
+		int x2 = (int)(this.x) + this.w - 1;
 		int y1;
 
 		if (direction) // down
@@ -345,7 +345,7 @@ public class Creature extends GameObject
 			// |   |
 			// #####
 
-			y1 = (int)(super.y) + 1 + super.h - 1;
+			y1 = (int)(this.y) + 1 + this.h - 1;
 
 			if (x1 < 0)
 				x1 = -LevelLayer.TILE_SIZE;
@@ -371,7 +371,7 @@ public class Creature extends GameObject
 			// |   |
 			// .---.
 
-			y1 = (int)(super.y) - 1;
+			y1 = (int)(this.y) - 1;
 
 			if (x1 < 0)
 				x1 = -LevelLayer.TILE_SIZE;
@@ -460,9 +460,9 @@ public class Creature extends GameObject
 			// |   |
 			// #####
 
-			x1 = (int)(super.x);
-			x2 = (int)(super.x) + super.w - 1;
-			y1 = (int)(curVy + super.y) + super.h - 1;
+			x1 = (int)(this.x);
+			x2 = (int)(this.x) + this.w - 1;
+			y1 = (int)(curVy + this.y) + this.h - 1;
 
 			if (x1 < 0)
 				x1 = -LevelLayer.TILE_SIZE;
@@ -498,18 +498,18 @@ public class Creature extends GameObject
 			}
 			else if ((col & Collision.COLLISION_PLATFORM) > 0)
 			{
-				if (((int)this.y + super.h - 1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE < (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
+				if (((int)this.y + this.h - 1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE < (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
 				{
 					this.vy = 0;
 					this.y = (float)ceil(this.y) - 0.2f;
 					this.isOnGround = true;
 				}
 				else
-					super.y += curVy;
+					this.y += curVy;
 			}
 			else
 			{
-				super.y += curVy;
+				this.y += curVy;
 			}
 
 			col = Collision.COLLISION_NONE;
@@ -534,9 +534,9 @@ public class Creature extends GameObject
 			// |   |
 			// .---.
 
-			x1 = (int)(super.x);
-			x2 = (int)(super.x) + super.w - 1;
-			y1 = (int)(curVy + super.y);
+			x1 = (int)(this.x);
+			x2 = (int)(this.x) + this.w - 1;
+			y1 = (int)(curVy + this.y);
 
 			if (x1 < 0)
 				x1 = -LevelLayer.TILE_SIZE;
@@ -572,7 +572,7 @@ public class Creature extends GameObject
 			}
 			else
 			{
-				super.y += curVy;
+				this.y += curVy;
 			}
 
 			col = Collision.COLLISION_NONE;
@@ -600,9 +600,9 @@ public class Creature extends GameObject
 			// |   #
 			// .---#
 
-			x1 = (int)(curVx + super.x) + super.w - 1;
-			y1 = (int)(super.y);
-			y2 = (int)(super.y) + super.h - 1;
+			x1 = (int)(curVx + this.x) + this.w - 1;
+			y1 = (int)(this.y);
+			y2 = (int)(this.y) + this.h - 1;
 
 			if (y1 < 0)
 				y1 = -LevelLayer.TILE_SIZE;
@@ -640,7 +640,7 @@ public class Creature extends GameObject
 			}
 			else
 			{
-				super.x += curVx;
+				this.x += curVx;
 			}
 
 			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
@@ -654,9 +654,9 @@ public class Creature extends GameObject
 			// #   |
 			// #---.
 
-			x1 = (int)(curVx + super.x);
-			y1 = (int)(super.y);
-			y2 = (int)(super.y) + super.h - 1;
+			x1 = (int)(curVx + this.x);
+			y1 = (int)(this.y);
+			y2 = (int)(this.y) + this.h - 1;
 
 			if (x1 < 0)
 				x1 = -LevelLayer.TILE_SIZE;
@@ -696,7 +696,7 @@ public class Creature extends GameObject
 			}
 			else
 			{
-				super.x += curVx;
+				this.x += curVx;
 			}
 
 			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
@@ -722,25 +722,25 @@ public class Creature extends GameObject
 //		int y2;
 
 //		// level boundaries check
-//		if (super.x + this.vx < 0)
+//		if (this.x + this.vx < 0)
 //		{
 //			this.vx = 0;
-//			super.x = 0;
+//			this.x = 0;
 //		}
-//		if (((int)(super.x + this.vx) + super.w - 1)/LevelLayer.TILE_SIZE >= levelLayer.getWidth())
+//		if (((int)(this.x + this.vx) + this.w - 1)/LevelLayer.TILE_SIZE >= levelLayer.getWidth())
 //		{
 //			this.vx = 0;
-//			super.x = levelLayer.getWidth() * LevelLayer.TILE_SIZE - super.w;
+//			this.x = levelLayer.getWidth() * LevelLayer.TILE_SIZE - this.w;
 //		}
-//		if (super.y + this.vy < 0)
+//		if (this.y + this.vy < 0)
 //		{
 //			this.vy = 0;
-//			super.y = 0;
+//			this.y = 0;
 //		}
-//		if (((int)(super.y + this.vy) + super.h)/LevelLayer.TILE_SIZE >= levelLayer.getHeight())
+//		if (((int)(this.y + this.vy) + this.h)/LevelLayer.TILE_SIZE >= levelLayer.getHeight())
 //		{
 //			this.vy = 0;
-//			super.y = levelLayer.getHeight() * LevelLayer.TILE_SIZE - super.h;
+//			this.y = levelLayer.getHeight() * LevelLayer.TILE_SIZE - this.h;
 //		}
 
 //		// check y
@@ -750,16 +750,16 @@ public class Creature extends GameObject
 //			// |   |
 //			// #####
 
-//			x1 = (int)(super.x);
-//			x2 = (int)(super.x) + super.w - 1;
-//			y1 = (int)(this.vy + super.y) + super.h - 1;
+//			x1 = (int)(this.x);
+//			x2 = (int)(this.x) + this.w - 1;
+//			y1 = (int)(this.vy + this.y) + this.h - 1;
 
 //			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 //			tile2 = levelLayer.getTile(x2/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 
 //			if (collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
-//				super.y += this.vy;
+//				this.y += this.vy;
 //			}
 //			else
 //			{
@@ -772,16 +772,16 @@ public class Creature extends GameObject
 //			// |   |
 //			// .---.
 
-//			x1 = (int)(super.x);
-//			x2 = (int)(super.x) + super.w - 1;
-//			y1 = (int)(this.vy + super.y);
+//			x1 = (int)(this.x);
+//			x2 = (int)(this.x) + this.w - 1;
+//			y1 = (int)(this.vy + this.y);
 
 //			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 //			tile2 = levelLayer.getTile(x2/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 
 //			if (collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
-//				super.y += this.vy;
+//				this.y += this.vy;
 //			}
 //			else
 //			{
@@ -796,16 +796,16 @@ public class Creature extends GameObject
 //			// |   #
 //			// .---#
 
-//			x1 = (int)(this.vx + super.x) + super.w - 1;
-//			y1 = (int)(super.y);
-//			y2 = (int)(super.y) + super.h - 1;
+//			x1 = (int)(this.vx + this.x) + this.w - 1;
+//			y1 = (int)(this.y);
+//			y2 = (int)(this.y) + this.h - 1;
 
 //			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 //			tile2 = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y2/LevelLayer.TILE_SIZE);
 
 //			if (collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
-//				super.x += this.vx;
+//				this.x += this.vx;
 //			}
 //			else
 //			{
@@ -819,16 +819,16 @@ public class Creature extends GameObject
 //			// #   |
 //			// #---.
 
-//			x1 = (int)(this.vx + super.x);
-//			y1 = (int)(super.y);
-//			y2 = (int)(super.y) + super.h - 1;
+//			x1 = (int)(this.vx + this.x);
+//			y1 = (int)(this.y);
+//			y2 = (int)(this.y) + this.h - 1;
 
 //			tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y1/LevelLayer.TILE_SIZE);
 //			tile2 = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, y2/LevelLayer.TILE_SIZE);
 
 //			if (collision.getCollision(tile) == 0 && collision.getCollision(tile2) == 0)
 //			{
-//				super.x += this.vx;
+//				this.x += this.vx;
 //			}
 //			else
 //			{
@@ -893,7 +893,7 @@ public class Creature extends GameObject
 		}
 
 
-		Animation curAnim = super.getAnimation();
+		Animation curAnim = this.getAnimation();
 
 		if (this instanceof Player)
 		{
@@ -980,7 +980,7 @@ public class Creature extends GameObject
 				((Player)this).setAcceptInput(true);
 			}
 
-			super.changeAnimation(newAnim);
+			this.changeAnimation(newAnim);
 		}
 
 		if (vx > 3)
@@ -1074,7 +1074,7 @@ public class Creature extends GameObject
 		// Ugly Hack! TODO: Move it somewhere else.
 		if (this.getName().equals("swoosh") && vx == 0)
 		{
-			super.setRemoval(true);
+			this.setRemoval(true);
 		}
 	}
 }
