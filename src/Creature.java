@@ -3,7 +3,9 @@ import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
 
-// Creature class extends GameObject class by moving creatures specific features
+/**
+ * This class extends GameObject class to provide additional logic for mobile creatures.
+ */
 public class Creature extends GameObject
 {
 	protected float vx;
@@ -35,12 +37,19 @@ public class Creature extends GameObject
 		this.canWalk = true;
 	}
 
+	/**
+	 * Overrides the load() method from the GameObject superclass.
+	 * This method invokes load() from the superclass to set up a new game object, then loads specific creature features.
+	 */
 	public void load(String fileName, int w, int h, int rowW, int size, ArrayList <GameObjectTemplate> tempList)
 	{
 		super.load(fileName, w, h, rowW, size, tempList);
 		loadAI();
 	}
 
+	/**
+	 * Loads predefined AI patterns for the given creature type.
+	 */
 	public void loadAI()
 	{
 		this.ai = new AI();
@@ -101,6 +110,10 @@ public class Creature extends GameObject
 		this.hp = value;
 	}
 
+	/**
+	 * Makes the creature crouch.
+	 * If climbCheck() is true, this method will cause the creature to climb down.
+	 */
 	public void tryCrouch()
 	{
 		climbCheck(true);
@@ -113,6 +126,9 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Makes the creature climb.
+	 */
 	public void tryClimb()
 	{
 		climbCheck(false);
@@ -120,12 +136,19 @@ public class Creature extends GameObject
 			this.isClimbing = true;
 	}
 
+	/**
+	 * Moves the creature vertically along a climbable tile (ie. a ladder).
+	 */
 	public void climb(float vy)
 	{
 		if (this.isClimbing)
 			this.vy = vy;
 	}
 
+	/**
+	 * Makes the creature jump.
+	 * If the creature is currently climing, this method will cause the creature to drop from the climbable tile.
+	 */
 	public void jump(float vy)
 	{
 		if (this.isOnGround)
@@ -137,17 +160,27 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Moves the creature horizontally.
+	 */
 	public void walk(float vx)
 	{
 		this.vx = vx;
 	}
 
+	/**
+	 * Movement equivalent for airborne creatures.
+	 * This method allows an airborne creature to move in both horizontal and vertical plane.
+	 */
 	public void fly(float vx, float vy)
 	{
 		this.vx = vx;
 		this.vy = vy;
 	}
 
+	/**
+	 * Handles AI logic.
+	 */
 	public void doAi()
 	{
 		if (!this.ai.hasActions())	// Don't bother if there are no AI actions for this object
@@ -254,6 +287,10 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Checks if a tile in front of the creature is walkable.
+	 * This method is used to detect gaps in the tiles for walkable creatures that are expected to stay on a single horizontal set of tiles (and not jump down).
+	 */
 	private void dropCheck(boolean direction)
 	{
 		int col = Collision.COLLISION_NONE;
@@ -330,6 +367,9 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Checks if a climbable surface (ie. a ladder) is located below or above the creature.
+	 */
 	private void climbCheck(boolean direction)
 	{
 		int col = Collision.COLLISION_NONE;
@@ -395,6 +435,10 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Performs a collision check against the level layer tiles.
+	 * This method is called recursively for x or y velocities greater than 1 pixel/frame (< -1f or > 1f).
+	 */
 	private void collisionCheck(float totalVx, float totalVy)
 	{
 		int col;
@@ -837,6 +881,10 @@ public class Creature extends GameObject
 //		}
 //	}
 
+	/**
+	 * Handles creature related logic.
+	 * This method overloads logic() from the GameObject superclass to perform actions for special types of creatures.
+	 */
 	public void logic()
 	{
 		super.logic();
@@ -862,6 +910,9 @@ public class Creature extends GameObject
 		}
 	}
 
+	/**
+	 * Sets creature animation and updates the creature position on the level.
+	 */
 	public void move()
 	{
 		String newAnim = null;
