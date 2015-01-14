@@ -911,57 +911,15 @@ public class Creature extends GameObject
 	}
 
 	/**
-	 * Sets creature animation and updates the creature position on the level.
+	 * Updates creature animation.
 	 */
-	public void move()
+	public void updateAnimation()
 	{
 		String newAnim = null;
-
-		if (this.affectedByGravity && !this.isClimbing)
-		{
-			vy += 0.2; // gravity
-		}
-
-		if (vx > 0)
-		{
-			if (this instanceof Player)
-			{
-				if (((Player)this).getAction(1))	// right
-					this.direction = true;
-			}
-			else
-				this.direction = true;
-		}
-		else if (vx < 0)
-		{
-			if (this instanceof Player)
-			{
-				if (((Player)this).getAction(0))	// left
-					this.direction = false;
-			}
-			else
-				this.direction = false;
-		}
-
-
 		Animation curAnim = this.getAnimation();
-
-		if (this instanceof Player)
-		{
-			if (curAnim.getAnimName().equals("ATTACK") && curAnim.isOver())
-			{
-				((Player)this).setAcceptInput(true);
-			}
-		}
 
 		if (vx != 0)
 		{
-			if (this instanceof Player && ((Player)this).getAction(5))
-			{
-				((Player)this).setAction(5, false);
-				newAnim = "ATTACK";
-			}
-			else
 			{
 				if (this.isOnGround)
 				{
@@ -972,12 +930,6 @@ public class Creature extends GameObject
 		}
 		else
 		{
-			if (this instanceof Player && ((Player)this).getAction(5))
-			{
-					((Player)this).setAction(5, false);
-					newAnim = "ATTACK";
-			}
-			else
 			{
 				if (this.isOnGround)
 				{
@@ -1026,13 +978,42 @@ public class Creature extends GameObject
 
 		if (newAnim != null)
 		{
-			if (this instanceof Player && !(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && !newAnim.equals("ATTACK"))
-			{
-				((Player)this).setAcceptInput(true);
-			}
-
 			this.changeAnimation(newAnim);
 		}
+	}
+
+	/**
+	 * Updates the creature position on the level.
+	 */
+	public void move()
+	{
+		if (this.affectedByGravity && !this.isClimbing)
+		{
+			vy += 0.2; // gravity
+		}
+
+		if (vx > 0)
+		{
+			if (this instanceof Player)
+			{
+				if (((Player)this).getAction(1))	// right
+					this.direction = true;
+			}
+			else
+				this.direction = true;
+		}
+		else if (vx < 0)
+		{
+			if (this instanceof Player)
+			{
+				if (((Player)this).getAction(0))	// left
+					this.direction = false;
+			}
+			else
+				this.direction = false;
+		}
+
+		updateAnimation();
 
 		if (vx > 3)
 			vx = 3;

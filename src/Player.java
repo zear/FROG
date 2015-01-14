@@ -123,6 +123,100 @@ public class Player extends Creature
 		}
 	}
 
+	/**
+	 * Updates player animation.
+	 */
+	public void updateAnimation()
+	{
+		String newAnim = null;
+		Animation curAnim = this.getAnimation();
+
+		if (curAnim.getAnimName().equals("ATTACK") && curAnim.isOver())
+		{
+			((Player)this).setAcceptInput(true);
+		}
+
+		if (vx != 0)
+		{
+			if (this.getAction(5))
+			{
+				this.setAction(5, false);
+				newAnim = "ATTACK";
+			}
+			else
+			{
+				if (this.isOnGround)
+				{
+					if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()))
+						newAnim = "WALK";
+				}
+			}
+		}
+		else
+		{
+			if (this.getAction(5))
+			{
+					this.setAction(5, false);
+					newAnim = "ATTACK";
+			}
+			else
+			{
+				if (this.isOnGround)
+				{
+					if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()))
+						newAnim = "IDLE";
+				}
+			}
+		}
+
+		if (vy < 0)
+		{
+			if (this.isOnGround)
+			{
+				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "JUMP_UP";
+			}
+
+			if (this.isClimbing)
+			{
+				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
+			}
+		}
+		else if (vy > 0)
+		{
+			if (!this.isOnGround)
+			{
+				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "JUMP_DOWN";
+			}
+
+			if (this.isClimbing)
+			{
+				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
+			}
+		}
+		else
+		{
+			if (this.isClimbing)
+			{
+				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
+					newAnim = "CLIMB";
+			}
+		}
+
+		if (newAnim != null)
+		{
+			if (this instanceof Player && !(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && !newAnim.equals("ATTACK"))
+			{
+				((Player)this).setAcceptInput(true);
+			}
+
+			this.changeAnimation(newAnim);
+		}
+	}
+
 	public boolean isDead()
 	{
 		return this.dead;
