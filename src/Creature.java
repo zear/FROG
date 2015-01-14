@@ -54,7 +54,10 @@ public class Creature extends GameObject
 	{
 		this.ai = new AI();
 
-		// Let's hardcode the AI behaviour for now.
+		// Set the list of AI actions based on the creature type.
+		// Combinations of multiple actions per creature are allowed.
+		// addAction() - sets the AI action type.
+		// setVar() - sets parameters for the current action (ie. walk speed, jump height).
 		if (this.getName().equals("jumper"))
 		{
 			ai.addAction(AI.JUMP);
@@ -65,7 +68,7 @@ public class Creature extends GameObject
 		{
 			ai.addAction(AI.WALK);
 			ai.setVar(AI.WALK_VX, 0.5f);
-			ai.setVar(AI.WALK_DROP, 1f); // don't drop
+			ai.setVar(AI.WALK_DROP, 1f);
 		}
 		else if (this.getName().equals("swoosh"))
 		{
@@ -183,20 +186,24 @@ public class Creature extends GameObject
 	 */
 	public void doAi()
 	{
-		if (!this.ai.hasActions())	// Don't bother if there are no AI actions for this object
+		if (!this.ai.hasActions()) // No need to perform the rest of the method if the object has no AI actions.
 			return;
 
+		// Check AI action type and perform appropriate logic.
 		switch (this.ai.getType())
 		{
+			// Idle.
 			case AI.WAIT:
 				this.ai.doTimer();
 
 				if (this.ai.getTimer() <= 0)
 					this.ai.setNextAction();
 			break;
+			// Walk.
 			case AI.WALK:
 				this.ai.doTimer();
 
+				// Move forward.
 				if (this.canWalk)
 				{
 					if (!this.direction)	// left
@@ -206,13 +213,16 @@ public class Creature extends GameObject
 				}
 				else
 				{
+					// Check if there is a tile ahead to walk on.
 					dropCheck(this.direction);
 				}
 
 				if (this.ai.getTimer() <= 0)
 					this.ai.setNextAction();
 			break;
+			// Jump.
 			case AI.JUMP:
+				// If creature is on the ground, jump.
 				if (this.isOnGround)
 				{
 					this.jump(-this.ai.getVar(AI.JUMP_VY));
@@ -227,17 +237,23 @@ public class Creature extends GameObject
 					this.ai.setNextAction();
 				}
 			break;
+			// Fly.
 			case AI.FLY:
 				this.ai.doTimer();
 
+				// Creature is supposed to fly in a straight line - don't bother with calculating the sine position.
 				if (this.ai.getVar(AI.FLY_AMPLITUDE) == 0)
 				{
 					this.fly((this.direction ? this.ai.getVar(AI.FLY_VX) : -this.ai.getVar(AI.FLY_VX)), 0f);
 				}
+				// Creature flies in a sine pattern.
 				else
 				{
+					// Increase the sine period.
 					this.ai.increaseSinePeriod((int)this.ai.getVar(AI.FLY_PERIOD));
 
+					// Set the creature velocity.
+					// The vertical velocity is set according to the sine table (SineTable.java), based on the current return value of getSinePeriod().
 					this.fly((this.direction ? this.ai.getVar(AI.FLY_VX) : -this.ai.getVar(AI.FLY_VX)), SineTable.TABLE[this.ai.getSinePeriod()]*this.ai.getVar(AI.FLY_AMPLITUDE));
 				}
 
@@ -246,22 +262,25 @@ public class Creature extends GameObject
 				if (this.ai.getTimer() <= 0)
 					this.ai.setNextAction();
 			break;
+			// Create new objects (ie. creature that shoots bullets)
 			case AI.SPAWN_OBJ:
+				// List of objects that will be added to the game in the next iteration of the logic() loop.
 				ArrayList<GameObject> newObjs = this.level.getNewObjs();
 
 				try
 				{
+					// Load the new game object.
 					this.level.loadSingleObject(this.ai.getObjName(), newObjs);
 				}
 				catch (Exception e)
 				{
 					System.out.printf("Failed to load object file: %s.obj\n", this.ai.getObjName());
 					return;
-					// todo
 				}
 
 				Creature obj = (Creature)newObjs.get(newObjs.size() - 1);
 
+				// Place the newly created object in the vicinity of the creature which spawns it.
 				obj.putX((int)(this.x + (this.w - 1)/2 - (obj.getW() - 1)/2));
 				obj.putY((int)this.y);
 				obj.setVx(this.ai.getVar(AI.SPAWN_OBJ_OBJVX));
@@ -271,13 +290,10 @@ public class Creature extends GameObject
 
 				this.ai.setNextAction();
 			break;
+			// Change direction.
 			case AI.TURN:
 				this.direction = !this.direction;
 				this.vx = 0;
-//				if (this.direction)
-//					this.vx = -20;
-//				else
-//					this.vx = 20;
 
 				this.ai.setNextAction();
 			break;
@@ -441,21 +457,22 @@ public class Creature extends GameObject
 	 */
 	private void collisionCheck(float totalVx, float totalVy)
 	{
-		int col;
-		int tmpCol;
-		boolean remTile;
-		float curVx;
-		float curVy;
-		float remVx = 0; // remaining vx
-		float remVy = 0; // remaining vy
-		int tile;
-		int x1;
-		int x2;
-		int y1;
-		int y2;
+		int col;		// Holds the collision type bitfield.
+		int tmpCol;		// Holds the collision type bitfield for a single tile check.
+		boolean remTile;	// Tile removal information for destructible tile types.
+		float curVx;		// Amount of vx used for calculation in the current iteration.
+		float curVy;		// Amount of vy used for calculation in the current iteration.
+		float remVx = 0;	// Amount of remaining vx for use in next iterations.
+		float remVy = 0;	// Amount of remaining vy for use in next iterations.
+		int tile;		// Tile type value.
+		int x1;			// Helper variable used for calculating the change in creature collision box after velocity is applied.
+		int x2;			// Helper variable used for calculating the change in creature collision box after velocity is applied.
+		int y1;			// Helper variable used for calculating the change in creature collision box after velocity is applied.
+		int y2;			// Helper variable used for calculating the change in creature collision box after velocity is applied.
+
 
 		// If the total velocity is greater than 1px/frame, calculate only 1px movement
-		// and leave the remaining part for recursive call to collisionCheck().
+		// and leave the remaining part for a recursive call to collisionCheck().
 		// This is done to accurately calculate collision of fast moving objects.
 		if (abs(totalVx) > 1f)
 		{
@@ -497,13 +514,14 @@ public class Creature extends GameObject
 		if (this.vy == 0)
 			curVy = 0;
 
-		// check y
-		if (curVy > 0)
+		// Check collision for y axis.
+		if (curVy > 0) // If creature is moving downwards.
 		{
 			// .---.
 			// |   |
 			// #####
 
+			// Set the collision check area according to the pictogram above (### line).
 			x1 = (int)(this.x);
 			x2 = (int)(this.x) + this.w - 1;
 			y1 = (int)(curVy + this.y) + this.h - 1;
@@ -513,35 +531,46 @@ public class Creature extends GameObject
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
+
+			// Perform collision check for all the level tiles located within the collision area.
 			for (int i = x1/LevelLayer.TILE_SIZE; i <= x2/LevelLayer.TILE_SIZE; i++)
 			{
+				// Fetch the tile type.
 				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
+				// Obtain collision type information from the tile type.
 				tmpCol = collision.getCollision(tile);
 
+				// If creature is a projectile...
 				if (this.getName().equals("swoosh"))
 				{
+					// ...and the tile is destructible - remove the tile.
 					if ((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
 						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 0);
 						remTile = false;
 					}
+					// ...and the tile is hidden - replace it with an uncovered tile.
 					if ((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
 						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 79);
 					}
 				}
 
+				// Accumulate the collision information.
 				col = col | tmpCol;
 			}
 
+			// Collision with a solid tile (wall, floor, ceiling, etc.).
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vy = 0;
 				this.y = (float)ceil(this.y) - 0.2f;
 				this.isOnGround = true;
 			}
+			// Collision with a platform tile (walkable on the top part, but creature will go past if moving through it from the bottom).
 			else if ((col & Collision.COLLISION_PLATFORM) > 0)
 			{
+				// Check if collision occurs with the top part.
 				if (((int)this.y + this.h - 1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE < (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE && !((col & Collision.COLLISION_PLATFORM) > 0 && isClimbing))
 				{
 					this.vy = 0;
@@ -551,11 +580,14 @@ public class Creature extends GameObject
 				else
 					this.y += curVy;
 			}
+
+			// If no collision occured, creature is free to continue its movement.
 			else
 			{
 				this.y += curVy;
 			}
 
+			// Special collision check with a different collision area for climbable tiles (ie. ladder).
 			col = Collision.COLLISION_NONE;
 			for (int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
@@ -572,12 +604,13 @@ public class Creature extends GameObject
 				}
 			}
 		}
-		else if (curVy < 0)
+		else if (curVy < 0) // If creature is moving upwards.
 		{
 			// #####
 			// |   |
 			// .---.
 
+			// Set the collision check area according to the pictogram above (### line).
 			x1 = (int)(this.x);
 			x2 = (int)(this.x) + this.w - 1;
 			y1 = (int)(curVy + this.y);
@@ -589,36 +622,47 @@ public class Creature extends GameObject
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
+
+			// Perform collision check for all the level tiles located within the collision area.
 			for (int i = x1/LevelLayer.TILE_SIZE; i <= x2/LevelLayer.TILE_SIZE; i++)
 			{
+				// Fetch the tile type.
 				tile = levelLayer.getTile(i, y1/LevelLayer.TILE_SIZE);
+				// Obtain collision type information from the tile type.
 				tmpCol = collision.getCollision(tile);
 
+				// If creature is a projectile...
 				if (this.getName().equals("swoosh"))
 				{
+					// ...and the tile is destructible - remove the tile.
 					if ((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
 						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 0);
 						remTile = false;
 					}
+					// ...and the tile is hidden - replace it with an uncovered tile.
 					if ((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
 						levelLayer.setTile(i, y1/LevelLayer.TILE_SIZE, 79);
 					}
 				}
 
+				// Accumulate the collision information.
 				col = col | tmpCol;
 			}
 
+			// Collision with a solid tile (wall, floor, ceiling, etc.).
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vy = 0;
 			}
+			// If no collision occured, creature is free to continue its movement.
 			else
 			{
 				this.y += curVy;
 			}
 
+			// Special collision check with a different collision area for climbable tiles (ie. ladder).
 			col = Collision.COLLISION_NONE;
 			for (int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
 			{
@@ -637,13 +681,14 @@ public class Creature extends GameObject
 
 		}
 
-		// check x
-		if (curVx > 0)
+		// Check collision for x axis.
+		if (curVx > 0) // If creature is moving rightwards.
 		{
 			// .---#
 			// |   #
 			// .---#
 
+			// Set the collision check area according to the pictogram above (### line).
 			x1 = (int)(curVx + this.x) + this.w - 1;
 			y1 = (int)(this.y);
 			y2 = (int)(this.y) + this.h - 1;
@@ -655,49 +700,60 @@ public class Creature extends GameObject
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
+			// Perform collision check for all the level tiles located within the collision area.
 			for (int i = y1/LevelLayer.TILE_SIZE; i <= y2/LevelLayer.TILE_SIZE; i++)
 			{
+				// Fetch the tile type.
 				tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, i);
+				// Obtain collision type information from the tile type.
 				tmpCol = collision.getCollision(tile);
 
+				// If creature is a projectile...
 				if (this.getName().equals("swoosh"))
 				{
+					// ...and the tile is destructible - remove the tile.
 					if ((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
 						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 0);
 						remTile = false;
 					}
+					// ...and the tile is hidden - replace it with an uncovered tile.
 					if ((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
 						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 79);
 					}
 				}
 
+				// Accumulate the collision information.
 				col = col | tmpCol;
 			}
 
+			// Collision with a solid tile (wall, floor, ceiling, etc.).
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vx = 0;
-				if (!(this instanceof Player))	// TODO: Shouldn't be here. Player class should have separate collision check that overloads this one.
+				if (!(this instanceof Player))
 					this.direction = !this.direction;
 			}
+			// If no collision occured, creature is free to continue its movement.
 			else
 			{
 				this.x += curVx;
 			}
 
+			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
 			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(true);
 			}
 		}
-		else if (curVx < 0)
+		else if (curVx < 0) // If creature is moving leftwards.
 		{
 			// #---.
 			// #   |
 			// #---.
 
+			// Set the collision check area according to the pictogram above (### line).
 			x1 = (int)(curVx + this.x);
 			y1 = (int)(this.y);
 			y2 = (int)(this.y) + this.h - 1;
@@ -711,44 +767,55 @@ public class Creature extends GameObject
 
 			col = Collision.COLLISION_NONE;
 			remTile = true;
+			// Perform collision check for all the level tiles located within the collision area.
 			for (int i = y1/LevelLayer.TILE_SIZE; i <= y2/LevelLayer.TILE_SIZE; i++)
 			{
+				// Fetch the tile type.
 				tile = levelLayer.getTile(x1/LevelLayer.TILE_SIZE, i);
+				// Obtain collision type information from the tile type.
 				tmpCol = collision.getCollision(tile);
 
+				// If creature is a projectile...
 				if (this.getName().equals("swoosh"))
 				{
+					// ...and the tile is destructible - remove the tile.
 					if ((tmpCol & Collision.COLLISION_DESTRUCTIBLE) > 0 && remTile)
 					{
 						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 0);
 						remTile = false;
 					}
+					// ...and the tile is hidden - replace it with an uncovered tile.
 					if ((tmpCol & Collision.COLLISION_HIDDEN) > 0)
 					{
 						levelLayer.setTile(x1/LevelLayer.TILE_SIZE, i, 79);
 					}
 				}
 
+				// Accumulate the collision information.
 				col = col | tmpCol;
 			}
 
+			// Collision with a solid tile (wall, floor, ceiling, etc.).
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vx = 0;
-				if (!(this instanceof Player))	// TODO: Shouldn't be here. Player class should have separate collision check that overloads this one.
+				if (!(this instanceof Player))
 					this.direction = !this.direction;
 			}
+			// If no collision occured, creature is free to continue its movement.
 			else
 			{
 				this.x += curVx;
 			}
 
+			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
 			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(false);
 			}
 		}
 
+		// Recursively call the collisionCheck() if there is any remaining velocity to take into account.
 		if (remVx != 0 || remVy != 0)
 		{
 			collisionCheck(remVx, remVy);
