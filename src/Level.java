@@ -42,14 +42,7 @@ public class Level
 	private void load(String fileName)
 	{
 		File file;
-		if (Program.levelName == null)
-		{
-			file = new File("./data/level/" + fileName);
-		}
-		else
-		{
-			file = new File(Program.levelName);
-		}
+		file = new File((Program.levelName != null ? "" : "./data/level/") + fileName);
 
 		FileIO fp = new FileIO(file);
 

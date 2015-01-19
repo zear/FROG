@@ -15,7 +15,11 @@ public class GameStateGame implements GameState
 
 	public void loadState()
 	{
-		if (episode != null)
+		if (Program.levelName != null)
+		{
+			level = new Level(Program.levelName);
+		}
+		else if (episode != null)
 		{
 			level = new Level(episode.getLevel(0));
 		}

@@ -158,10 +158,20 @@ public class GameStateMenu implements GameState
 			switch (curMenu[curSelection])
 			{
 				case MENU_EPISODES:
-					loadEpisodes();
-					parentMenu = curMenu;
-					curMenu = menuEpisodes;
-					curSelection = 0;
+					if (Program.levelName != null)
+					{
+						// Jump directly to in-game.
+						Program.game.changeState(GameStateEnum.STATE_GAME);
+						drawLoading = true;
+					}
+					else
+					{
+						// Show episode selection.
+						loadEpisodes();
+						parentMenu = curMenu;
+						curMenu = menuEpisodes;
+						curSelection = 0;
+					}
 				break;
 				case MENU_OPTIONS:
 					parentMenu = curMenu;
