@@ -20,9 +20,17 @@ public class Game
 		if (newState != activeState)
 		{
 			if (activeState != null)
+			{
 				activeState.unloadState();
+			}
 			if (newState != null)
+			{
+				if (activeState == stateMenu && newState == stateGame)
+				{
+					stateGame.setEpisode(stateMenu.getSelectedEpisode());
+				}
 				newState.loadState();
+			}
 
 			activeState = newState;
 		}

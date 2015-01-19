@@ -2,14 +2,23 @@ public class GameStateGame implements GameState
 {
 	public static boolean leaveGame = false;
 
+	private Episode episode = null;
 	private Level level = null;
 	private int fadeStep;
 	private int fadeTotalSteps;
 	private int fadeTo;
 
+	public void setEpisode(Episode newEpisode)
+	{
+		this.episode = newEpisode;
+	}
+
 	public void loadState()
 	{
-		level = new Level("e1l1.lvl");
+		if (episode != null)
+		{
+			level = new Level(episode.getLevel(0));
+		}
 
 		fadeStep = 0;
 		fadeTotalSteps = 25;

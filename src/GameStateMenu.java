@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.io.File;
+
 import sdljava.*;
 import sdljava.event.*;
 import sdljava.video.*;
@@ -7,14 +10,15 @@ public class GameStateMenu implements GameState
 	private static final int MENU_EPISODES = 0;
 	private static final int MENU_OPTIONS = 1;
 	private static final int MENU_EXIT = 2;
-	private static final int MENU_FPS = 3;
-	private static final int MENU_DEBUG = 4;
-	private static final int MENU_SEPARATOR = 5;
-	private static final int MENU_BACK = 6;
+	private static final int MENU_LAUNCH_EPISODE = 3;
+	private static final int MENU_FPS = 4;
+	private static final int MENU_DEBUG = 5;
+	private static final int MENU_SEPARATOR = 6;
+	private static final int MENU_BACK = 7;
 
 	private int[] curMenu;
-	private int[] parentMenu = null;
-	private int curSelection = 0;
+	private int[] parentMenu;
+	private int curSelection;
 	private boolean selected = false;
 	private boolean[] keys;
 
@@ -24,11 +28,8 @@ public class GameStateMenu implements GameState
 		MENU_OPTIONS,
 		MENU_EXIT
 	};
-	private int[] menuEpisodes =
-	{
-		MENU_SEPARATOR,
-		MENU_BACK
-	};
+	private int[] menuEpisodes;
+
 	private int[] menuOptions =
 	{
 		MENU_FPS,
@@ -36,6 +37,9 @@ public class GameStateMenu implements GameState
 		MENU_SEPARATOR,
 		MENU_BACK
 	};
+
+	private ArrayList<Episode> episodeList = null;
+	private Episode selectedEpisode = null;
 
 	private Font font;
 
@@ -46,12 +50,47 @@ public class GameStateMenu implements GameState
 	private int fadeTotalSteps;
 	private int fadeTo;
 
+	private void loadEpisodes()
+	{
+		if (episodeList != null)
+			return;
+
+		int i = 0;
+		episodeList = new ArrayList<Episode>();
+		File folder = new File("./data/level/");
+		File[] fileList = folder.listFiles();
+
+		for (File curFile : fileList)
+		{
+			if (curFile.isFile() && curFile.getName().endsWith(".ep"))
+			{
+				episodeList.add(new Episode(curFile.getName()));
+			}
+		}
+
+		menuEpisodes = new int[episodeList.size() + 2];
+
+		for (; i < episodeList.size(); ++i)
+		{
+			menuEpisodes[i] = MENU_LAUNCH_EPISODE;
+		}
+		menuEpisodes[i] = MENU_SEPARATOR;
+		menuEpisodes[i+1] = MENU_BACK;
+	}
+
+	public Episode getSelectedEpisode()
+	{
+		return selectedEpisode;
+	}
+
 	public void loadState()
 	{
 		font = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
 		disk = Sdl.loadImage("./data/gfx/disk.bmp");
 		keys = new boolean[6]; // left, right, up, down, accept, back
 		curMenu = menuMain;
+		parentMenu = null;
+		curSelection = 0;
 
 		fadeStep = 0;
 		fadeTotalSteps = 25;
@@ -119,8 +158,10 @@ public class GameStateMenu implements GameState
 			switch (curMenu[curSelection])
 			{
 				case MENU_EPISODES:
-					Program.game.changeState(GameStateEnum.STATE_GAME);
-					drawLoading = true;
+					loadEpisodes();
+					parentMenu = curMenu;
+					curMenu = menuEpisodes;
+					curSelection = 0;
 				break;
 				case MENU_OPTIONS:
 					parentMenu = curMenu;
@@ -129,6 +170,20 @@ public class GameStateMenu implements GameState
 				break;
 				case MENU_EXIT:
 					Program.game.changeState(GameStateEnum.STATE_EXIT);
+				break;
+				case MENU_LAUNCH_EPISODE:
+					if(curSelection < episodeList.size())
+					{
+						for (int i = 0; i < episodeList.size(); ++i)
+						{
+							if (episodeList.get(i).getId() == curSelection)
+							{
+								selectedEpisode = episodeList.get(i);
+								Program.game.changeState(GameStateEnum.STATE_GAME);
+								drawLoading = true;
+							}
+						}
+					}
 				break;
 				case MENU_FPS:
 					Game.drawFps = !Game.drawFps;
@@ -195,6 +250,16 @@ public class GameStateMenu implements GameState
 					case MENU_EXIT:
 						word = "Quit";
 					break;
+					case MENU_LAUNCH_EPISODE:
+						for (int j = 0; j < episodeList.size(); ++j)
+						{
+							if (episodeList.get(j).getId() == i)
+							{
+								word = String.valueOf(i+1) + ": " + episodeList.get(j).getTitle();
+								break;
+							}
+						}
+					break;
 					case MENU_FPS:
 						word = "show fps" + (Game.drawFps ? ": ON" : ": OFF");
 					break;
@@ -222,9 +287,16 @@ public class GameStateMenu implements GameState
 					font.drawCentered(word, 130 + i * 12);
 				}
 
-				font.drawCentered("** Fantastic Rescue Of Greeny v0.1 **", 30);
-				font.drawCentered("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 60);
-				font.drawCentered("(c) 2014-2015, Licensed under LGPLv2.1+", 220);
+				if (curMenu == menuEpisodes)
+				{
+					font.drawCentered("Select episode:", 110);
+				}
+				else
+				{
+					font.drawCentered("** Fantastic Rescue Of Greeny v0.1 **", 30);
+					font.drawCentered("Programming - Artur \"Zear\" Rojek\nGraphics - Daniel \"Dnilo\" Garcia", 60);
+					font.drawCentered("(c) 2014-2015, Licensed under LGPLv2.1+", 220);
+				}
 			}
 		}
 

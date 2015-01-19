@@ -62,17 +62,24 @@ public class Level
 			{
 				String next = fp.getNext();
 
-				if (next.equals("COLLISION")) {
+				if (next.equals("COLLISION"))
+				{
 					collision = new Collision(fp.getNext(), Integer.parseInt(fp.getNext()));
-				} else if (next.equals("LAYER")) {
+				}
+				else if (next.equals("LAYER"))
+				{
 					curElem = new LevelLayer();
 					layers.add(curElem);
 					System.out.printf("New layer\n");
 					curElem.load(Integer.parseInt(fp.getNext()));
-				} else if (next.equals("IMG")) {
+				}
+				else if (next.equals("IMG"))
+				{
 					curElem.load("./data/gfx/" + fp.getNext(), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()));
 					curElem.load(fp); // load the tileset
-				} else if (next.equals("OBJECTS")) {
+				}
+				else if (next.equals("OBJECTS"))
+				{
 					loadObjects(fp);
 				}
 			}
