@@ -6,6 +6,7 @@ enum ObjType
 {
 	OBJECT,
 	ITEM,
+	TRIGGER,
 	CREATURE,
 	PROJECTILE,
 	PLAYER
@@ -24,6 +25,7 @@ public class GameObject
 	protected int h;
 	protected boolean direction;
 	private boolean vulnerable = false;
+	private boolean invincibilityCountdownAllowed = false;
 	private int invincibilityTimer;
 	private int invincibilityOrigTime;
 
@@ -171,16 +173,23 @@ public class GameObject
 	public void setInvincibility(int time)
 	{
 		this.vulnerable = false;
+		this.invincibilityCountdownAllowed = true;
 		this.invincibilityOrigTime = time;
 		this.invincibilityTimer = this.invincibilityOrigTime;
 	}
 
 	private void invincibilityCountdown()
 	{
+		if (!this.invincibilityCountdownAllowed)
+			return;
+
 		if (this.invincibilityTimer > 0)
 			this.invincibilityTimer--;
 		else
+		{
 			this.vulnerable = true;
+			this.invincibilityCountdownAllowed = false;
+		}
 	}
 
 	public void addAnimation(FileIO fp)

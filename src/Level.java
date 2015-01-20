@@ -17,6 +17,8 @@ public class Level
 	private Camera camera;
 	private Gui gui;
 	private Font font0;
+	private boolean complete;
+	private int playTime;
 
 	private Player playerObj = null;
 
@@ -29,14 +31,27 @@ public class Level
 		layers = new ArrayList<LevelLayer>();
 		load(fileName);
 		gui = new Gui();
+		gui.setLevel(this);
 		// load fonts
 		font0 = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
 		gui.setFont(font0);
+		complete = false;
+		playTime = 0;
 	}
 
 	public ArrayList<GameObject> getNewObjs()
 	{
 		return this.newObjs;
+	}
+
+	public boolean isComplete()
+	{
+		return this.complete;
+	}
+
+	public int getPlayTime()
+	{
+		return this.playTime;
 	}
 
 	private void load(String fileName)
@@ -171,6 +186,12 @@ public class Level
 					type = ObjType.ITEM;
 					System.out.printf("new item\n");
 				}
+				else if (words[1].equals("TRIGGER"))
+				{
+					objTemp2.add(new Trigger());
+					type = ObjType.TRIGGER;
+					System.out.printf("new trigger\n");
+				}
 				else if (words[1].equals("CREATURE"))
 				{
 					System.out.printf("List: %d\n", layers.size());
@@ -250,6 +271,13 @@ public class Level
 						((Item)newObj).setPoints(Integer.parseInt(words[1]));
 					}
 				}
+				else if (words[0].equals("TRIGGER_TYPE"))
+				{
+					if (newObj instanceof Trigger)
+					{
+						((Trigger)newObj).setTriggerType(words[1]);
+					}
+				}
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
@@ -273,6 +301,10 @@ public class Level
 				break;
 				case ITEM:
 					list.add(new Item());
+					newObj = list.get(list.size() - 1);
+				break;
+				case TRIGGER:
+					list.add(new Trigger());
 					newObj = list.get(list.size() - 1);
 				break;
 				case CREATURE:
@@ -320,6 +352,10 @@ public class Level
 			if (newObj instanceof Item)
 			{
 				((Item)newObj).setPoints(((Item)template).getPoints());
+			}
+			if (newObj instanceof Trigger)
+			{
+				((Trigger)newObj).setTriggerType(((Trigger)template).getTriggerType());
 			}
 		}
 	}
@@ -472,6 +508,27 @@ public class Level
 
 		for (GameObject tmpObj : objs)
 		{
+			// Check triggers
+			if (tmpObj instanceof Trigger)
+			{
+				Trigger tmpTrigger = (Trigger)tmpObj;
+				if (tmpTrigger.isTriggered())
+				{
+					switch (tmpTrigger.getTriggerType())
+					{
+						case EXITPOINT:
+							camera.setTarget((int)tmpTrigger.getX(), (int)tmpTrigger.getY());
+							player.setVulnerability(false);
+							this.complete = true;
+							//GameStateGame.leaveGame = true;
+						break;
+
+						default:
+						break;
+					}
+				}
+			}
+
 			// Activity zone around the player - only objects within this zone have the logic computed
 			int zoneX = this.camera.getX() - 20;
 			int zoneY = this.camera.getY() - 20;
@@ -546,8 +603,25 @@ public class Level
 					{
 						if ((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
 						{
-							player.addScore(((Item)tmpObj).getPoints());
+							player.addScore(tmpItem.getPoints());
 							tmpItem.setRemoval(true);
+						}
+					}
+				}
+				else if (tmpObj instanceof Trigger && tmpObj != player)
+				{
+					Trigger tmpTrigger = (Trigger)tmpObj;
+
+					int px = (int)player.x;
+					int py = (int)player.y;
+					int ix = (int)tmpTrigger.x;
+					int iy = (int)tmpTrigger.y;
+
+					if ((px >= ix && px <= ix + tmpTrigger.w - 1) || (px + player.w - 1 >= ix && px + player.w - 1 <= ix + tmpTrigger.w - 1) || (px < ix && px + player.w - 1 > ix + tmpTrigger.w - 1))
+					{
+						if ((py >= iy && py <= iy + tmpTrigger.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpTrigger.h - 1) || (py < iy && py + player.h - 1 > iy + tmpTrigger.h - 1))
+						{
+							tmpTrigger.setTriggered(true);
 						}
 					}
 				}
@@ -564,7 +638,7 @@ public class Level
 				ArrayList<GameObject> attackObjs = playerObj.getAttackObjs();
 				for (GameObject tmpObj : attackObjs)
 				{
-					if (tmpObj instanceof Creature && !(curObj instanceof Item) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
+					if (tmpObj instanceof Creature && !(curObj instanceof Item) && !(curObj instanceof Trigger) && tmpObj != curObj && tmpObj.getName().equals("swoosh"))
 					{
 						Creature tmpCreature = (Creature)tmpObj;
 
@@ -585,11 +659,14 @@ public class Level
 				}
 			}
 		}
+
+		if (!playerObj.isDead() && !this.complete)
+			playTime++;
 	}
 
 	public void draw() // draws map layers, objects and all the other map related stuff
 	{
-		if (playerObj.hp > 0)
+		if (playerObj.hp > 0 && !this.complete)
 		{
 			camera.setTarget(playerObj);
 		}

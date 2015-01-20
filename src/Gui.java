@@ -6,11 +6,14 @@ public class Gui
 	private SDLSurface hpBar;
 	private SDLRect[] hpBarClip;
 	private Player player;
+	private Level level;
 	private Font font;
 
 	private int timer = 240;
 	private int timer2 = 40;
 	private int dist = 0;
+
+	private int playTimeEffect = 0;
 
 	public Gui()
 	{
@@ -30,6 +33,11 @@ public class Gui
 	public void setPlayer(Player player)
 	{
 		this.player = player;
+	}
+
+	public void setLevel(Level level)
+	{
+		this.level = level;
 	}
 
 	public void setFont(Font font)
@@ -92,7 +100,18 @@ public class Gui
 //				font.draw("(c) 2014-2015, Licensed under LGPLv2.1+", 20, 220 + dist);
 			}
 
-			if (this.player.isDead())
+			if (this.level.isComplete())
+			{
+				int time = playTimeEffect/Sdl.framesPerSecond;
+				font.drawCentered("Level complete!", Sdl.SCREEN_HEIGHT/2 - 36);
+				font.drawCentered("Time: " + String.valueOf(time/60) + ":" + "".format("%02d", time%60), Sdl.SCREEN_HEIGHT/2 - 24); 
+
+				if (playTimeEffect < this.level.getPlayTime())
+				{
+					playTimeEffect+=Sdl.framesPerSecond/4;
+				}
+			}
+			else if (this.player.isDead())
 			{
 				font.drawCentered("Game Over", Sdl.SCREEN_HEIGHT/2);
 			}

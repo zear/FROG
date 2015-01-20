@@ -29,6 +29,9 @@ public class Camera
 
 	public void setTarget(GameObject obj)
 	{
+		if (obj == null)
+			return;
+
 		this.target = obj;
 		this.targetX = (int)Math.floor(target.getX());
 		this.targetY = (int)Math.floor(target.getY());
