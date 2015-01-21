@@ -32,11 +32,14 @@ public class Level
 		load(fileName);
 		gui = new Gui();
 		gui.setLevel(this);
-		// load fonts
-		font0 = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
-		gui.setFont(font0);
 		complete = false;
 		playTime = 0;
+	}
+
+	public void setFont(Font font)
+	{
+		this.font0 = font;
+		gui.setFont(font0);
 	}
 
 	public ArrayList<GameObject> getNewObjs()

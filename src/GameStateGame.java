@@ -7,6 +7,9 @@ public class GameStateGame implements GameState
 	private int fadeStep;
 	private int fadeTotalSteps;
 	private int fadeTo;
+	private Font font0;
+	private boolean intro;
+	private int introTimer;
 
 	public void setEpisode(Episode newEpisode)
 	{
@@ -15,14 +18,24 @@ public class GameStateGame implements GameState
 
 	public void loadState()
 	{
+		intro = true;
+		introTimer = 120;
+
+		// Load fonts
+		font0 = new Font("./data/gfx/font1.bmp", 7, 10, 1, 4);
+
+		// Load level
 		if (Program.levelName != null)
 		{
 			level = new Level(Program.levelName);
+			intro = false;
 		}
 		else if (episode != null)
 		{
 			level = new Level(episode.getLevel(0));
 		}
+
+		level.setFont(font0);
 
 		fadeStep = 0;
 		fadeTotalSteps = 25;
@@ -38,13 +51,43 @@ public class GameStateGame implements GameState
 	public void logic()
 	{
 		if (level != null)
-			level.logic();
+		{
+			if (!intro)
+			{
+				level.logic();
+			}
+		}
 	}
+
 	public void draw()
 	{
 		if (level != null)
-			level.draw();
+		{
+			if (intro)
+			{
+				// Draw uniform background
+				try
+				{
+					Sdl.screen.fillRect(100);
+				}
+				catch (Exception e)
+				{
+				}
 
+				font0.drawCentered("Get ready!", 60);
+				if (episode != null)
+					font0.drawCentered(episode.getTitle() + " 1", 100);
+
+				if (--introTimer == 0)
+				{
+					intro = false;
+				}
+			}
+			else
+			{
+				level.draw();
+			}
+		}
 
 		if (leaveGame)
 		{
