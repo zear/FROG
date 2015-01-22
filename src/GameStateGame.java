@@ -1,3 +1,6 @@
+import sdljava.*;
+import sdljava.video.*;
+
 public class GameStateGame implements GameState
 {
 	public static boolean leaveGame = false;
@@ -43,6 +46,13 @@ public class GameStateGame implements GameState
 		intro = true;
 		introTimer = 120;
 
+		Player oldPlayer = null;
+
+		if (level != null)
+		{
+			oldPlayer = level.getPlayer();
+		}
+
 		if (Program.levelName != null)
 		{
 			level = new Level(Program.levelName);
@@ -51,6 +61,19 @@ public class GameStateGame implements GameState
 		else if (episode != null)
 		{
 			level = new Level(episode.getLevel(levelNum));
+		}
+
+		if (oldPlayer != null)
+		{
+			Player newPlayer = level.getPlayer();
+			newPlayer.setLives(oldPlayer.getLives());
+			newPlayer.setScore(oldPlayer.getScore());
+		}
+		else
+		{
+			Player newPlayer = level.getPlayer();
+			newPlayer.setLives(3);
+			newPlayer.setScore(0);
 		}
 
 		level.setFont(font0);
@@ -110,9 +133,15 @@ public class GameStateGame implements GameState
 				{
 				}
 
+				Player player = level.getPlayer();
+
 				font0.drawCentered("Get ready!", 60);
 				if (episode != null)
+				{
 					font0.drawCentered(episode.getTitle() + " " + (levelNum+1), 100);
+				}
+				font0.drawCentered("  x " + player.getLives(), 142);
+				player.draw(Sdl.SCREEN_WIDTH/2 - player.getW() - 10, 145 - player.getH()/2, "IDLE");
 
 				if (--introTimer == 0)
 				{

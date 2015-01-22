@@ -62,6 +62,23 @@ public class Level
 		return gui.isPlayTimeCalculated();
 	}
 
+	public Player getPlayer()
+	{
+		if (playerObj == null)
+		{
+			for (GameObject curObj : objs)
+			{
+				if (curObj instanceof Player)
+				{
+					playerObj = (Player)curObj;
+					break; // this assumes there is only one player on the level
+				}
+			}
+		}
+
+		return playerObj;
+	}
+
 	private void load(String fileName)
 	{
 		File file;
@@ -402,14 +419,7 @@ public class Level
 
 		if (playerObj == null)
 		{
-			for (GameObject curObj : objs)
-			{
-				if (curObj instanceof Player)
-				{
-					playerObj = (Player)curObj;
-					break; // this assumes there is only one player on the level
-				}
-			}
+			getPlayer();
 		}
 
 		if (playerObj != null)

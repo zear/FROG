@@ -276,6 +276,68 @@ public class GameObject
 		this.invincibilityCountdown();
 	}
 
+	public void draw(int x, int y, String name)
+	{
+		Animation animation = null;
+		ArrayList <Animation> animList = this.objTemplate.getAnimation();
+
+		for (Animation curElement : animList)
+		{
+			if (curElement.getAnimName().equals(name))
+			{
+				animation = curElement;
+				break;
+			}
+		}
+
+		if (animation != null)
+		{
+			SDLRect r = new SDLRect();
+
+			r.x = x;
+			r.y = y;
+
+			r.x += animation.getOffsetX(direction);
+			r.y += animation.getOffsetY(direction);
+
+			if (r.x < -this.w + 1)
+				return;
+			if (r.x > Sdl.SCREEN_WIDTH)
+				return;
+			if (r.y < -this.h + 1)
+				return;
+			if (r.y > Sdl.SCREEN_HEIGHT)
+				return;
+
+			try
+			{
+				SDLRect[] imgClip = this.objTemplate.getImgClip();
+				this.objTemplate.getImg().blitSurface(imgClip[animation.getFrame(this.direction, frameNum)], Sdl.screen, r);
+				if (frameDelay == 0)
+				{
+					frameDelay = animation.getFrameRate();
+					if (frameNum < animation.getLength(this.direction) - 1)
+						frameNum++;
+					else
+					{
+						if (animation.isLooping())
+							frameNum = 0;
+						else
+							animation.setIsOver(true);
+					}
+				}
+				else
+				{
+					frameDelay--;
+				}
+			}
+			catch (SDLException e)
+			{
+			}
+
+		}
+	}
+
 	public void draw(Camera camera) // draws game object
 	{
 		if (curAnim == null)

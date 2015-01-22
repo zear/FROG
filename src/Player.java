@@ -10,6 +10,7 @@ public class Player extends Creature
 	private boolean[] keys;
 	private boolean acceptInput = true;
 	private boolean dead = false;	// temporary
+	private int lives;
 	private int score;
 	private ArrayList<GameObject> attackObjs = null;
 
@@ -48,6 +49,21 @@ public class Player extends Creature
 	public void setAcceptInput(boolean value)
 	{
 		this.acceptInput = value;
+	}
+
+	public int getLives()
+	{
+		return this.lives;
+	}
+
+	public void setLives(int lives)
+	{
+		this.lives = lives;
+	}
+
+	public void addLives(int lives)
+	{
+		this.lives += lives;
 	}
 
 	public int getScore()
