@@ -102,51 +102,51 @@ public class GameStateMenu implements GameState
 
 	public void input()
 	{
-		keys[0] = Sdl.getInput(SDLKey.SDLK_LEFT);
-		keys[1] = Sdl.getInput(SDLKey.SDLK_RIGHT);
-		keys[2] = Sdl.getInput(SDLKey.SDLK_UP);
-		keys[3] = Sdl.getInput(SDLKey.SDLK_DOWN);
-//		keys[4] = Sdl.getInput(SDLKey.SDLK_x);
-//		keys[5] = Sdl.getInput(SDLKey.SDLK_z);
-		keys[4] = Sdl.getInput(SDLKey.SDLK_LCTRL);
-		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
+		keys[Input.KEY_LEFT] = Sdl.getInput(SDLKey.SDLK_LEFT);
+		keys[Input.KEY_RIGHT] = Sdl.getInput(SDLKey.SDLK_RIGHT);
+		keys[Input.KEY_UP] = Sdl.getInput(SDLKey.SDLK_UP);
+		keys[Input.KEY_DOWN] = Sdl.getInput(SDLKey.SDLK_DOWN);
+//		keys[Input.KEY_JUMP] = Sdl.getInput(SDLKey.SDLK_x);
+//		keys[Input.KEY_ATTACK] = Sdl.getInput(SDLKey.SDLK_z);
+		keys[Input.KEY_JUMP] = Sdl.getInput(SDLKey.SDLK_LCTRL);
+		keys[Input.KEY_ATTACK] = Sdl.getInput(SDLKey.SDLK_LALT);
 	}
 
 	public void logic()
 	{
 		input();
 
-		if (keys[2]) // up
+		if (keys[Input.KEY_UP]) // up
 		{
-			keys[2] = false;
+			keys[Input.KEY_UP] = false;
 			curSelection--;
 
 			if (curSelection >= 0 && curMenu[curSelection] == MENU_SEPARATOR)
 				curSelection--;
 		}
-		else if (keys[3]) // down
+		else if (keys[Input.KEY_DOWN]) // down
 		{
-			keys[3] = false;
+			keys[Input.KEY_DOWN] = false;
 			curSelection++;
 
 			if (curSelection < curMenu.length && curMenu[curSelection] == MENU_SEPARATOR)
 				curSelection++;
 		}
-		else if (keys[4]) // accept
+		else if (keys[Input.KEY_JUMP]) // accept
 		{
-			keys[4] = false;
+			keys[Input.KEY_JUMP] = false;
 			selected = true;
 		}
 
 		// temp
-		Sdl.putInput(SDLKey.SDLK_LEFT, keys[0]);
-		Sdl.putInput(SDLKey.SDLK_RIGHT, keys[1]);
-		Sdl.putInput(SDLKey.SDLK_UP, keys[2]);
-		Sdl.putInput(SDLKey.SDLK_DOWN, keys[3]);
-//		Sdl.putInput(SDLKey.SDLK_x, keys[4]);
-//		Sdl.putInput(SDLKey.SDLK_z, keys[5]);
-		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[4]);
-		Sdl.putInput(SDLKey.SDLK_LALT, keys[5]);
+		Sdl.putInput(SDLKey.SDLK_LEFT, keys[Input.KEY_LEFT]);
+		Sdl.putInput(SDLKey.SDLK_RIGHT, keys[Input.KEY_RIGHT]);
+		Sdl.putInput(SDLKey.SDLK_UP, keys[Input.KEY_UP]);
+		Sdl.putInput(SDLKey.SDLK_DOWN, keys[Input.KEY_DOWN]);
+//		Sdl.putInput(SDLKey.SDLK_x, keys[Input.KEY_JUMP]);
+//		Sdl.putInput(SDLKey.SDLK_z, keys[Input.KEY_ATTACK]);
+		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[Input.KEY_JUMP]);
+		Sdl.putInput(SDLKey.SDLK_LALT, keys[Input.KEY_ATTACK]);
 
 		if (curSelection < 0)
 			curSelection = curMenu.length - 1;

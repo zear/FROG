@@ -75,32 +75,32 @@ public class Player extends Creature
 		keys[key] = value;
 
 		// temp
-		Sdl.putInput(SDLKey.SDLK_LEFT, keys[0]);
-		Sdl.putInput(SDLKey.SDLK_RIGHT, keys[1]);
-		Sdl.putInput(SDLKey.SDLK_UP, keys[2]);
-		Sdl.putInput(SDLKey.SDLK_DOWN, keys[3]);
-//		Sdl.putInput(SDLKey.SDLK_x, keys[4]);
-//		Sdl.putInput(SDLKey.SDLK_z, keys[5]);
-		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[4]);
-		Sdl.putInput(SDLKey.SDLK_LALT, keys[5]);
+		Sdl.putInput(SDLKey.SDLK_LEFT, keys[Input.KEY_LEFT]);
+		Sdl.putInput(SDLKey.SDLK_RIGHT, keys[Input.KEY_RIGHT]);
+		Sdl.putInput(SDLKey.SDLK_UP, keys[Input.KEY_UP]);
+		Sdl.putInput(SDLKey.SDLK_DOWN, keys[Input.KEY_DOWN]);
+//		Sdl.putInput(SDLKey.SDLK_x, keys[Input.KEY_JUMP]);
+//		Sdl.putInput(SDLKey.SDLK_z, keys[Input.KEY_ATTACK]);
+		Sdl.putInput(SDLKey.SDLK_LCTRL, keys[Input.KEY_JUMP]);
+		Sdl.putInput(SDLKey.SDLK_LALT, keys[Input.KEY_ATTACK]);
 	}
 
 	public void updateKeys()
 	{
-		keys[0] = Sdl.getInput(SDLKey.SDLK_LEFT);
-		keys[1] = Sdl.getInput(SDLKey.SDLK_RIGHT);
-		keys[2] = Sdl.getInput(SDLKey.SDLK_UP);
-		keys[3] = Sdl.getInput(SDLKey.SDLK_DOWN);
-//		keys[4] = Sdl.getInput(SDLKey.SDLK_x);
-//		keys[5] = Sdl.getInput(SDLKey.SDLK_z);
-		keys[4] = Sdl.getInput(SDLKey.SDLK_LCTRL);
-		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
+		keys[Input.KEY_LEFT] = Sdl.getInput(SDLKey.SDLK_LEFT);
+		keys[Input.KEY_RIGHT] = Sdl.getInput(SDLKey.SDLK_RIGHT);
+		keys[Input.KEY_UP] = Sdl.getInput(SDLKey.SDLK_UP);
+		keys[Input.KEY_DOWN] = Sdl.getInput(SDLKey.SDLK_DOWN);
+//		keys[Input.KEY_JUMP] = Sdl.getInput(SDLKey.SDLK_x);
+//		keys[Input.KEY_ATTACK] = Sdl.getInput(SDLKey.SDLK_z);
+		keys[Input.KEY_JUMP] = Sdl.getInput(SDLKey.SDLK_LCTRL);
+		keys[Input.KEY_ATTACK] = Sdl.getInput(SDLKey.SDLK_LALT);
 
 		// TODO: move this elsewhere
-		if (keys[4] && (dead || (this.level.isComplete() && this.level.isPlayTimeCalculated())))
+		if (keys[Input.KEY_JUMP] && (dead || (this.level.isComplete() && this.level.isPlayTimeCalculated())))
 		{
 			GameStateGame.leaveGame = true;
-			keys[4] = false;
+			keys[Input.KEY_JUMP] = false;
 		}
 		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
 			GameStateGame.leaveGame = true;
