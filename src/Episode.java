@@ -24,7 +24,10 @@ public class Episode
 
 	public String getLevel(int levelNum)
 	{
-		if(levelNum < levelList.size())
+		if (levelList == null)
+			return null;
+
+		if (levelNum < levelList.size())
 		{
 			return levelList.get(levelNum);
 		}
@@ -32,6 +35,11 @@ public class Episode
 		{
 			return null;
 		}
+	}
+
+	public int getLevelNum()
+	{
+		return (levelList != null ? levelList.size() : 0);
 	}
 
 	public void load(String fileName)
