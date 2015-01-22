@@ -124,7 +124,7 @@ public class Gui
 			}
 			else if (this.player.isDead())
 			{
-				font.drawCentered("Game Over", Sdl.SCREEN_HEIGHT/2);
+				font.drawCentered((player.getLives() > 0 ? "Woops" : "Game Over"), Sdl.SCREEN_HEIGHT/2);
 			}
 		}
 		catch (SDLException e)

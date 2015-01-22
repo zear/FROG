@@ -119,7 +119,10 @@ public class Player extends Creature
 			keys[Input.KEY_JUMP] = false;
 		}
 		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
+		{
+			lives = 0;
 			GameStateGame.leaveGame = true;
+		}
 		if (Sdl.getInput(SDLKey.SDLK_f))
 			Sdl.toggleFullscreen();
 		if (Sdl.getInput(SDLKey.SDLK_c))
@@ -244,6 +247,7 @@ public class Player extends Creature
 	public void setDead(boolean value)
 	{
 		this.dead = value;
+		this.lives--;
 	}
 
 	public ArrayList<GameObject> getAttackObjs()

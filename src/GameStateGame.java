@@ -85,12 +85,21 @@ public class GameStateGame implements GameState
 		{
 			if (leaveGame)
 			{
+				Player player = level.getPlayer();
+
 				if (fadeStep >= fadeTotalSteps)
 				{
-					if (level.isComplete() && Program.levelName == null)
+					if (player.getLives() > 0)
 					{
-						levelNum++;
-						if (levelNum >= episode.getLevelNum())
+						if (level.isComplete())
+						{
+							if (Program.levelName == null)
+							{
+								levelNum++;
+							}
+						}
+
+						if (Program.levelName != null || levelNum >= episode.getLevelNum())
 						{
 							Program.game.changeState(GameStateEnum.STATE_MENU);
 						}
@@ -140,8 +149,8 @@ public class GameStateGame implements GameState
 				{
 					font0.drawCentered(episode.getTitle() + " " + (levelNum+1), 100);
 				}
-				font0.drawCentered("  x " + player.getLives(), 142);
-				player.draw(Sdl.SCREEN_WIDTH/2 - player.getW() - 10, 145 - player.getH()/2, "IDLE");
+				font0.drawCentered("  x " + player.getLives(), 140);
+				player.draw(Sdl.SCREEN_WIDTH/2 - player.getW() - 12, 145 - player.getH()/2, "IDLE");
 
 				if (--introTimer == 0)
 				{

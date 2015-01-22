@@ -960,7 +960,8 @@ public class Creature extends GameObject
 		{
 			if (this instanceof Player)
 			{
-				((Player)this).setDead(true);
+				if (!((Player)this).isDead())
+					((Player)this).setDead(true);
 			}
 			else
 			{
