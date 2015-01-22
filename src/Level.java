@@ -57,6 +57,11 @@ public class Level
 		return this.playTime;
 	}
 
+	public boolean isPlayTimeCalculated()
+	{
+		return gui.isPlayTimeCalculated();
+	}
+
 	private void load(String fileName)
 	{
 		File file;

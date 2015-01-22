@@ -14,6 +14,7 @@ public class Gui
 	private int dist = 0;
 
 	private int playTimeEffect = 0;
+	private boolean playTimeCalculated = false;
 
 	public Gui()
 	{
@@ -43,6 +44,11 @@ public class Gui
 	public void setFont(Font font)
 	{
 		this.font = font;
+	}
+
+	public boolean isPlayTimeCalculated()
+	{
+		return this.playTimeCalculated;
 	}
 
 	public void draw() // draws game object
@@ -109,6 +115,11 @@ public class Gui
 				if (playTimeEffect < this.level.getPlayTime())
 				{
 					playTimeEffect+=Sdl.framesPerSecond/4;
+				}
+				else
+				{
+					playTimeEffect = this.level.getPlayTime();
+					playTimeCalculated = true;
 				}
 			}
 			else if (this.player.isDead())

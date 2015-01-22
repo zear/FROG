@@ -26,7 +26,7 @@ public class Creature extends GameObject
 
 	protected LevelLayer levelLayer;	// the middle-layer of the level
 	protected Collision collision;		// reference to collision map passed by the Level object
-	private Level level;			// Current level. We use that to be able to spawn new objects within the current object. Ugly!
+	protected Level level;			// Current level. We use that to be able to spawn new objects within the current object. Ugly!
 
 	public Creature(LevelLayer lay, Collision col, Level lev)
 	{

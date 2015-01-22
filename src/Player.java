@@ -97,8 +97,11 @@ public class Player extends Creature
 		keys[5] = Sdl.getInput(SDLKey.SDLK_LALT);
 
 		// TODO: move this elsewhere
-		if (keys[4] && dead)
+		if (keys[4] && (dead || (this.level.isComplete() && this.level.isPlayTimeCalculated())))
+		{
 			GameStateGame.leaveGame = true;
+			keys[4] = false;
+		}
 		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
 			GameStateGame.leaveGame = true;
 		if (Sdl.getInput(SDLKey.SDLK_f))
