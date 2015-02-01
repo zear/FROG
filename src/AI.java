@@ -166,19 +166,22 @@ public class AI
 	public void addAction(int type)
 	{
 		actionList.add(new AIAction(type));
-		this.resetActions();
+		curAction = actionList.get(actionList.size() - 1);
 	}
 
 	public void addAction(int type, int time)
 	{
 		actionList.add(new AIAction(type, time));
-		this.resetActions();
+		curAction = actionList.get(actionList.size() - 1);
 	}
 
 	public void resetActions()
 	{
-		actionListIterator = actionList.listIterator();
-		curAction = actionList.get(0);
+		if (this.hasActions())
+		{
+			actionListIterator = actionList.listIterator();
+			curAction = actionList.get(0);
+		}
 	}
 
 	public void setNextAction()

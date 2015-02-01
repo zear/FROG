@@ -496,7 +496,7 @@ public class Level
 						}
 						catch (Exception e)
 						{
-							System.out.printf("Failed to load object file: test.obj\n");
+							System.out.printf("Failed to load object file\n");
 							return;
 							// todo
 						}

@@ -83,6 +83,8 @@ public class Creature extends GameObject
 			ai.setVar(AI.FLY_PERIOD, 5f);
 			ai.addAction(AI.TURN);
 		}
+
+		ai.resetActions();
 	}
 
 	public float getVx()
