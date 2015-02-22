@@ -62,6 +62,7 @@ public class GameStateMenu implements GameState
 			episodeList = new ArrayList<Episode>();
 		}
 		File folder = new File(directory);
+		folder.mkdir();
 		File[] fileList = folder.listFiles();
 
 		for (File curFile : fileList)
@@ -174,6 +175,7 @@ public class GameStateMenu implements GameState
 						if (episodeList == null)
 						{
 							loadEpisodes("./data/level/");
+							loadEpisodes(Program.configDir + "custom/");
 						}
 						parentMenu = curMenu;
 						curMenu = menuEpisodes;

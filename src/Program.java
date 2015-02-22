@@ -1,8 +1,10 @@
+import java.io.File;
 import sdljava.*;
 
 public class Program
 {
 	public static Game game;
+	public static String configDir = null;
 	public static String levelName = null;
 	public static void main(String [] args)
 	{
@@ -36,6 +38,14 @@ public class Program
 			{
 				Game.debugMode = true;
 			}
+		}
+
+		Program.configDir = System.getProperty("user.home");
+		if (Program.configDir != null)
+		{
+			Program.configDir += "/.frog/";
+			File dir = new File(Program.configDir);
+			dir.mkdir();
 		}
 
 		Sdl.initSDL();
