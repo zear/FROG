@@ -55,12 +55,12 @@ public class GameStateGame implements GameState
 
 		if (Program.levelName != null)
 		{
-			level = new Level(Program.levelName);
+			level = new Level("", Program.levelName);
 			intro = false;
 		}
 		else if (episode != null)
 		{
-			level = new Level(episode.getLevel(levelNum));
+			level = new Level(episode.getDirectory(), episode.getLevel(levelNum));
 		}
 
 		if (oldPlayer != null)

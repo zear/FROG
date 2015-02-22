@@ -22,14 +22,14 @@ public class Level
 
 	private Player playerObj = null;
 
-	public Level(String fileName) // constructor
+	public Level(String directory, String fileName) // constructor
 	{
 		objTemp = new ArrayList<GameObjectTemplate>();
 		objTemp2 = new ArrayList<GameObject>();
 		objs = new ArrayList<GameObject>();
 		newObjs = new ArrayList<GameObject>();
 		layers = new ArrayList<LevelLayer>();
-		load(fileName);
+		load(directory, fileName);
 		gui = new Gui();
 		gui.setLevel(this);
 		complete = false;
@@ -79,10 +79,10 @@ public class Level
 		return playerObj;
 	}
 
-	private void load(String fileName)
+	private void load(String directory, String fileName)
 	{
 		File file;
-		file = new File((Program.levelName != null ? "" : "./data/level/") + fileName);
+		file = new File(directory + fileName);
 
 		FileIO fp = new FileIO(file);
 

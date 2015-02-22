@@ -50,21 +50,25 @@ public class GameStateMenu implements GameState
 	private int fadeTotalSteps;
 	private int fadeTo;
 
-	private void loadEpisodes()
+	private void loadEpisodes(String directory)
 	{
-		if (episodeList != null)
+		if (directory == null)
 			return;
 
 		int i = 0;
-		episodeList = new ArrayList<Episode>();
-		File folder = new File("./data/level/");
+
+		if (episodeList == null)
+		{
+			episodeList = new ArrayList<Episode>();
+		}
+		File folder = new File(directory);
 		File[] fileList = folder.listFiles();
 
 		for (File curFile : fileList)
 		{
 			if (curFile.isFile() && curFile.getName().endsWith(".ep"))
 			{
-				episodeList.add(new Episode(curFile.getName()));
+				episodeList.add(new Episode(directory, curFile.getName()));
 			}
 		}
 
@@ -167,7 +171,10 @@ public class GameStateMenu implements GameState
 					else
 					{
 						// Show episode selection.
-						loadEpisodes();
+						if (episodeList == null)
+						{
+							loadEpisodes("./data/level/");
+						}
 						parentMenu = curMenu;
 						curMenu = menuEpisodes;
 						curSelection = 0;

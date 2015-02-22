@@ -3,13 +3,20 @@ import java.io.File;
 
 public class Episode
 {
+	private String directory = "";
 	private String title = "";
 	private int id = -1;
 	private ArrayList<String> levelList = null;
 
-	public Episode(String fileName)
+	public Episode(String directory, String fileName)
 	{
+		this.directory = directory;
 		load(fileName);
+	}
+
+	public String getDirectory()
+	{
+		return this.directory;
 	}
 
 	public String getTitle()
@@ -46,7 +53,7 @@ public class Episode
 	{
 		File file;
 
-		file = new File("./data/level/" + fileName);
+		file = new File(directory + fileName);
 		FileIO fp = new FileIO(file);
 
 		if (fp != null)
