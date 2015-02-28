@@ -4,30 +4,32 @@ import java.util.ListIterator;
 public class AI
 {
 	// AI types
-	public static final int NONE		= 0;
-	public static final int WAIT		= 1;
-	public static final int WALK		= 2;
-	public static final int JUMP		= 3;
-	public static final int FLY		= 4;
-	public static final int SPAWN_OBJ	= 5;
-	public static final int TURN		= 6;
+	public static final int NONE			= 0;
+	public static final int WAIT			= 1;
+	public static final int WALK			= 2;
+	public static final int JUMP			= 3;
+	public static final int FLY			= 4;
+	public static final int SPAWN_OBJ		= 5;
+	public static final int TURN			= 6;
 
 	// AI action var names
-	public static final int WALK_VX		= 0;
-	public static final int WALK_DROP	= 1;
-	public static final int JUMP_VX		= 0;
-	public static final int JUMP_VY		= 1;
-	public static final int FLY_VX		= 0;
-	public static final int FLY_AMPLITUDE	= 1;
-	public static final int FLY_PERIOD	= 2;
-	public static final int SPAWN_OBJ_OBJVX	= 1;
-	public static final int SPAWN_OBJ_OBJVY	= 2;
+	public static final int WALK_VX			= 0;
+	public static final int WALK_DROP		= 1;
+	public static final int JUMP_VX			= 0;
+	public static final int JUMP_VY			= 1;
+	public static final int FLY_VX			= 0;
+	public static final int FLY_AMPLITUDE		= 1;
+	public static final int FLY_PERIOD		= 2;
+	public static final int SPAWN_OBJ_OBJVX		= 1;
+	public static final int SPAWN_OBJ_OBJVY		= 2;
+	public static final int TURN_TOWARDS_PLAYER	= 0;
 
 	private static class AIAction
 	{
 		private int type;
 		private int timer;
 		private int origTime;
+		private boolean goToNextAction;
 
 		// Variables used for sine wave
 		private int sinePeriod;
@@ -74,6 +76,16 @@ public class AI
 		public void resetTimer()
 		{
 			this.timer = origTime;
+		}
+
+		public boolean isGoToNextAction()
+		{
+			return this.goToNextAction;
+		}
+
+		public void setGoToNextAction(boolean value)
+		{
+			this.goToNextAction = value;
 		}
 
 		public int getSinePeriod()
@@ -180,7 +192,10 @@ public class AI
 		if (this.hasActions())
 		{
 			actionListIterator = actionList.listIterator();
-			curAction = actionList.get(0);
+			if (actionListIterator.hasNext())
+			{
+				curAction = actionListIterator.next();
+			}
 		}
 	}
 
@@ -188,11 +203,14 @@ public class AI
 	{
 		curAction.resetTimer();
 		if (actionListIterator.hasNext())
+		{
 			curAction = actionListIterator.next();
+		}
 		else
 		{
 			this.resetActions();
 		}
+		curAction.goToNextAction = false;
 	}
 
 	public int getType()
@@ -208,6 +226,16 @@ public class AI
 	public int getTimer()
 	{
 		return this.curAction.getTimer();
+	}
+
+	public boolean isGoToNextAction()
+	{
+		return this.curAction.isGoToNextAction();
+	}
+
+	public void setGoToNextAction(boolean value)
+	{
+		this.curAction.setGoToNextAction(value);
 	}
 
 	public int getSinePeriod()

@@ -227,6 +227,12 @@ public class Creature extends GameObject
 				// If creature is on the ground, jump.
 				if (this.isOnGround)
 				{
+					if (this.ai.isGoToNextAction())
+					{
+						this.ai.setNextAction();
+						break;
+					}
+
 					this.jump(-this.ai.getVar(AI.JUMP_VY));
 					if (!this.direction)	// left
 					{
@@ -236,7 +242,8 @@ public class Creature extends GameObject
 					{
 						this.walk(this.ai.getVar(AI.JUMP_VX));
 					}
-					this.ai.setNextAction();
+
+					this.ai.setGoToNextAction(true);
 				}
 			break;
 			// Fly.
@@ -294,8 +301,23 @@ public class Creature extends GameObject
 			break;
 			// Change direction.
 			case AI.TURN:
-				this.direction = !this.direction;
-				this.vx = 0;
+				if (this.ai.getVar(AI.TURN_TOWARDS_PLAYER) != 0)
+				{
+					Player playerObj = level.getPlayer();
+
+					if ((this.x + this.w) < playerObj.x)
+					{
+						this.direction = true; // right
+					}
+					else if (this.x > (playerObj.x + playerObj.w))
+					{
+						this.direction = false; // left
+					}
+				}
+				else
+				{
+					this.direction = !this.direction;
+				}
 
 				this.ai.setNextAction();
 			break;
@@ -1069,8 +1091,6 @@ public class Creature extends GameObject
 				if (((Player)this).getAction(1))	// right
 					this.direction = true;
 			}
-			else
-				this.direction = true;
 		}
 		else if (vx < 0)
 		{
@@ -1079,8 +1099,6 @@ public class Creature extends GameObject
 				if (((Player)this).getAction(0))	// left
 					this.direction = false;
 			}
-			else
-				this.direction = false;
 		}
 
 		updateAnimation();
