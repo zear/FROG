@@ -77,7 +77,7 @@ public class Creature extends GameObject
 		}
 		else if (this.getName().equals("dragonfly"))
 		{
-			ai.addAction(AI.FLY, 60);
+			ai.addAction(AI.FLY, 120);
 			ai.setVar(AI.FLY_VX, 0.75f);
 			ai.setVar(AI.FLY_AMPLITUDE, 1f);
 			ai.setVar(AI.FLY_PERIOD, 5f);
