@@ -713,7 +713,15 @@ public class Level
 			{
 				for (GameObject curObj : objs)
 				{
-					curObj.draw(camera);
+					if (!(curObj instanceof Item))
+						curObj.draw(camera);
+				}
+
+				// Make sure ITEM objects are drawn on top of all the other objects
+				for (GameObject curObj : objs)
+				{
+					if (curObj instanceof Item)
+						curObj.draw(camera);
 				}
 			}
 
