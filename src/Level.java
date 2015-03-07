@@ -555,7 +555,7 @@ public class Level
 			int ox = (int)tmpObj.x;
 			int oy = (int)tmpObj.y;
 
-			if ((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH))
+			if ((tmpObj instanceof Creature && ((Creature)tmpObj).isHurt()) || ((ox + tmpObj.w - 1 > zoneX && ox < zoneX + zoneW) && (oy + tmpObj.h - 1 > zoneY && oy < zoneY + zoneH)))
 			{
 				if (tmpObj instanceof Creature && tmpObj != player)
 				{
@@ -569,7 +569,7 @@ public class Level
 					tmpCreature.doAi();
 					tmpCreature.move();
 
-					if (player.isVulnerable() && !player.isDead() && !tmpCreature.getName().equals("swoosh"))
+					if (player.isVulnerable() && !player.isDead() && !tmpCreature.isHurt() && !tmpCreature.getName().equals("swoosh"))
 					{
 						if ((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 						{
@@ -669,7 +669,14 @@ public class Level
 						{
 							if ((oy >= cy && oy <= cy + tmpCreature.h - 1) || (oy + curObj.h - 1 >= cy && oy + curObj.h - 1 <= cy + tmpCreature.h - 1) || (oy < cy && oy + curObj.h - 1 > cy + tmpCreature.h - 1))
 							{
-								curObj.setRemoval(true);
+								if (curObj instanceof Creature)
+								{
+									((Creature)curObj).hurt(tmpCreature.vx > 0 ? true : false);
+								}
+								else
+								{
+									curObj.setRemoval(true);
+								}
 								tmpCreature.setRemoval(true);
 							}
 						}

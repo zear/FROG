@@ -24,6 +24,9 @@ public class Creature extends GameObject
 
 	protected int hp;
 
+	private boolean hurt = false;
+	private boolean hurtOnGround = false;
+
 	protected LevelLayer levelLayer;	// the middle-layer of the level
 	protected Collision collision;		// reference to collision map passed by the Level object
 	protected Level level;			// Current level. We use that to be able to spawn new objects within the current object. Ugly!
@@ -115,6 +118,25 @@ public class Creature extends GameObject
 		this.hp = value;
 	}
 
+	public void hurt(boolean direction)
+	{
+		this.hurt = true;
+		this.hp--;
+		this.setVulnerability(false);
+		this.vx = (direction ? 2 : -2);
+		this.vy = -5;
+
+		if (!this.affectedByGravity && hp <= 0)
+		{
+			this.affectedByGravity = true;
+		}
+	}
+
+	public boolean isHurt()
+	{
+		return this.hurt;
+	}
+
 	/**
 	 * Makes the creature crouch.
 	 * If climbCheck() is true, this method will cause the creature to climb down.
@@ -190,6 +212,11 @@ public class Creature extends GameObject
 	{
 		if (!this.ai.hasActions()) // No need to perform the rest of the method if the object has no AI actions.
 			return;
+
+		if (this.hurt)
+		{
+			return;
+		}
 
 		// Check AI action type and perform appropriate logic.
 		switch (this.ai.getType())
@@ -756,8 +783,11 @@ public class Creature extends GameObject
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vx = 0;
-				if (!(this instanceof Player))
+
+				if (!(this instanceof Player) && !hurt)
+				{
 					this.direction = !this.direction;
+				}
 			}
 			// If no collision occured, creature is free to continue its movement.
 			else
@@ -766,7 +796,7 @@ public class Creature extends GameObject
 			}
 
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
-			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
+			if (!(this instanceof Player) && !hurt && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(true);
 			}
@@ -823,8 +853,11 @@ public class Creature extends GameObject
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vx = 0;
-				if (!(this instanceof Player))
+
+				if (!(this instanceof Player) && !hurt)
+				{
 					this.direction = !this.direction;
+				}
 			}
 			// If no collision occured, creature is free to continue its movement.
 			else
@@ -833,7 +866,7 @@ public class Creature extends GameObject
 			}
 
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
-			if (!(this instanceof Player) && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
+			if (!(this instanceof Player) && !hurt && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
 				dropCheck(false);
 			}
@@ -987,10 +1020,6 @@ public class Creature extends GameObject
 				if (!((Player)this).isDead())
 					((Player)this).setDead(true);
 			}
-			else
-			{
-				this.setRemoval(true);
-			}
 		}
 		if (this instanceof Projectile)
 		{
@@ -999,6 +1028,29 @@ public class Creature extends GameObject
 				this.setRemoval(true);
 			}
 			((Projectile)this).ttlCountdown();
+		}
+
+		if (hurt)
+		{
+			if (isOnGround && !hurtOnGround)
+			{
+				hurtOnGround = true;
+
+				setInvincibility(30);
+				setBlinking(30);
+			}
+
+			if (hurtOnGround && !this.isBlinking())
+			{
+				this.hurt = false;
+				this.hurtOnGround = false;
+				this.setVulnerability(true);
+
+				if (hp <= 0)
+				{
+					this.setRemoval(true);
+				}
+			}
 		}
 	}
 
@@ -1066,6 +1118,11 @@ public class Creature extends GameObject
 				if (!(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && newAnim != "ATTACK")
 					newAnim = "CLIMB";
 			}
+		}
+
+		if (hurt)
+		{
+			newAnim = "HURT";
 		}
 
 		if (newAnim != null)
@@ -1137,10 +1194,17 @@ public class Creature extends GameObject
 
 		if (this.isOnGround)
 		{
-			if (vx > 0)
-				vx-= 0.1;
-			else if (vx < 0)
-				vx+= 0.1;
+			if (hurt)
+			{
+				vx = 0;
+			}
+			else
+			{
+				if (vx > 0)
+					vx-= 0.1;
+				else if (vx < 0)
+					vx+= 0.1;
+			}
 
 			if (this.isClimbing)
 				this.isClimbing = false;

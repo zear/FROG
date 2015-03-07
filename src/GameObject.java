@@ -208,6 +208,11 @@ public class GameObject
 		this.blinkTimer = this.blinkOrigTime;
 	}
 
+	public boolean isBlinking()
+	{
+		return this.isBlinking;
+	}
+
 	private void blinkingCountdown()
 	{
 		if (this.blinkTimer > 0)
