@@ -354,6 +354,9 @@ public class GameObject
 				return;
 		}
 
+		if (this.removal)
+			return;
+
 		this.blinkingCountdown();
 
 		if (!doDraw)
