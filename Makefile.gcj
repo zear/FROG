@@ -11,33 +11,13 @@ CPPFLAGS := -I $(SDLJAVA)/src -I$(SRC_DIR)
 JFLAGS := -O3
 LDFLAGS := -L $(SDLJAVA)/lib -ljsdl -lgcj
 
-OBJS := AI.o \
-	Animation.o \
-	Camera.o \
-	Collision.o \
-	Creature.o \
-	FileIO.o \
-	Font.o \
-	Game.o \
-	GameObject.o \
-	GameObjectTemplate.o \
-	GameStateEnum.o \
-	GameStateGame.o \
-	GameState.o \
-	GameStateMenu.o \
-	Gui.o \
-	Input.o \
-	Level.o \
-	LevelLayer.o \
-	Player.o \
-	Program.o \
-	Replay.o \
-	Sdl.o
+SRC := $(wildcard $(SRC_DIR)/*.java)
+OBJS := $(SRC:$(SRC_DIR)/%.java=$(SRC_DIR)/%.o)
 
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): $(SRC_DIR)/$(OBJS)
+$(TARGET): $(OBJS)
 	$(JC) $(JFLAGS) --main=Program -o $@ $^ $(LDFLAGS)
 
 %.o: %.java
@@ -46,4 +26,4 @@ $(TARGET): $(SRC_DIR)/$(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(SRC_DIR)/$(OBJS)
+	rm -f $(TARGET) $(OBJS)
