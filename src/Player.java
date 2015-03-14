@@ -22,6 +22,21 @@ public class Player extends Creature
 		attackObjs = new ArrayList<GameObject>();
 	}
 
+	public void hurt(boolean direction)
+	{
+		this.hurt = true;
+		this.acceptInput = false;
+		this.hp--;
+		this.vx = (direction ? 2 : -2);
+		this.vy = -2;
+		this.isOnGround = false;
+
+		if (!this.affectedByGravity && hp <= 0)
+		{
+			this.affectedByGravity = true;
+		}
+	}
+
 	public float getWalkV()
 	{
 		return this.walkV;
@@ -153,7 +168,7 @@ public class Player extends Creature
 		String newAnim = null;
 		Animation curAnim = this.getAnimation();
 
-		if (curAnim.getAnimName().equals("ATTACK") && curAnim.isOver())
+		if (curAnim.getAnimName().equals("ATTACK") && curAnim.isOver() && !hurt)
 		{
 			((Player)this).setAcceptInput(true);
 		}
@@ -230,7 +245,7 @@ public class Player extends Creature
 
 		if (newAnim != null)
 		{
-			if (this instanceof Player && !(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && !newAnim.equals("ATTACK"))
+			if (this instanceof Player && !(curAnim.getAnimName().equals("ATTACK") && !curAnim.isOver()) && !newAnim.equals("ATTACK") && !hurt)
 			{
 				((Player)this).setAcceptInput(true);
 			}

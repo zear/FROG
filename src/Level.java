@@ -569,41 +569,18 @@ public class Level
 					tmpCreature.doAi();
 					tmpCreature.move();
 
-					if (player.isVulnerable() && !player.isDead() && !tmpCreature.isHurt() && !tmpCreature.getName().equals("swoosh"))
+					if (player.isVulnerable() && !player.isDead() && !player.isHurt() && !tmpCreature.isHurt() && !tmpCreature.getName().equals("swoosh"))
 					{
 						if ((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 						{
 							if ((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
 							{
-								// Pushes the player away from the creature.
-								if (px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
-								{
-									player.vx += 1;
-								}
-								else
-								{
-									player.vx -= 1;
-								}
-
-								player.hp--;
-								player.setInvincibility(90);
-								player.setBlinking(90);
+								player.hurt(player.vx > 0 ? false : true);
 
 								if (player.hp <= 0)
 								{
 									camera.setTarget(tmpCreature);
 								}
-								//player.setAcceptInput(false);
-
-								// Pushes the creature away from the player.
-//								if (px + (player.w - 1)/2 > cx + (tmpCreature.w - 1)/2)
-//								{
-//									tmpCreature.vx -= 2;
-//								}
-//								else
-//								{
-//									tmpCreature.vx += 2;
-//								}
 							}
 						}
 					}

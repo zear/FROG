@@ -24,8 +24,8 @@ public class Creature extends GameObject
 
 	protected int hp;
 
-	private boolean hurt = false;
-	private boolean hurtOnGround = false;
+	protected boolean hurt = false;
+	protected boolean hurtOnGround = false;
 
 	protected LevelLayer levelLayer;	// the middle-layer of the level
 	protected Collision collision;		// reference to collision map passed by the Level object
@@ -1013,14 +1013,6 @@ public class Creature extends GameObject
 	{
 		super.logic();
 
-		if (this.hp <= 0)
-		{
-			if (this instanceof Player)
-			{
-				if (!((Player)this).isDead())
-					((Player)this).setDead(true);
-			}
-		}
 		if (this instanceof Projectile)
 		{
 			if (((Projectile)this).getTtl() <= 0)
@@ -1036,19 +1028,43 @@ public class Creature extends GameObject
 			{
 				hurtOnGround = true;
 
-				setInvincibility(30);
-				setBlinking(30);
+				if (this instanceof Player)
+				{
+					setInvincibility(90);
+					setBlinking(90);
+				}
+				else
+				{
+					setInvincibility(30);
+					setBlinking(30);
+				}
 			}
 
-			if (hurtOnGround && !this.isBlinking())
+			if (hurtOnGround)
 			{
-				this.hurt = false;
-				this.hurtOnGround = false;
-				this.setVulnerability(true);
-
-				if (hp <= 0)
+				if (this instanceof Player)
 				{
-					this.setRemoval(true);
+					if (hp <= 0)
+					{
+						if (!((Player)this).isDead())
+							((Player)this).setDead(true);
+					}
+					else
+					{
+						((Player)this).setAcceptInput(true);
+					}
+				}
+
+				if (!this.isBlinking())
+				{
+					this.hurt = false;
+					this.hurtOnGround = false;
+					this.setVulnerability(true);
+
+					if (!(this instanceof Player) && hp <= 0)
+					{
+						this.setRemoval(true);
+					}
 				}
 			}
 		}
