@@ -575,7 +575,7 @@ public class Level
 						{
 							if ((py >= cy && py <= cy + tmpCreature.h - 1) || (py + player.h - 1 >= cy && py + player.h - 1 <= cy + tmpCreature.h - 1) || (py < cy && py + player.h - 1 > cy + tmpCreature.h - 1))
 							{
-								player.hurt(player.vx > 0 ? false : true);
+								player.hurt(player.vx == 0 ? (tmpCreature.vx > 0 ? true : false) : (player.vx > 0 ? false : true));
 
 								if (player.hp <= 0)
 								{
