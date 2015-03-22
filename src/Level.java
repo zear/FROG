@@ -443,9 +443,9 @@ public class Level
 				if (playerObj.acceptInput())
 				{
 					if (playerObj.getAction(0))		// left
-						playerObj.walk(-playerObj.getWalkV());
+						playerObj.walk(-0.25f);
 					if (playerObj.getAction(1))		// right
-						playerObj.walk(playerObj.getWalkV());
+						playerObj.walk(0.25f);
 					if (playerObj.getAction(2))		// up
 					{
 						if (playerObj.isClimbing)

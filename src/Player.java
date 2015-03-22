@@ -37,6 +37,20 @@ public class Player extends Creature
 		}
 	}
 
+	public void walk(float vx)
+	{
+		this.vx += vx;
+
+		if (this.vx < -this.walkV)
+		{
+			this.vx = -this.walkV;
+		}
+		else if (this.vx > this.walkV)
+		{
+			this.vx = this.walkV;
+		}
+	}
+
 	public float getWalkV()
 	{
 		return this.walkV;

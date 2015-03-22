@@ -1161,7 +1161,7 @@ public class Creature extends GameObject
 		{
 			if (this instanceof Player)
 			{
-				if (((Player)this).getAction(1))	// right
+				if (((Player)this).getAction(1) && ((Player)this).acceptInput()) // right
 					this.direction = true;
 			}
 		}
@@ -1169,7 +1169,7 @@ public class Creature extends GameObject
 		{
 			if (this instanceof Player)
 			{
-				if (((Player)this).getAction(0))	// left
+				if (((Player)this).getAction(0) && ((Player)this).acceptInput()) // left
 					this.direction = false;
 			}
 		}
@@ -1182,8 +1182,8 @@ public class Creature extends GameObject
 			vx = -3;
 		if (vy > 4)
 			vy = 4;
-		if (vy < -4)
-			vy = -4;
+		if (vy < -5)
+			vy = -5;
 
 		if (isClimbing)
 		{
@@ -1210,7 +1210,7 @@ public class Creature extends GameObject
 
 		if (this.isOnGround)
 		{
-			if (hurt)
+			if (hurt && !this.isBlinking())
 			{
 				vx = 0;
 			}
