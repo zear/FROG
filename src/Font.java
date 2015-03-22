@@ -112,21 +112,21 @@ public class Font
 		draw(text, Sdl.SCREEN_WIDTH/2 - width/2, y);
 	}
 
-	public void drawFloating(String text, int x, int y, int step)
+	public void drawFloating(String text, int x, int y, int step, int amplitude)
 	{
 		int period = this.sinePeriod;
 
 		for (int i = 0; i < text.length(); i++)
 		{
 			period = (period + 45) % 360;
-			int height = (int)(y + SineTable.TABLE[period]*5);
+			int height = (int)(y + SineTable.TABLE[period]*amplitude);
 			draw(text.substring(i, i+1), x, height);
 			x += this.kerning + this.w;
 		}
 		increaseSinePeriod(step);
 	}
 
-	public void drawFloatingCentered(String text, int y, int step)
+	public void drawFloatingCentered(String text, int y, int step, int amplitude)
 	{
 		int width = 0;
 
@@ -140,7 +140,7 @@ public class Font
 				width += this.kerning;
 		}
 
-		drawFloating(text, Sdl.SCREEN_WIDTH/2 - width/2, y, step);
+		drawFloating(text, Sdl.SCREEN_WIDTH/2 - width/2, y, step, amplitude);
 	}
 
 	public void increaseSinePeriod(int step)
