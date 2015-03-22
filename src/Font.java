@@ -10,6 +10,8 @@ public class Font
 	private int kerning;	// horizontal distance between characters
 	private int leading;	// vertical distance between verses
 
+	private int sinePeriod;
+
 //	public Font(String fileName, int w, int h)
 //	{
 //		this.Font(fileName, w, h, 1, 4); // init with default kerning (1px) and leading (4px)
@@ -41,7 +43,7 @@ public class Font
 
 		this.kerning = kerning;
 		this.leading = leading;
-
+		this.sinePeriod = 0;
 	}
 
 	public int getW()
@@ -108,6 +110,47 @@ public class Font
 		}
 
 		draw(text, Sdl.SCREEN_WIDTH/2 - width/2, y);
+	}
+
+	public void drawFloating(String text, int x, int y, int step)
+	{
+		int period = this.sinePeriod;
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			period = (period + 45) % 360;
+			int height = (int)(y + SineTable.TABLE[period]*5);
+			draw(text.substring(i, i+1), x, height);
+			x += this.kerning + this.w;
+		}
+		increaseSinePeriod(step);
+	}
+
+	public void drawFloatingCentered(String text, int y, int step)
+	{
+		int width = 0;
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			if (text.charAt(i) == '\n') // line break
+				break;
+
+			width += this.w;
+			if (i < text.length() - 1)
+				width += this.kerning;
+		}
+
+		drawFloating(text, Sdl.SCREEN_WIDTH/2 - width/2, y, step);
+	}
+
+	public void increaseSinePeriod(int step)
+	{
+		this.sinePeriod+= step;
+
+		if (this.sinePeriod >= SineTable.STEPS)
+		{
+			this.sinePeriod = 0;
+		}
 	}
 
 }
