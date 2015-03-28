@@ -56,6 +56,16 @@ public class Font
 		return this.h;
 	}
 
+	public int getKerning()
+	{
+		return this.kerning;
+	}
+
+	public int getLeading()
+	{
+		return this.leading;
+	}
+
 	public void draw(String text, int x, int y)
 	{
 		SDLRect r = new SDLRect();

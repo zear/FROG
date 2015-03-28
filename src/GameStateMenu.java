@@ -9,12 +9,13 @@ public class GameStateMenu implements GameState
 {
 	private static final int MENU_EPISODES = 0;
 	private static final int MENU_OPTIONS = 1;
-	private static final int MENU_EXIT = 2;
-	private static final int MENU_LAUNCH_EPISODE = 3;
-	private static final int MENU_FPS = 4;
-	private static final int MENU_DEBUG = 5;
-	private static final int MENU_SEPARATOR = 6;
-	private static final int MENU_BACK = 7;
+	private static final int MENU_CREDITS = 2;
+	private static final int MENU_EXIT = 3;
+	private static final int MENU_LAUNCH_EPISODE = 4;
+	private static final int MENU_FPS = 5;
+	private static final int MENU_DEBUG = 6;
+	private static final int MENU_SEPARATOR = 7;
+	private static final int MENU_BACK = 8;
 
 	private int[] curMenu;
 	private int[] parentMenu;
@@ -26,6 +27,7 @@ public class GameStateMenu implements GameState
 	{
 		MENU_EPISODES,
 		MENU_OPTIONS,
+		MENU_CREDITS,
 		MENU_EXIT
 	};
 	private int[] menuEpisodes;
@@ -187,6 +189,9 @@ public class GameStateMenu implements GameState
 					curMenu = menuOptions;
 					curSelection = 0;
 				break;
+				case MENU_CREDITS:
+					Program.game.changeState(GameStateEnum.STATE_CREDITS);
+				break;
 				case MENU_EXIT:
 					Program.game.changeState(GameStateEnum.STATE_EXIT);
 				break;
@@ -265,6 +270,9 @@ public class GameStateMenu implements GameState
 					break;
 					case MENU_OPTIONS:
 						word = "Options";
+					break;
+					case MENU_CREDITS:
+						word = "Credits";
 					break;
 					case MENU_EXIT:
 						word = "Quit";

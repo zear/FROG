@@ -2,6 +2,7 @@
 public class Game
 {
 	private GameStateMenu stateMenu = new GameStateMenu();
+	private GameStateCredits stateCredits = new GameStateCredits();
 	private GameStateGame stateGame = new GameStateGame();
 	private GameState activeState = null;
 	private GameState newState = stateMenu;
@@ -48,6 +49,9 @@ public class Game
 			break;
 			case STATE_MENU:
 				newState = stateMenu;
+			break;
+			case STATE_CREDITS:
+				newState = stateCredits;
 			break;
 			case STATE_GAME:
 				newState = stateGame;
