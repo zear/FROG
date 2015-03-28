@@ -5,6 +5,7 @@ public class GameStateCredits implements GameState
 	private Font font;
 	private boolean[] keys;
 	private int scroll;
+	private boolean doScroll;
 	private int scrollTimer;
 	private int lineHeight;
 
@@ -37,12 +38,24 @@ public class GameStateCredits implements GameState
 	{
 		input();
 
+		doScroll = true;
+
 		if (keys[Input.KEY_JUMP])
 		{
 			keys[Input.KEY_JUMP] = false;
 			Sdl.putInput(SDLKey.SDLK_LCTRL, keys[Input.KEY_JUMP]);
 
 			Program.game.changeState(GameStateEnum.STATE_MENU);
+		}
+		else if (keys[Input.KEY_UP])
+		{
+			doScroll = false;
+			scroll--;
+		}
+		else if (keys[Input.KEY_DOWN])
+		{
+			doScroll = false;
+			scroll++;
 		}
 	}
 
@@ -89,7 +102,7 @@ public class GameStateCredits implements GameState
 		lineHeight += Sdl.SCREEN_HEIGHT;
 		font.drawFloatingCentered("Thank YOU for playing!", Sdl.SCREEN_HEIGHT - scroll + getLineHeight(), 1, 3);
 
-		if (scrollTimer-- <= 0)
+		if (doScroll && scrollTimer-- <= 0)
 		{
 			scrollTimer = 3;
 			scroll++;
@@ -98,6 +111,10 @@ public class GameStateCredits implements GameState
 		if (scroll > lineHeight + font.getH() + font.getLeading() + Sdl.SCREEN_HEIGHT)
 		{
 			scroll = 0;
+		}
+		else if (scroll < 0)
+		{
+			scroll = lineHeight + font.getH() + font.getLeading() + Sdl.SCREEN_HEIGHT;
 		}
 
 		Sdl.flip(Sdl.screen);
