@@ -146,6 +146,7 @@ public class Player extends Creature
 		{
 			GameStateGame.leaveGame = true;
 			keys[Input.KEY_JUMP] = false;
+			Sdl.putInput(SDLKey.SDLK_LCTRL, keys[Input.KEY_JUMP]);
 		}
 		if (Sdl.getInput(SDLKey.SDLK_ESCAPE))
 		{

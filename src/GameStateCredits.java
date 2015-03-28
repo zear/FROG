@@ -40,6 +40,7 @@ public class GameStateCredits implements GameState
 		if (keys[Input.KEY_JUMP])
 		{
 			keys[Input.KEY_JUMP] = false;
+			Sdl.putInput(SDLKey.SDLK_LCTRL, keys[Input.KEY_JUMP]);
 
 			Program.game.changeState(GameStateEnum.STATE_MENU);
 		}
