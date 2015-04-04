@@ -638,6 +638,17 @@ public class Creature extends GameObject
 				this.y += curVy;
 			}
 
+			if ((col & Collision.COLLISION_DAMAGE) > 0)
+			{
+				if (this instanceof Player && !this.hurt)
+				{
+					if (((int)this.y + this.h - 1) >= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+					{
+						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+					}
+				}
+			}
+
 			// Special collision check with a different collision area for climbable tiles (ie. ladder).
 			col = Collision.COLLISION_NONE;
 			for (int i = (x1 + 6)/LevelLayer.TILE_SIZE; i <= (x2 - 6)/LevelLayer.TILE_SIZE; i++)
@@ -711,6 +722,17 @@ public class Creature extends GameObject
 			else
 			{
 				this.y += curVy;
+			}
+
+			if ((col & Collision.COLLISION_DAMAGE) > 0)
+			{
+				if (this instanceof Player && !this.hurt)
+				{
+					if (((int)this.y) <= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE)
+					{
+						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+					}
+				}
 			}
 
 			// Special collision check with a different collision area for climbable tiles (ie. ladder).
@@ -795,6 +817,17 @@ public class Creature extends GameObject
 				this.x += curVx;
 			}
 
+			if ((col & Collision.COLLISION_DAMAGE) > 0)
+			{
+				if (this instanceof Player && !this.hurt)
+				{
+					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+					{
+						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+					}
+				}
+			}
+
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
 			if (!(this instanceof Player) && !hurt && this.ai.getType() == AI.WALK && this.ai.getVar(AI.WALK_DROP) != 0f)
 			{
@@ -863,6 +896,17 @@ public class Creature extends GameObject
 			else
 			{
 				this.x += curVx;
+			}
+
+			if ((col & Collision.COLLISION_DAMAGE) > 0)
+			{
+				if (this instanceof Player && !this.hurt)
+				{
+					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+					{
+						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+					}
+				}
 			}
 
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
