@@ -268,6 +268,29 @@ public class Level
 				{
 					newObj.setVulnerability(Integer.parseInt(words[1]) != 0);
 				}
+				else if (words[0].equals("INTER"))
+				{
+					InteractionType interaction = InteractionType.IGNORE;
+
+					if (words[1].equals("IGNORE"))
+					{
+						interaction = InteractionType.IGNORE;
+					}
+					else if (words[1].equals("DAMAGE"))
+					{
+						interaction = InteractionType.DAMAGE;
+					}
+					else if (words[1].equals("WALKABLE_PLATFORM"))
+					{
+						interaction = InteractionType.WALKABLE_PLATFORM;
+					}
+					else if (words[1].equals("WALKABLE_SOLID"))
+					{
+						interaction = InteractionType.WALKABLE_SOLID;
+					}
+
+					newObj.setInteraction(interaction);
+				}
 				else if (words[0].equals("WALK_V"))
 				{
 					if (newObj instanceof Player)
@@ -359,6 +382,7 @@ public class Level
 			newObj.putH(template.getH());
 			newObj.setTemplate(template.getTemplate());
 			newObj.setVulnerability(template.isVulnerable());
+			newObj.setInteraction(template.getInteraction());
 			newObj.setAnimation(template.getAnimation());
 			if (newObj instanceof Creature)
 			{
@@ -569,7 +593,7 @@ public class Level
 					tmpCreature.doAi();
 					tmpCreature.move();
 
-					if (player.isVulnerable() && !player.isDead() && !player.isHurt() && !tmpCreature.isHurt() && !tmpCreature.getName().equals("swoosh"))
+					if (player.isVulnerable() && !player.isDead() && !player.isHurt() && tmpCreature.getInteraction() == InteractionType.DAMAGE && !tmpCreature.isHurt())
 					{
 						if ((px >= cx && px <= cx + tmpCreature.w - 1) || (px + player.w - 1 >= cx && px + player.w - 1 <= cx + tmpCreature.w - 1) || (px < cx && px + player.w - 1 > cx + tmpCreature.w - 1))
 						{

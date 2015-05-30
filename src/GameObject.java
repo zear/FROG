@@ -12,6 +12,15 @@ enum ObjType
 	PLAYER
 }
 
+// Interaction with the player.
+enum InteractionType
+{
+	IGNORE,
+	DAMAGE,
+	WALKABLE_PLATFORM,
+	WALKABLE_SOLID
+}
+
 // GameObject class keeps all information necessary for objects on the map
 public class GameObject
 {
@@ -19,6 +28,7 @@ public class GameObject
 	private String objName;
 	private ObjType type;
 	private boolean removal = false;	// if true, object is flagged for removal
+	private InteractionType interaction = InteractionType.IGNORE;
 	protected float x;
 	protected float y;
 	protected int w;
@@ -114,6 +124,16 @@ public class GameObject
 	public void setRemoval(boolean value)
 	{
 		this.removal = value;
+	}
+
+	public InteractionType getInteraction()
+	{
+		return this.interaction;
+	}
+
+	public void setInteraction(InteractionType value)
+	{
+		this.interaction = value;
 	}
 
 	public void putX(int x)
