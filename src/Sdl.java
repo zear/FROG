@@ -26,6 +26,8 @@ public class Sdl
 	private static SDLSurface fadeSurface;
 	private static String windowTitle = "F.R.O.G.";
 	public static boolean enableJoystick = true;
+	private static boolean acceptJoyX = true;
+	private static boolean acceptJoyY = true;
 
 	public Sdl()
 	{
@@ -386,35 +388,41 @@ public class Sdl
 							switch (axis.getAxis())
 							{
 								case 0: // left-right
-									if (value < -deadzone)
+									if (acceptJoyX && value < -deadzone)
 									{
+										acceptJoyX = false;
 										putInput(SDLKey.SDLK_LEFT, true);
 										putInput(SDLKey.SDLK_RIGHT, false);
 									}
-									else if (value > deadzone)
+									else if (acceptJoyX && value > deadzone)
 									{
+										acceptJoyX = false;
 										putInput(SDLKey.SDLK_LEFT, false);
 										putInput(SDLKey.SDLK_RIGHT, true);
 									}
-									else
+									else if (value >= -deadzone && value <= deadzone)
 									{
+										acceptJoyX = true;
 										putInput(SDLKey.SDLK_LEFT, false);
 										putInput(SDLKey.SDLK_RIGHT, false);
 									}
 								break;
 								case 1: // up-down
-									if (value < -deadzone)
+									if (acceptJoyY && value < -deadzone)
 									{
+										acceptJoyY = false;
 										putInput(SDLKey.SDLK_UP, true);
 										putInput(SDLKey.SDLK_DOWN, false);
 									}
-									else if (value > deadzone)
+									else if (acceptJoyY && value > deadzone)
 									{
+										acceptJoyY = false;
 										putInput(SDLKey.SDLK_UP, false);
 										putInput(SDLKey.SDLK_DOWN, true);
 									}
-									else
+									else if (value >= -deadzone && value <= deadzone)
 									{
+										acceptJoyY = true;
 										putInput(SDLKey.SDLK_UP, false);
 										putInput(SDLKey.SDLK_DOWN, false);
 									}
