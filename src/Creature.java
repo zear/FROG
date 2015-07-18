@@ -86,6 +86,21 @@ public class Creature extends GameObject
 			ai.setVar(AI.FLY_PERIOD, 5f);
 			ai.addAction(AI.TURN);
 		}
+		else if (this.getName().equals("runner"))
+		{
+			ai.addAction(AI.SLEEP);
+			ai.setVar(AI.RANGE_X, 88);
+			ai.setVar(AI.RANGE_Y, 40);
+			ai.addAction(AI.TURN);
+			ai.setVar(AI.TURN_TOWARDS_PLAYER, 1f);
+			ai.addAction(AI.WALK);
+			ai.setVar(AI.WALK_VX, 1.25f);
+			ai.setVar(AI.WALK_DROP, 0f);
+			ai.addAction(AI.JUMP_IN_RANGE);
+			ai.setVar(AI.RANGE_X, 48);
+			ai.setVar(AI.RANGE_JUMP_VX, 2.0f);
+			ai.setVar(AI.RANGE_JUMP_VY, 4.0f);
+		}
 
 		ai.resetActions();
 	}
@@ -347,6 +362,67 @@ public class Creature extends GameObject
 				}
 
 				this.ai.setNextAction();
+			break;
+			// Sleep.
+			case AI.SLEEP:
+			{
+				Player playerObj = level.getPlayer();
+
+				int x1 = (int)(this.x + this.w/2 - this.ai.getVar(AI.RANGE_X));
+				int x2 = (int)(this.x + this.w/2 + this.ai.getVar(AI.RANGE_X));
+				int y1 = (int)(this.y + this.h/2 - this.ai.getVar(AI.RANGE_Y));
+				int y2 = (int)(this.y + this.h);
+
+				int pX = (int)(playerObj.x + playerObj.w/2);
+				int pY = (int)(playerObj.y + playerObj.h/2);
+
+				// Player is within range. Wake up!
+				if (!playerObj.isDead() && pX >= x1 && pX <= x2 && pY >= y1 && pY <= y2)
+				{
+					this.ai.setNextAction();
+				}
+			}
+			break;
+
+			// Jump while in range.
+			case AI.JUMP_IN_RANGE:
+			{
+				Player playerObj = level.getPlayer();
+				int x1 = (int)(this.x + this.w/2 - this.ai.getVar(AI.RANGE_X));
+				int x2 = (int)(this.x + this.w/2 + this.ai.getVar(AI.RANGE_X));
+
+				int pX = (int)(playerObj.x + playerObj.w/2);
+
+				// Player is within range. Attempt to jump.
+				if (pX >= x1 && pX <= x2)
+				{
+					// If creature is on the ground, jump.
+					if (this.isOnGround)
+					{
+						if (this.ai.isGoToNextAction())
+						{
+							this.ai.setNextAction();
+							break;
+						}
+
+						this.jump(-this.ai.getVar(AI.RANGE_JUMP_VY));
+						if (!this.direction)	// left
+						{
+							this.walk(-this.ai.getVar(AI.RANGE_JUMP_VX));
+						}
+						else			// right
+						{
+							this.walk(this.ai.getVar(AI.RANGE_JUMP_VX));
+						}
+
+						this.ai.setGoToNextAction(true);
+					}
+				}
+				else
+				{
+					this.ai.setNextAction();
+				}
+			}
 			break;
 
 			default:

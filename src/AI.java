@@ -11,6 +11,8 @@ public class AI
 	public static final int FLY			= 4;
 	public static final int SPAWN_OBJ		= 5;
 	public static final int TURN			= 6;
+	public static final int SLEEP			= 7;
+	public static final int JUMP_IN_RANGE		= 8;
 
 	// AI action var names
 	public static final int WALK_VX			= 0;
@@ -23,6 +25,10 @@ public class AI
 	public static final int SPAWN_OBJ_OBJVX		= 1;
 	public static final int SPAWN_OBJ_OBJVY		= 2;
 	public static final int TURN_TOWARDS_PLAYER	= 0;
+	public static final int RANGE_X			= 0;
+	public static final int RANGE_Y			= 1;
+	public static final int RANGE_JUMP_VX		= 1;
+	public static final int RANGE_JUMP_VY		= 2;
 
 	private static class AIAction
 	{
