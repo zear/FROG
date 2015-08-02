@@ -185,6 +185,8 @@ public class Level
 			line = fp.getLine();
 			if (line == null)
 			{
+				if (newObj != null)
+					loadObjectFromTemplate(newObj, list);
 				return;
 			}
 
@@ -192,6 +194,8 @@ public class Level
 
 			if (words[0].equals("END"))
 			{
+				if (newObj != null)
+					loadObjectFromTemplate(newObj, list);
 				return;
 			}
 
@@ -329,7 +333,6 @@ public class Level
 				else if (words[0].equals("ANIMATION"))
 				{
 					newObj.addAnimation(fp);
-					loadObjectFromTemplate(newObj, list);
 				}
 			}
 		}
@@ -505,15 +508,6 @@ public class Level
 						//playerObj.setAction(5, false);
 						playerObj.setAcceptInput(false);
 
-						if (!playerObj.direction)	// left
-						{
-							x = (int)playerObj.x - 15;
-						}
-						else			// right
-						{
-							x = (int)playerObj.x + playerObj.w;
-						}
-
 						try
 						{
 							loadSingleObject("swoosh", newObjs);
@@ -526,6 +520,15 @@ public class Level
 						}
 
 						Projectile swoosh = (Projectile)newObjs.get(newObjs.size() - 1);
+
+						if (!playerObj.direction)	// left
+						{
+							x = (int)playerObj.x - swoosh.w;
+						}
+						else				// right
+						{
+							x = (int)playerObj.x + playerObj.w;
+						}
 
 						swoosh.putX(x);
 						if (playerObj.isCrouching)
@@ -654,6 +657,7 @@ public class Level
 
 			if (curObj.isVulnerable() && curObj != playerObj) // check if can get damage
 			{
+				// collision with "swoosh" attack
 				ArrayList<GameObject> attackObjs = playerObj.getAttackObjs();
 				for (GameObject tmpObj : attackObjs)
 				{
@@ -679,6 +683,32 @@ public class Level
 									curObj.setRemoval(true);
 								}
 								tmpCreature.setRemoval(true);
+							}
+						}
+					}
+				}
+
+				// collision with player's sword area
+				if (playerObj.getAnimation().getAnimName().equals("ATTACK") && !playerObj.getAnimation().isOver())
+				{
+					int ox = (int)curObj.x;
+					int oy = (int)curObj.y;
+					int sw = 20;
+					int sh = 20;
+					int sx = !playerObj.direction ? (int)playerObj.x - sw/2 : (int)playerObj.x + playerObj.w - 1 - sw/2;
+					int sy = (int)playerObj.y + playerObj.h - sh;
+
+					if ((ox >= sx && ox <= sx + sw - 1) || (ox + curObj.w - 1 >= sx && ox + curObj.w - 1 <= sx + sw - 1) || (ox < sx && ox + curObj.w - 1 > sx + sw - 1))
+					{
+						if ((oy >= sy && oy <= sy + sh - 1) || (oy + curObj.h - 1 >= sy && oy + curObj.h - 1 <= sy + sh - 1) || (oy < sy && oy + curObj.h - 1 > sy + sh - 1))
+						{
+							if (curObj instanceof Creature)
+							{
+								((Creature)curObj).hurt(playerObj.direction);
+							}
+							else
+							{
+								curObj.setRemoval(true);
 							}
 						}
 					}

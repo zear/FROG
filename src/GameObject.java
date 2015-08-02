@@ -365,9 +365,6 @@ public class GameObject
 
 	public void draw(Camera camera) // draws game object
 	{
-		if (curAnim == null)
-			return;
-
 		if (this instanceof Player)
 		{
 			if (((Player)this).isDead())
@@ -377,74 +374,78 @@ public class GameObject
 		if (this.removal)
 			return;
 
-		this.blinkingCountdown();
-
-		if (!doDraw)
-			return;
-
-		SDLRect r = new SDLRect();
-
-		r.x = (int)this.x - camera.getX();
-		r.y = (int)this.y - camera.getY();
-
-		r.x += this.curAnim.getOffsetX(direction);
-		r.y += this.curAnim.getOffsetY(direction);
-
-		if (r.x < -this.w + 1)
-			return;
-		if (r.x > Sdl.SCREEN_WIDTH)
-			return;
-		if (r.y < -this.h + 1)
-			return;
-		if (r.y > Sdl.SCREEN_HEIGHT)
-			return;
-
-		try
+		if (curAnim != null)
 		{
-			if (this instanceof Player)
+			this.blinkingCountdown();
+
+			if (!doDraw)
+				return;
+
+			SDLRect r = new SDLRect();
+
+			r.x = (int)this.x - camera.getX();
+			r.y = (int)this.y - camera.getY();
+
+			r.x += this.curAnim.getOffsetX(direction);
+			r.y += this.curAnim.getOffsetY(direction);
+
+			if (r.x < -this.w + 1)
+				return;
+			if (r.x > Sdl.SCREEN_WIDTH)
+				return;
+			if (r.y < -this.h + 1)
+				return;
+			if (r.y > Sdl.SCREEN_HEIGHT)
+				return;
+
+			try
 			{
-				//System.out.printf("%s, Frame %d/%d: %d\n", this.curAnim.getName(), frameNum, this.curAnim.getLength(this.direction) - 1, this.curAnim.getFrame(this.direction, frameNum));
-			}
-			SDLRect[] imgClip = this.objTemplate.getImgClip();
-			this.objTemplate.getImg().blitSurface(imgClip[this.curAnim.getFrame(this.direction, frameNum)], Sdl.screen, r);
-//			if (frameDelay == 0)
-//			{
-//				frameDelay = this.curAnim.getFrameRate();
-//				if (frameNum > 0)
-//					frameNum--;
-//				else
-//				{
-//					if (this.curAnim.isLooping())
-//						frameNum = this.curAnim.getLength(this.direction) - 1;
-//					else
-//						this.curAnim.setIsOver(true);
-//				}
-//			}
-			if (frameDelay == 0)
-			{
-				frameDelay = this.curAnim.getFrameRate();
-				if (frameNum < this.curAnim.getLength(this.direction) - 1)
-					frameNum++;
+				if (this instanceof Player)
+				{
+					//System.out.printf("%s, Frame %d/%d: %d\n", this.curAnim.getName(), frameNum, this.curAnim.getLength(this.direction) - 1, this.curAnim.getFrame(this.direction, frameNum));
+				}
+				SDLRect[] imgClip = this.objTemplate.getImgClip();
+				this.objTemplate.getImg().blitSurface(imgClip[this.curAnim.getFrame(this.direction, frameNum)], Sdl.screen, r);
+	//			if (frameDelay == 0)
+	//			{
+	//				frameDelay = this.curAnim.getFrameRate();
+	//				if (frameNum > 0)
+	//					frameNum--;
+	//				else
+	//				{
+	//					if (this.curAnim.isLooping())
+	//						frameNum = this.curAnim.getLength(this.direction) - 1;
+	//					else
+	//						this.curAnim.setIsOver(true);
+	//				}
+	//			}
+				if (frameDelay == 0)
+				{
+					frameDelay = this.curAnim.getFrameRate();
+					if (frameNum < this.curAnim.getLength(this.direction) - 1)
+						frameNum++;
+					else
+					{
+						if (this.curAnim.isLooping())
+							frameNum = 0;
+						else
+							this.curAnim.setIsOver(true);
+					}
+				}
 				else
 				{
-					if (this.curAnim.isLooping())
-						frameNum = 0;
-					else
-						this.curAnim.setIsOver(true);
+					frameDelay--;
 				}
 			}
-			else
+			catch (SDLException e)
 			{
-				frameDelay--;
+				// todo
 			}
-		}
-		catch (SDLException e)
-		{
-			// todo
 		}
 
 		if (Game.debugMode)
 		{
+			SDLRect r = new SDLRect();
 			r.x = (int)this.x - camera.getX();
 			r.y = (int)this.y - camera.getY();
 			r.width = this.w;
@@ -464,6 +465,33 @@ public class GameObject
 			catch (SDLException e)
 			{
 				// todo
+			}
+
+			if (this instanceof Player)
+			{
+				Player playerObj = (Player)this;
+
+				if (playerObj.getAnimation().getAnimName().equals("ATTACK") && !playerObj.getAnimation().isOver())
+				{
+					int sw = 20;
+					int sh = 20;
+					int sx = !playerObj.direction ? (int)playerObj.x - sw/2 : (int)playerObj.x + playerObj.w - 1 - sw/2;
+					int sy = (int)playerObj.y + playerObj.h - sh;
+
+					r.x = sx - camera.getX();
+					r.y = sy - camera.getY();
+					r.width = sw;
+					r.height = sh;
+
+					try
+					{
+						Sdl.screen.fillRect(r, 1000);
+					}
+					catch (SDLException e)
+					{
+						// todo
+					}
+				}
 			}
 		}
 	}
