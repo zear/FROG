@@ -320,7 +320,28 @@ public class Level
 				{
 					if (newObj instanceof Item)
 					{
-						((Item)newObj).setPoints(Integer.parseInt(words[1]));
+						((Item)newObj).setPointsValue(Integer.parseInt(words[1]));
+					}
+				}
+				else if (words[0].equals("LIVES"))
+				{
+					if (newObj instanceof Item)
+					{
+						((Item)newObj).setLivesValue(Integer.parseInt(words[1]));
+					}
+				}
+				else if (words[0].equals("HEARTS"))
+				{
+					if (newObj instanceof Item)
+					{
+						((Item)newObj).setHeartsValue(Integer.parseInt(words[1]));
+					}
+				}
+				else if (words[0].equals("POWER"))
+				{
+					if (newObj instanceof Item)
+					{
+						((Item)newObj).setPowerValue(Integer.parseInt(words[1]));
 					}
 				}
 				else if (words[0].equals("TRIGGER_TYPE"))
@@ -403,7 +424,10 @@ public class Level
 			}
 			if (newObj instanceof Item)
 			{
-				((Item)newObj).setPoints(((Item)template).getPoints());
+				((Item)newObj).setPointsValue(((Item)template).getPointsValue());
+				((Item)newObj).setPowerValue(((Item)template).getPowerValue());
+				((Item)newObj).setLivesValue(((Item)template).getLivesValue());
+				((Item)newObj).setHeartsValue(((Item)template).getHeartsValue());
 			}
 			if (newObj instanceof Trigger)
 			{
@@ -503,40 +527,43 @@ public class Level
 					}
 					if (playerObj.getAction(5))		// attack
 					{
-						int x;
-
 						//playerObj.setAction(5, false);
 						playerObj.setAcceptInput(false);
 
-						try
+						if (playerObj.getPower() > 0)
 						{
-							loadSingleObject("swoosh", newObjs);
-						}
-						catch (Exception e)
-						{
-							System.out.printf("Failed to load object file\n");
-							return;
-							// todo
-						}
+							int x;
 
-						Projectile swoosh = (Projectile)newObjs.get(newObjs.size() - 1);
+							try
+							{
+								loadSingleObject("swoosh", newObjs);
+							}
+							catch (Exception e)
+							{
+								System.out.printf("Failed to load object file\n");
+								return;
+								// todo
+							}
 
-						if (!playerObj.direction)	// left
-						{
-							x = (int)playerObj.x - swoosh.w;
-						}
-						else				// right
-						{
-							x = (int)playerObj.x + playerObj.w;
-						}
+							Projectile swoosh = (Projectile)newObjs.get(newObjs.size() - 1);
 
-						swoosh.putX(x);
-						if (playerObj.isCrouching)
-							swoosh.putY((int)playerObj.y + 14);
-						else
-							swoosh.putY((int)playerObj.y + 7);
-						swoosh.putDirection(playerObj.direction ? 1 : 0);
-						swoosh.affectedByGravity = false;
+							if (!playerObj.direction)	// left
+							{
+								x = (int)playerObj.x - swoosh.w;
+							}
+							else				// right
+							{
+								x = (int)playerObj.x + playerObj.w;
+							}
+
+							swoosh.putX(x);
+							if (playerObj.isCrouching)
+								swoosh.putY((int)playerObj.y + 14);
+							else
+								swoosh.putY((int)playerObj.y + 7);
+							swoosh.putDirection(playerObj.direction ? 1 : 0);
+							swoosh.affectedByGravity = false;
+						}
 					}
 				}
 				else	// TODO: This should be solved in a cleaner way.
@@ -625,7 +652,10 @@ public class Level
 					{
 						if ((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
 						{
-							player.addScore(tmpItem.getPoints());
+							player.addScore(tmpItem.getPointsValue());
+							player.addPower(tmpItem.getPowerValue());
+							player.addLives(tmpItem.getLivesValue());
+							player.addHp(tmpItem.getHeartsValue());
 							tmpItem.setRemoval(true);
 						}
 					}

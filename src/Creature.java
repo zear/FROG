@@ -133,6 +133,11 @@ public class Creature extends GameObject
 		this.hp = value;
 	}
 
+	public void addHp(int value)
+	{
+		this.hp += value;
+	}
+
 	public void hurt(boolean direction)
 	{
 		this.hurt = true;

@@ -10,6 +10,7 @@ public class Player extends Creature
 	private boolean[] keys;
 	private boolean acceptInput = true;
 	private boolean dead = false;	// temporary
+	private int power;
 	private int lives;
 	private int score;
 	private ArrayList<GameObject> attackObjs = null;
@@ -93,6 +94,21 @@ public class Player extends Creature
 	public void addLives(int lives)
 	{
 		this.lives += lives;
+	}
+
+	public int getPower()
+	{
+		return this.power;
+	}
+
+	public void setPower(int value)
+	{
+		this.power = value;
+	}
+
+	public void addPower(int value)
+	{
+		this.power += value;
 	}
 
 	public int getScore()
