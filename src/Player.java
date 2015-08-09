@@ -109,6 +109,11 @@ public class Player extends Creature
 	public void addPower(int value)
 	{
 		this.power += value;
+		if (this.power > 2)
+		{
+			this.power = 2;
+			this.addScore(1000);
+		}
 	}
 
 	public int getScore()

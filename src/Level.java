@@ -563,6 +563,8 @@ public class Level
 								swoosh.putY((int)playerObj.y + 7);
 							swoosh.putDirection(playerObj.direction ? 1 : 0);
 							swoosh.affectedByGravity = false;
+
+							swoosh.setTtl(swoosh.getTtl() * playerObj.getPower());
 						}
 					}
 				}
