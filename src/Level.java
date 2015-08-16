@@ -108,7 +108,7 @@ public class Level
 				}
 				else if (next.equals("IMG"))
 				{
-					curElem.load("./data/gfx/" + fp.getNext(), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()));
+					curElem.load("./data/gfx/tileset/" + fp.getNext(), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()), Integer.parseInt(fp.getNext()));
 					curElem.load(fp); // load the tileset
 				}
 				else if (next.equals("OBJECTS"))
