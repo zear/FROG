@@ -721,7 +721,7 @@ public class Level
 				}
 
 				// collision with player's sword area
-				if (playerObj.getAnimation().getAnimName().equals("ATTACK") && !playerObj.getAnimation().isOver())
+				if (!playerObj.isDead() && playerObj.getAnimation().getAnimName().equals("ATTACK") && !playerObj.getAnimation().isOver())
 				{
 					int ox = (int)curObj.x;
 					int oy = (int)curObj.y;
