@@ -530,6 +530,8 @@ public class Level
 						//playerObj.setAction(5, false);
 						playerObj.setAcceptInput(false);
 
+						playerObj.setSwordSwing(true);
+
 						if (playerObj.getPower() > 0)
 						{
 							int x;
@@ -746,6 +748,41 @@ public class Level
 					}
 				}
 			}
+		}
+
+		// Check player sword attack area against level tiles.
+		if (playerObj.isSwordSwing() && !playerObj.isDead() && playerObj.getAnimation().getAnimName().equals("ATTACK") && !playerObj.getAnimation().isOver())
+		{
+			LevelLayer levelLayer = layers.get(1);
+			int sw = 20;
+			int sh = 20;
+			int sx = !playerObj.direction ? (int)playerObj.x - sw/2 : (int)playerObj.x + playerObj.w - 1 - sw/2;
+			int sy = (int)playerObj.y + playerObj.h - sh;
+
+			int x1 = sx / LevelLayer.TILE_SIZE;
+			int x2 = (sx + sw - 1) / LevelLayer.TILE_SIZE;
+			int y1 = sy / LevelLayer.TILE_SIZE;
+			int y2 = (sy + sh - 1) / LevelLayer.TILE_SIZE;
+
+			for (int x = x1; x <= x2; ++x)
+			{
+				for (int y = y1; y <= y2; ++y)
+				{
+					int tile = levelLayer.getTile(x, y);
+					int col = collision.getCollision(tile);
+
+					if ((col & Collision.COLLISION_DESTRUCTIBLE) > 0)
+					{
+						levelLayer.setTile(x, y, 0);
+					}
+					if ((col & Collision.COLLISION_HIDDEN) > 0)
+					{
+						levelLayer.setTile(x, y, 79);
+					}
+				}
+			}
+
+			playerObj.setSwordSwing(false);
 		}
 
 		if (!playerObj.isDead() && !this.complete)

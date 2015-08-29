@@ -9,6 +9,7 @@ public class Player extends Creature
 	public Camera viewport;
 	private boolean[] keys;
 	private boolean acceptInput = true;
+	private boolean swordSwing;
 	private boolean dead = false;	// temporary
 	private int power;
 	private int lives;
@@ -288,6 +289,16 @@ public class Player extends Creature
 
 			this.changeAnimation(newAnim);
 		}
+	}
+
+	public boolean isSwordSwing()
+	{
+		return this.swordSwing;
+	}
+
+	public void setSwordSwing(boolean value)
+	{
+		this.swordSwing = value;
 	}
 
 	public boolean isDead()
