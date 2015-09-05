@@ -221,6 +221,9 @@ public class AI
 
 	public int getType()
 	{
+		if (this.curAction == null)
+			return AI.NONE;
+
 		return this.curAction.getType();
 	}
 

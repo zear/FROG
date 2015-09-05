@@ -316,6 +316,13 @@ public class Level
 						((Projectile)newObj).setTtl(Integer.parseInt(words[1]));
 					}
 				}
+				else if (words[0].equals("ON_COLLISION"))
+				{
+					if (newObj instanceof Projectile)
+					{
+						((Projectile)newObj).setOnCollision(words[1]);
+					}
+				}
 				else if (words[0].equals("POINTS"))
 				{
 					if (newObj instanceof Item)
@@ -421,6 +428,7 @@ public class Level
 			if (newObj instanceof Projectile)
 			{
 				((Projectile)newObj).setTtl(((Projectile)template).getTtl());
+				((Projectile)newObj).setOnCollision(((Projectile)template).getOnCollision());
 			}
 			if (newObj instanceof Item)
 			{

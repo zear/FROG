@@ -30,4 +30,30 @@ public class Projectile extends Creature
 		if (this.ttl > 0)
 			this.ttl--;
 	}
+
+	public OnCollision getOnCollision()
+	{
+		return this.onCollision;
+	}
+
+	public void setOnCollision(OnCollision collision)
+	{
+		this.onCollision = collision;
+	}
+
+	public void setOnCollision(String collisionString)
+	{
+		OnCollision collision = OnCollision.IGNORE;
+
+		if (collisionString.equals("PERISH"))
+		{
+			collision = OnCollision.PERISH;
+		}
+		else if (collisionString.equals("BOUNCE"))
+		{
+			collision = OnCollision.BOUNCE;
+		}
+
+		this.onCollision = collision;
+	}
 }

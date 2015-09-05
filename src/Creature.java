@@ -101,6 +101,22 @@ public class Creature extends GameObject
 			ai.setVar(AI.RANGE_JUMP_VX, 2.0f);
 			ai.setVar(AI.RANGE_JUMP_VY, 4.0f);
 		}
+		else if (this.getName().equals("flower"))
+		{
+			ai.addAction(AI.WAIT, 180);
+			ai.addAction(AI.SPAWN_OBJ);
+			ai.setVar("spikeball");
+			ai.setVar(AI.SPAWN_OBJ_OBJVX, -1.25f);
+			ai.setVar(AI.SPAWN_OBJ_OBJVY, -2.25f);
+			ai.addAction(AI.WAIT, 30);
+			ai.addAction(AI.SPAWN_OBJ);
+			ai.setVar("spikeball");
+			ai.setVar(AI.SPAWN_OBJ_OBJVX, 1.25f);
+			ai.setVar(AI.SPAWN_OBJ_OBJVY, -2.25f);
+
+			// Temporary hack.
+			this.affectedByGravity = false;
+		}
 
 		ai.resetActions();
 	}
@@ -341,7 +357,8 @@ public class Creature extends GameObject
 				obj.putY((int)this.y);
 				obj.setVx(this.ai.getVar(AI.SPAWN_OBJ_OBJVX));
 				obj.setVy(this.ai.getVar(AI.SPAWN_OBJ_OBJVY));
-				obj.putDirection(this.direction ? 1 : 0);
+//				obj.putDirection(this.direction ? 1 : 0);
+				obj.putDirection(obj.getVx() != 0 ? (obj.getVx() > 0 ? 1 : 0) : (this.direction ? 1 : 0));
 				obj.affectedByGravity = true;
 
 				this.ai.setNextAction();
@@ -698,6 +715,20 @@ public class Creature extends GameObject
 				this.vy = 0;
 				this.y = (float)ceil(this.y) - 0.2f;
 				this.isOnGround = true;
+
+				if (this instanceof Projectile)
+				{
+					Projectile projectile = (Projectile)this;
+					switch (projectile.getOnCollision())
+					{
+						case PERISH:
+							projectile.setRemoval(true);
+						break;
+
+						default:
+						break;
+					}
+				}
 			}
 			// Collision with a platform tile (walkable on the top part, but creature will go past if moving through it from the bottom).
 			else if ((col & Collision.COLLISION_PLATFORM) > 0)
@@ -708,6 +739,20 @@ public class Creature extends GameObject
 					this.vy = 0;
 					this.y = (float)ceil(this.y) - 0.2f;
 					this.isOnGround = true;
+
+					if (this instanceof Projectile)
+					{
+						Projectile projectile = (Projectile)this;
+						switch (projectile.getOnCollision())
+						{
+							case PERISH:
+								projectile.setRemoval(true);
+							break;
+
+							default:
+							break;
+						}
+					}
 				}
 				else
 					this.y += curVy;
@@ -798,6 +843,20 @@ public class Creature extends GameObject
 			if ((col & Collision.COLLISION_SOLID) > 0)
 			{
 				this.vy = 0;
+
+				if (this instanceof Projectile)
+				{
+					Projectile projectile = (Projectile)this;
+					switch (projectile.getOnCollision())
+					{
+						case PERISH:
+							projectile.setRemoval(true);
+						break;
+
+						default:
+						break;
+					}
+				}
 			}
 			// If no collision occured, creature is free to continue its movement.
 			else
@@ -891,6 +950,20 @@ public class Creature extends GameObject
 				{
 					this.direction = !this.direction;
 				}
+
+				if (this instanceof Projectile)
+				{
+					Projectile projectile = (Projectile)this;
+					switch (projectile.getOnCollision())
+					{
+						case PERISH:
+							projectile.setRemoval(true);
+						break;
+
+						default:
+						break;
+					}
+				}
 			}
 			// If no collision occured, creature is free to continue its movement.
 			else
@@ -971,6 +1044,20 @@ public class Creature extends GameObject
 				if (!(this instanceof Player) && !hurt)
 				{
 					this.direction = !this.direction;
+				}
+
+				if (this instanceof Projectile)
+				{
+					Projectile projectile = (Projectile)this;
+					switch (projectile.getOnCollision())
+					{
+						case PERISH:
+							projectile.setRemoval(true);
+						break;
+
+						default:
+						break;
+					}
 				}
 			}
 			// If no collision occured, creature is free to continue its movement.
@@ -1395,11 +1482,5 @@ public class Creature extends GameObject
 			vx = 0;
 		if (abs(vy) < 0.1)
 			vy = 0;
-
-		// Ugly Hack! TODO: Move it somewhere else.
-		if (this.getName().equals("swoosh") && vx == 0)
-		{
-			this.setRemoval(true);
-		}
 	}
 }
