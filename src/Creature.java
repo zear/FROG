@@ -766,13 +766,27 @@ public class Creature extends GameObject
 
 			if ((col & Collision.COLLISION_DAMAGE) > 0)
 			{
-				if (this instanceof Player && !this.hurt)
+				if (this instanceof Player)
 				{
 					if (((int)this.y + this.h - 1) >= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
 					{
-						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						this.setHp(0);
+
+						if (!this.hurt)
+						{
+							this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						}
 					}
 				}
+
+				// Code for doing regular damage.
+//				if (this instanceof Player && !this.hurt)
+//				{
+//					if (((int)this.y + this.h - 1) >= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+//					{
+//						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+//					}
+//				}
 			}
 
 			// Special collision check with a different collision area for climbable tiles (ie. ladder).
@@ -866,13 +880,27 @@ public class Creature extends GameObject
 
 			if ((col & Collision.COLLISION_DAMAGE) > 0)
 			{
-				if (this instanceof Player && !this.hurt)
+				if (this instanceof Player)
 				{
 					if (((int)this.y) <= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE)
 					{
-						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						this.setHp(0);
+
+						if (!this.hurt)
+						{
+							this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						}
 					}
 				}
+
+				// Code for doing regular damage.
+//				if (this instanceof Player && !this.hurt)
+//				{
+//					if (((int)this.y) <= (y1)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE)
+//					{
+//						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+//					}
+//				}
 			}
 
 			// Special collision check with a different collision area for climbable tiles (ie. ladder).
@@ -973,13 +1001,27 @@ public class Creature extends GameObject
 
 			if ((col & Collision.COLLISION_DAMAGE) > 0)
 			{
-				if (this instanceof Player && !this.hurt)
+				if (this instanceof Player)
 				{
 					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
 					{
-						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						this.setHp(0);
+
+						if (!this.hurt)
+						{
+							this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						}
 					}
 				}
+
+				// Code for doing regular damage.
+//				if (this instanceof Player && !this.hurt)
+//				{
+//					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+//					{
+//						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+//					}
+//				}
 			}
 
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
@@ -1068,13 +1110,27 @@ public class Creature extends GameObject
 
 			if ((col & Collision.COLLISION_DAMAGE) > 0)
 			{
-				if (this instanceof Player && !this.hurt)
+				if (this instanceof Player)
 				{
 					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
 					{
-						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						this.setHp(0);
+
+						if (!this.hurt)
+						{
+							this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+						}
 					}
 				}
+
+				// Code for doing regular damage.
+//				if (this instanceof Player && !this.hurt)
+//				{
+//					if (((int)this.y + this.h - 1) >= (y2)/LevelLayer.TILE_SIZE*LevelLayer.TILE_SIZE + LevelLayer.TILE_SIZE/2)
+//					{
+//						this.hurt((curVx != 0 ? (curVx > 0 ? false : true) : (this.direction ? true : false)));
+//					}
+//				}
 			}
 
 			// For creatures with AI that turns on platform edges, perform additional check for walkable space.
