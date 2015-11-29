@@ -117,6 +117,26 @@ public class Player extends Creature
 		}
 	}
 
+	public void setHp(int value)
+	{
+		if (value > 3)
+		{
+			value = 3;
+		}
+
+		super.setHp(value);
+	}
+
+	public void addHp(int value)
+	{
+		if (this.hp + value > 3)
+		{
+			value = 3 - this.hp;
+		}
+
+		super.addHp(value);
+	}
+
 	public int getScore()
 	{
 		return this.score;

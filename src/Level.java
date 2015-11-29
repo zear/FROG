@@ -664,11 +664,15 @@ public class Level
 					{
 						if ((py >= iy && py <= iy + tmpItem.h - 1) || (py + player.h - 1 >= iy && py + player.h - 1 <= iy + tmpItem.h - 1) || (py < iy && py + player.h - 1 > iy + tmpItem.h - 1))
 						{
+							if (tmpItem.getPointsValue() > 0 || tmpItem.getPowerValue() > 0 || tmpItem.getLivesValue() > 0 || ((tmpItem.getHeartsValue() > 0) && player.getHp() < 3))
+							{
+								tmpItem.setRemoval(true);
+							}
+
 							player.addScore(tmpItem.getPointsValue());
 							player.addPower(tmpItem.getPowerValue());
 							player.addLives(tmpItem.getLivesValue());
 							player.addHp(tmpItem.getHeartsValue());
-							tmpItem.setRemoval(true);
 						}
 					}
 				}
