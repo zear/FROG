@@ -2,7 +2,7 @@ TYPE	ITEM
 NAME	powerup
 WIDTH	16
 HEIGHT	16
-IMG	powerup.bmp 16 16 6 6
+IMG	powerup.bmp 16 16 2 2
 POINTS	0
 LIVES	0
 HEARTS	0
