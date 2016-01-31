@@ -1,6 +1,8 @@
 F.R.O.G. - the Fantastic Rescue Of Greeny
 =========================================
 
+![screenshot](screenshot.png "Gameplay example")
+
 About
 -----
 F.R.O.G. is a 2D action-platformer game written in Java and using SDL 1.2, originally developed as a java class project.
