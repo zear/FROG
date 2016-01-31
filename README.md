@@ -41,3 +41,8 @@ Installation
   `LD_LIBRARY_PATH=":/path/to/libsdljava.so" java -jar frog-YYYY.MM.DD.jar`
 
 The game is known to run at least with OpenJDK and JamVM JVMs.
+
+Tools
+-----
+
+* [FROG Level Editor] (https://github.com/zear/fled) - level creation tool
