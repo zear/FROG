@@ -99,6 +99,7 @@ public class GameStateCredits implements GameState
 		font.drawCentered("Paul Cercueil", Sdl.SCREEN_HEIGHT - scroll + getLineHeight());
 		font.drawCentered("Andreas Bjerkeholt", Sdl.SCREEN_HEIGHT - scroll + getLineHeight());
 		font.drawCentered("Nebuleon", Sdl.SCREEN_HEIGHT - scroll + getLineHeight());
+		font.drawCentered("Tomas Vymazal", Sdl.SCREEN_HEIGHT - scroll + getLineHeight());
 		lineHeight += Sdl.SCREEN_HEIGHT;
 		font.drawFloatingCentered("Thank YOU for playing!", Sdl.SCREEN_HEIGHT - scroll + getLineHeight(), 1, 3);
 
